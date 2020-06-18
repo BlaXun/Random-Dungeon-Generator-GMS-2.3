@@ -15,11 +15,11 @@ function placeHallwaysOnDungeonPresetWithConnectors() {
 	_targetPlacedChamber = argument[4];
 
 	var _startX, _startY, _targetX, _targetY;
-	_startX = _chosenStartConnector.xStart+_startingPlacedChamber[? PlacedChamberProps.xPositionInDungeon];
-	_startY = _chosenStartConnector.yStart+_startingPlacedChamber[? PlacedChamberProps.yPositionInDungeon];
+	_startX = _chosenStartConnector.xStart+_startingPlacedChamber.xPositionInDungeon;
+	_startY = _chosenStartConnector.yStart+_startingPlacedChamber.yPositionInDungeon;
 
-	_targetX = _chosenTargetConnector.xStart+_targetPlacedChamber[? PlacedChamberProps.xPositionInDungeon];
-	_targetY = _chosenTargetConnector.yStart+_targetPlacedChamber[? PlacedChamberProps.yPositionInDungeon];
+	_targetX = _chosenTargetConnector.xStart+_targetPlacedChamber.xPositionInDungeon;
+	_targetY = _chosenTargetConnector.yStart+_targetPlacedChamber.yPositionInDungeon;
 
 	var _startConnectorWidth, _startConnectorHeight;
 	_startConnectorWidth = _chosenStartConnector.width;
@@ -31,7 +31,7 @@ function placeHallwaysOnDungeonPresetWithConnectors() {
 
 	var _endX, _endY;
 	_endX = _startX + _startConnectorWidth-1;
-	_endY = _startingPlacedChamber[? PlacedChamberProps.yPositionInDungeon]-(_startConnectorWidth);
+	_endY = _startingPlacedChamber.yPositionInDungeon-(_startConnectorWidth);
 
 	//	Start by creating a path to outside of the chamber in the direction the connector is facing towards
 	//	TODO: Depending on the connectors facing direction the end-coordinates must be changed!

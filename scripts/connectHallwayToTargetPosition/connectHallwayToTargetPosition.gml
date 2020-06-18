@@ -19,13 +19,13 @@ function connectHallwayToTargetPosition() {
 	_targetPlacedChamber = argument[6];
 
 	var _sourcePlacedChamberXPosition, _sourcePlacedChamberYPosition;
-	_sourcePlacedChamberXPosition = _sourcePlacedChamber[? PlacedChamberProps.xPositionInDungeon];
-	_sourcePlacedChamberYPosition = _sourcePlacedChamber[? PlacedChamberProps.yPositionInDungeon];
+	_sourcePlacedChamberXPosition = _sourcePlacedChamber.xPositionInDungeon;
+	_sourcePlacedChamberYPosition = _sourcePlacedChamber.yPositionInDungeon;
 
 	var _chamberPresetOnSourcePlacedChamber, _sourcePlacedChamberXEnd, _sourcePlacedChamberYEnd;
-	_chamberPresetOnSourcePlacedChamber = _sourcePlacedChamber[? PlacedChamberProps.ChamberPreset];
-	_sourcePlacedChamberXEnd = _sourcePlacedChamber[? PlacedChamberProps.xPositionInDungeon]+_chamberPresetOnSourcePlacedChamber.totalWidth;
-	_sourcePlacedChamberYEnd = _sourcePlacedChamber[? PlacedChamberProps.yPositionInDungeon]+_chamberPresetOnSourcePlacedChamber.totalHeight;
+	_chamberPresetOnSourcePlacedChamber = _sourcePlacedChamber.chamberPreset;
+	_sourcePlacedChamberXEnd = _sourcePlacedChamber.xPositionInDungeon+_chamberPresetOnSourcePlacedChamber.totalWidth;
+	_sourcePlacedChamberYEnd = _sourcePlacedChamber.yPositionInDungeon+_chamberPresetOnSourcePlacedChamber.totalHeight;
 
 
 	var _newLastCoordinates = [];

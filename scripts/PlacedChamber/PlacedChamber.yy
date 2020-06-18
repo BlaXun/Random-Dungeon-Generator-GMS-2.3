@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Debugging",
-    "path": "folders/Scripts/Debugging.yy",
+    "name": "RandomDungeonGenerator",
+    "path": "folders/Scripts/RandomDungeonGenerator.yy",
   },
   "resourceVersion": "1.0",
-  "name": "debugPlacedChamber",
+  "name": "PlacedChamber",
   "tags": [],
   "resourceType": "GMScript",
 }

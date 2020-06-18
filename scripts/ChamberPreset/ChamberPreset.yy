@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ChamberPresets",
-    "path": "folders/Scripts/RandomDungeonGenerator/ChamberPresets.yy",
+    "name": "RandomDungeonGenerator",
+    "path": "folders/Scripts/RandomDungeonGenerator.yy",
   },
   "resourceVersion": "1.0",
   "name": "ChamberPreset",

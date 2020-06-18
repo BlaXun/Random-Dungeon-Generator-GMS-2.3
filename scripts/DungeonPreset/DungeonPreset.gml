@@ -28,7 +28,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_newHeight = ds_grid_height(croppedTypeGrid);
 
 		replaceTypeGridOnValueTypeGrid(croppedTypeGrid, valueTypeGridOnDungeonPreset);
-		correctPlacedChamberPositionsOnDungeonPreset(self,croppedPositions);
+		
+		self.updatePositionsOfAllPlacedChambersFromCroppedSpaces(croppedPositions);
 
 		self.widthInPixel = _newWidth;
 		self.heightInPixel = _newHeight;
@@ -155,7 +156,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				_randomizedOffset = floor(random(_maximumRandomOffsetOnAxis-_minimumRandomOffsetOnAxis));
 	
 				var _previousPlacedChamberChamberPreset, _previousChamberPresetTotalWidth, _previousChamberPresetTotalHeight;
-				_previousPlacedChamberChamberPreset = _previouslyPlacedChamber[? PlacedChamberProps.ChamberPreset];
+				_previousPlacedChamberChamberPreset = _previouslyPlacedChamber.chamberPreset;
 				_previousChamberPresetTotalWidth = _previousPlacedChamberChamberPreset.totalWidth;
 				_previousChamberPresetTotalHeight = _previousPlacedChamberChamberPreset.totalHeight;
 	
@@ -246,20 +247,20 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 			debug("Placing chamber ("+ string(_chosenChamberPreset) +") on x: " + string(_chosenColumn) +" y: " + string(_chosenRow));
 	
-			var _placedChamber = placedChamberFromChamberPreset(_chosenChamberPreset);	
-			_placedChamber[? PlacedChamberProps.Index] = _placedChambers;
-			_placedChamber[? PlacedChamberProps.xPositionInDungeon] = _chosenColumn;
-			_placedChamber[? PlacedChamberProps.yPositionInDungeon] = _chosenRow;	
+			var _placedChamber = new PlacedChamber(_chosenChamberPreset);	
+			_placedChamber.index = _placedChambers;
+			_placedChamber.xPositionInDungeon = _chosenColumn;
+			_placedChamber.yPositionInDungeon = _chosenRow;	
 	
 			if (_previouslyPlacedChamber != undefined) {			
-				ds_list_add(_previouslyPlacedChamber[? PlacedChamberProps.NextChambers], _placedChamber);
-				ds_list_add(_placedChamber[? PlacedChamberProps.PreviousChambers], _previouslyPlacedChamber);
+				ds_list_add(_previouslyPlacedChamber.nextChambers, _placedChamber);
+				ds_list_add(_placedChamber.previousChambers, _previouslyPlacedChamber);
 			}
 	
-			deactivateDirectionOnPlacedChamber(_placedChamber,_directionToPreventOnAllFollowingPlacedChambers);
-			deactivateDirectionOnPlacedChamber(_placedChamber,oppositeDirectionForDirection(_directionToMoveToNext));
-			_directionToMoveToNext = randomDirectionFromPlacedChamberDirections(_placedChamber);		
-			_placedChamber[? PlacedChamberProps.DesiredDirectionToConnectTo] = _directionToMoveToNext;
+			_placedChamber.deactivateDirection(_directionToPreventOnAllFollowingPlacedChambers);
+			_placedChamber.deactivateDirection(oppositeDirectionForDirection(_directionToMoveToNext));
+			_directionToMoveToNext = _placedChamber.randomDirectionFromAvailableDirections();		
+			_placedChamber.desiredDirectionToConnectTo = _directionToMoveToNext;
 	
 			var _valueGridOnChamberPreset = valueGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
 			var _typeGridOnChamberPreset = typeGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
@@ -277,6 +278,32 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		}
 
 		debug("Done placing chambers (" + string(_placedChambers)+"/"+string(amountOfChambersToPlace)+")");
+	}
+	
+	///	@function correctPlacedChamberPositionsOnDungeonPreset(dungeonPreset,croppedSpaces);
+	/// @description							Corrects the starting x and y position for all PlacedChambers on the given DungeonPreset using the given croppedSpaces-Array
+	///	@param {array<real>}	croppedSpaces	A array with Position-Enum entries as key and pixels as value
+	static correctPlacedChamberPositionsOnDungeonPreset = function(croppedSpaces) {
+
+		var _cropLeft = croppedSpaces[Position.Left];
+		var _cropTop = croppedSpaces[Position.Top];
+		var _placedChamber = undefined;
+
+		var _placedChambersList = self.placedChambers;
+		for (var _i=0;_i<ds_list_size(_placedChambersList);_i++) {
+			_placedChamber = _placedChambersList[| _i];
+			_placedChamber.xPositionInDungeon = _placedChamber.xPositionInDungeon-_cropLeft;
+			_placedChamber.yPositionInDungeon = _placedChamber.yPositionInDungeon-_cropTop;
+		}
+	}
+
+	static updatePositionsOfAllPlacedChambersFromCroppedSpaces = function(croppedSpaces) {
+		
+		var _currentPlacedChamber = undefined;
+		for (var _i=0;_i<ds_list_size(self.placedChambers);_i++) {
+			_currentPlacedChamber = self.placedChambers[| _i];
+			_currentPlacedChamber.correctPositions(croppedSpaces);		
+		}
 	}
 	
 	static toString = function() {

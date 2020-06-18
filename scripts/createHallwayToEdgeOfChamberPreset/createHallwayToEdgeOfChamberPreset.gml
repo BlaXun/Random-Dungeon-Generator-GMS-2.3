@@ -12,10 +12,10 @@ function createHallwayToEdgeOfChamberPreset() {
 	_connectorPreset = argument[2];
 
 	var _placedChamberXPosition, _placedChamberYPosition, _placedChamberWidth, _placedChamberHeight, _chamberPreset;
-	_placedChamberXPosition = _placedChamber[? PlacedChamberProps.xPositionInDungeon];
-	_placedChamberYPosition = _placedChamber[? PlacedChamberProps.yPositionInDungeon];
+	_placedChamberXPosition = _placedChamber.xPositionInDungeon;
+	_placedChamberYPosition = _placedChamber.yPositionInDungeon;
 
-	_chamberPreset = _placedChamber[? PlacedChamberProps.ChamberPreset];
+	_chamberPreset = _placedChamber.chamberPreset;
 	_placedChamberWidth = _chamberPreset.totalWidth;
 	_placedChamberHeight = _chamberPreset.totalHeight;
 

@@ -9,12 +9,12 @@ function createHallwaysForDungeonPreset() {
 	var _startingChamber, _targetChamber;
 	_startingChamber = _placedChambers[| 0];
 
-	var _nextChambersList = _startingChamber[? PlacedChamberProps.NextChambers];
+	var _nextChambersList = _startingChamber.nextChambers;
 	_targetChamber = _nextChambersList[| 0];
 
 	var _startPreset, _targetPreset;
-	_startPreset = _startingChamber[? PlacedChamberProps.ChamberPreset];
-	_targetPreset = _targetChamber[? PlacedChamberProps.ChamberPreset];
+	_startPreset = _startingChamber.chamberPreset;
+	_targetPreset = _targetChamber.chamberPreset;
 
 	var _allConnectorsOnStart, _allConnectorsOnTarget;
 	_allConnectorsOnStart = _startPreset.allConnectors;

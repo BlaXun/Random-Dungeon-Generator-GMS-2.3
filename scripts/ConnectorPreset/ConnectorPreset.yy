@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Connectors",
-    "path": "folders/Scripts/RandomDungeonGenerator/Connectors.yy",
+    "name": "RandomDungeonGenerator",
+    "path": "folders/Scripts/RandomDungeonGenerator.yy",
   },
   "resourceVersion": "1.0",
   "name": "ConnectorPreset",
