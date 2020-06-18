@@ -6,7 +6,7 @@
     "path": "folders/Scripts/RandomDungeonGenerator/DungeonPreset.yy",
   },
   "resourceVersion": "1.0",
-  "name": "populateDungeonPresetWithChamberPresets",
+  "name": "DungeonPreset",
   "tags": [],
   "resourceType": "GMScript",
 }

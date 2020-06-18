@@ -35,12 +35,12 @@ function placeHallwaysOnDungeonPresetWithConnectors() {
 
 	//	Start by creating a path to outside of the chamber in the direction the connector is facing towards
 	//	TODO: Depending on the connectors facing direction the end-coordinates must be changed!
-	var _currentHallwayCoordinates = createHallwayToEdgeOfChamberPreset(dungeonPreset,_startingPlacedChamber,_chosenStartConnector);
-	var _targetCoordinates = createHallwayToEdgeOfChamberPreset(dungeonPreset,_targetPlacedChamber,_chosenTargetConnector);
+	var _currentHallwayCoordinates = createHallwayToEdgeOfChamberPreset(_dungeonPreset,_startingPlacedChamber,_chosenStartConnector);
+	var _targetCoordinates = createHallwayToEdgeOfChamberPreset(_dungeonPreset,_targetPlacedChamber,_chosenTargetConnector);
 
 	var _didReachDestination = false;
 	//while (_didReachDestination = false) {
-		_didReachDestination = connectHallwayToTargetPosition(dungeonPreset,_currentHallwayCoordinates,_targetCoordinates,_chosenStartConnector,_chosenTargetConnector,_startingPlacedChamber,_targetPlacedChamber);
+		_didReachDestination = connectHallwayToTargetPosition(_dungeonPreset,_currentHallwayCoordinates,_targetCoordinates,_chosenStartConnector,_chosenTargetConnector,_startingPlacedChamber,_targetPlacedChamber);
 	//}
 
 	//createHallwayPartOnDungeonPreset(dungeonPreset,_startX, _startY, _endX, _endY);

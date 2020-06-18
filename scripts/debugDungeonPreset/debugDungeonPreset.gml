@@ -3,11 +3,8 @@ function debugDungeonPreset() {
 
 	debug("DUNGEON PRESET");
 	debug("==============");
-	debug("WidthInPixel: " +string(_dungeonPreset[? DungeonPresetProps.WidthInPixel]));
-	debug("HeightInPixel: " + string(_dungeonPreset[? DungeonPresetProps.HeightInPixel]));
-	debug("PlacedChambers (count): " + string(ds_list_size(_dungeonPreset[? DungeonPresetProps.PlacedChambers])));
+	debug("WidthInPixel: " +string(_dungeonPreset.widthInPixel));
+	debug("HeightInPixel: " + string(_dungeonPreset.heightInPixel));
+	debug("PlacedChambers (count): " + string(ds_list_size(_dungeonPreset.placedChambers)));
 	debug("");
-
-
-
 }

@@ -11,7 +11,7 @@ function correctPlacedChamberPositionsOnDungeonPreset() {
 	var _cropTop = _croppedSpaces[Position.Top];
 	var _placedChamber = undefined;
 
-	var _placedChambersList = _dungeonPreset[? DungeonPresetProps.PlacedChambers];
+	var _placedChambersList = _dungeonPreset.placedChambers;
 	for (var _i=0;_i<ds_list_size(_placedChambersList);_i++) {
 		_placedChamber = _placedChambersList[| _i];
 		_placedChamber[? PlacedChamberProps.xPositionInDungeon] = _placedChamber[? PlacedChamberProps.xPositionInDungeon]-_cropLeft;

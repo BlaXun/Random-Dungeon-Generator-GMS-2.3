@@ -39,16 +39,15 @@ function initRandomDungeonGenerator() {
 		ds_list_add(chamberPresets, chamber);
 	}
 
-	dungeonPreset = emptyDungeonPreset();
-	dungeonPreset[? DungeonPresetProps.ColorAssignments] = colorAssignments;
+	dungeonPreset = new DungeonPreset(colorAssignments,global.__initialDungeonDimensions,global.__initialDungeonDimensions);
 
-	createNewDungeonOnPreset(dungeonPreset, chamberPresets, amountOfChambersToPlace);
+	dungeonPreset.createNewDungeon(chamberPresets, amountOfChambersToPlace);
 
-	dungeonSurface = surface_create(dungeonPreset[? DungeonPresetProps.WidthInPixel], dungeonPreset[? DungeonPresetProps.HeightInPixel]);	//	Surface on which the complete dungeon will be drawn*/
+	dungeonSurface = surface_create(dungeonPreset.widthInPixel, dungeonPreset.heightInPixel);	//	Surface on which the complete dungeon will be drawn*/
 	surface_set_target(dungeonSurface);
 	draw_clear(c_black);
 
-	drawDungeonFromDungeonPreset(dungeonPreset,0,0);
+	dungeonPreset.drawDungeon(0,0);
 
 	surface_reset_target();
 

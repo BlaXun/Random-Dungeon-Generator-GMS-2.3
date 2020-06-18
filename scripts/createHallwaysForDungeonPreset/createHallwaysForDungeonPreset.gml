@@ -4,7 +4,7 @@
 function createHallwaysForDungeonPreset() {
 
 	var _dungeonPreset = argument[0];
-	var _placedChambers  = _dungeonPreset[? DungeonPresetProps.PlacedChambers];
+	var _placedChambers  = _dungeonPreset.placedChambers;
 
 	var _startingChamber, _targetChamber;
 	_startingChamber = _placedChambers[| 0];
@@ -21,10 +21,10 @@ function createHallwaysForDungeonPreset() {
 	_allConnectorsOnTarget = _targetPreset.allConnectors;
 
 	var _chosenStartConnector, _chosenTargetConnector;
-	_chosenStartConnector = _allConnectorsOnStart[@ floor(random(array_length_1d(_allConnectorsOnStart)))];
-	_chosenTargetConnector = _allConnectorsOnTarget[@ floor(random(array_length_1d(_allConnectorsOnTarget)))];
+	_chosenStartConnector = _allConnectorsOnStart[@ floor(random(array_length(_allConnectorsOnStart)))];
+	_chosenTargetConnector = _allConnectorsOnTarget[@ floor(random(array_length(_allConnectorsOnTarget)))];
 
-	placeHallwaysOnDungeonPresetWithConnectors(dungeonPreset, _chosenStartConnector, _chosenTargetConnector, _startingChamber, _targetChamber);
+	placeHallwaysOnDungeonPresetWithConnectors(_dungeonPreset, _chosenStartConnector, _chosenTargetConnector, _startingChamber, _targetChamber);
 
 	//	For each PlacedChamber
 	//	Choose (lets start with only 1) a connector that is fitting for the given dungeonFlow
