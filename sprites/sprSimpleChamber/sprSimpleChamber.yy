@@ -74,6 +74,8 @@
   },
   "resourceVersion": "1.0",
   "name": "sprSimpleChamber",
-  "tags": [],
+  "tags": [
+    "ChamberSprite",
+  ],
   "resourceType": "GMSprite",
 }

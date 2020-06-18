@@ -20,40 +20,40 @@ function createHallwayToEdgeOfChamberPreset() {
 	_placedChamberHeight = _chamberPreset.totalHeight;
 
 	var _Direction, _connectorWidth, _connectorHeight;
-	_Direction = _connectorPreset[? ConnectorPresetProps.FacingDirection];
-	_connectorWidth = _connectorPreset[? ConnectorPresetProps.Width];
-	_connectorHeight = _connectorPreset[? ConnectorPresetProps.Height];
+	_Direction = _connectorPreset.facingDirection;
+	_connectorWidth = _connectorPreset.width;
+	_connectorHeight = _connectorPreset.height;
 
 	var _startX = 0, _startY = 0, _endX = 0, _endY = 0;
 	switch (_Direction) {
 	
 		case Direction.Right: {
-			_startX = _placedChamberXPosition+_connectorPreset[? ConnectorPresetProps.XStart]+1;
-			_startY = _placedChamberYPosition+_connectorPreset[? ConnectorPresetProps.YStart];
+			_startX = _placedChamberXPosition+_connectorPreset.xStart+1;
+			_startY = _placedChamberYPosition+_connectorPreset.yStart;
 			_endX = _placedChamberXPosition+_placedChamberWidth+_connectorHeight-1;
 			_endY = _startY+_connectorHeight-1;
 		}
 		break;
 	
 		case Direction.Up: {
-			_startX = _placedChamberXPosition+_connectorPreset[? ConnectorPresetProps.XStart];
-			_startY = _placedChamberYPosition+_connectorPreset[? ConnectorPresetProps.YStart]-1;
+			_startX = _placedChamberXPosition+_connectorPreset.xStart;
+			_startY = _placedChamberYPosition+_connectorPreset.yStart-1;
 			_endX = _startX+_connectorWidth-1;
 			_endY = _placedChamberYPosition-_connectorWidth;
 		}
 		break;
 	
 		case Direction.Down: {
-			_startX = _placedChamberXPosition+_connectorPreset[? ConnectorPresetProps.XStart];
-			_startY = _placedChamberYPosition+_connectorPreset[? ConnectorPresetProps.YStart]+1;
+			_startX = _placedChamberXPosition+_connectorPreset.xStart;
+			_startY = _placedChamberYPosition+_connectorPreset.yStart+1;
 			_endX = _startX+_connectorWidth-1;
 			_endY = _placedChamberYPosition+_placedChamberHeight+_connectorWidth-1;
 		}
 		break;
 	
 		case Direction.Left: {
-			_startX = _placedChamberXPosition+_connectorPreset[? ConnectorPresetProps.XStart]-1;
-			_startY = _placedChamberYPosition+_connectorPreset[? ConnectorPresetProps.YStart];
+			_startX = _placedChamberXPosition+_connectorPreset.xStart-1;
+			_startY = _placedChamberYPosition+_connectorPreset.yStart;
 			_endX = _placedChamberXPosition-_connectorHeight;
 			_endY = _startY+_connectorHeight-1;
 		}

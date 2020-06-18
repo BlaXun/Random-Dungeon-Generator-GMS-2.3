@@ -22,5 +22,11 @@ function defineGenericEnums() {
 		yEnd
 	}
 
-
+	enum Direction {
+		None,
+		Up, 
+		Right,
+		Down,
+		Left
+	}
 }

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ChamberPresets",
-    "path": "folders/Scripts/RandomDungeonGenerator/ChamberPresets.yy",
+    "name": "Connectors",
+    "path": "folders/Scripts/RandomDungeonGenerator/Connectors.yy",
   },
   "resourceVersion": "1.0",
-  "name": "emptyChamberPreset",
+  "name": "ConnectorPreset",
   "tags": [],
   "resourceType": "GMScript",
 }

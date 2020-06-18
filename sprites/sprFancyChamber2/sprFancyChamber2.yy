@@ -74,6 +74,8 @@
   },
   "resourceVersion": "1.0",
   "name": "sprFancyChamber2",
-  "tags": [],
+  "tags": [
+    "ChamberSprite",
+  ],
   "resourceType": "GMSprite",
 }

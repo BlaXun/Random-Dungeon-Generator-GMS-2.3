@@ -2,7 +2,7 @@ function initRandomDungeonGenerator() {
 	global.__debugging = true;	//	Enables / Disables debugging output on console
 
 	//	TODO: This must be calculated
-	global.__initialDungeonDimensions = 4000;	//	TODO: Add comment
+	global.__initialDungeonDimensions = 2000;	//	TODO: Add comment
 
 	var _startTime = current_time;
 
@@ -20,11 +20,15 @@ function initRandomDungeonGenerator() {
 	colorAssignments[? make_color_rgb(20,20,20)] = ColorAssignment.Padding;
 	colorAssignments[? make_color_rgb(0,0,255)] = ColorAssignment.Hallway;
 
-	chamberSprites = [sprAnotherChamber,sprSimpleChamber,sprFancyChamber,sprFancyChamber2,sprTopAndBottomConnectorChamber,sprTopAndRightConnectorChamber,sprBottomAndRightConnectorChamber,sprLeftAndBottomConnectorChamber,sprLeftAndTopConnectorChamber];	//	All sprites that should be used as chambers
-
+	chamberSprites = [];
+	var _chamberSpriteAssetIndices = tag_get_assets("ChamberSprite");
+	for (var _i=0;_i<array_length(_chamberSpriteAssetIndices);_i++) {
+		chamberSprites[array_length(chamberSprites)] = asset_get_index(_chamberSpriteAssetIndices[_i]);
+	}
+	
 	dungeonWasCreated = false;	//	Wether the dungeon generating is done
 	chamberPresetPadding = 4;
-	amountOfChambersToPlace = 50;
+	amountOfChambersToPlace = 10;
 	//amountOfChambersToPlace = 10+ceil(random(5));	//	The amount of chambers to be placed when creating the dungeon
 	chamberPresets = newList();
 

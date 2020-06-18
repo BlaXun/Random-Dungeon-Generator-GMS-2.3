@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Debugging",
-    "path": "folders/Scripts/Debugging.yy",
+    "name": "ChamberPresets",
+    "path": "folders/Scripts/RandomDungeonGenerator/ChamberPresets.yy",
   },
   "resourceVersion": "1.0",
-  "name": "debugConnectorPreset",
+  "name": "ChamberPreset",
   "tags": [],
   "resourceType": "GMScript",
 }

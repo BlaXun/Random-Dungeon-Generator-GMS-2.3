@@ -74,6 +74,8 @@
   },
   "resourceVersion": "1.0",
   "name": "sprLeftAndTopConnectorChamber",
-  "tags": [],
+  "tags": [
+    "ChamberSprite",
+  ],
   "resourceType": "GMSprite",
 }

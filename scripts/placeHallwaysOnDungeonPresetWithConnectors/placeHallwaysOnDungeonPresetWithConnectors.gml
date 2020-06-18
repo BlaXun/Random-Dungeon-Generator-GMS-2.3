@@ -15,19 +15,19 @@ function placeHallwaysOnDungeonPresetWithConnectors() {
 	_targetPlacedChamber = argument[4];
 
 	var _startX, _startY, _targetX, _targetY;
-	_startX = _chosenStartConnector[? ConnectorPresetProps.XStart]+_startingPlacedChamber[? PlacedChamberProps.xPositionInDungeon];
-	_startY = _chosenStartConnector[? ConnectorPresetProps.YStart]+_startingPlacedChamber[? PlacedChamberProps.yPositionInDungeon];
+	_startX = _chosenStartConnector.xStart+_startingPlacedChamber[? PlacedChamberProps.xPositionInDungeon];
+	_startY = _chosenStartConnector.yStart+_startingPlacedChamber[? PlacedChamberProps.yPositionInDungeon];
 
-	_targetX = _chosenTargetConnector[? ConnectorPresetProps.XStart]+_targetPlacedChamber[? PlacedChamberProps.xPositionInDungeon];
-	_targetY = _chosenTargetConnector[? ConnectorPresetProps.YStart]+_targetPlacedChamber[? PlacedChamberProps.yPositionInDungeon];
+	_targetX = _chosenTargetConnector.xStart+_targetPlacedChamber[? PlacedChamberProps.xPositionInDungeon];
+	_targetY = _chosenTargetConnector.yStart+_targetPlacedChamber[? PlacedChamberProps.yPositionInDungeon];
 
 	var _startConnectorWidth, _startConnectorHeight;
-	_startConnectorWidth = _chosenStartConnector[? ConnectorPresetProps.Width];
-	_startConnectorHeight = _chosenStartConnector[? ConnectorPresetProps.Height];
+	_startConnectorWidth = _chosenStartConnector.width;
+	_startConnectorHeight = _chosenStartConnector.height;
 
 	var _targetConnectorWidth, _targetConnectorHeight;
-	_targetConnectorWidth = _chosenTargetConnector[? ConnectorPresetProps.Width];
-	_targetConnectorHeight = _chosenTargetConnector[? ConnectorPresetProps.Height];
+	_targetConnectorWidth = _chosenTargetConnector.width;
+	_targetConnectorHeight = _chosenTargetConnector.height;
 
 	var _endX, _endY;
 	_endX = _startX + _startConnectorWidth-1;
