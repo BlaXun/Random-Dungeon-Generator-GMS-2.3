@@ -49,7 +49,6 @@
     {"id":{"name":"ChamberPreset","path":"scripts/ChamberPreset/ChamberPreset.yy",},"order":3,},
     {"id":{"name":"ConnectorPreset","path":"scripts/ConnectorPreset/ConnectorPreset.yy",},"order":0,},
     {"id":{"name":"debug","path":"scripts/debug/debug.yy",},"order":2,},
-    {"id":{"name":"debugDungeonPreset","path":"scripts/debugDungeonPreset/debugDungeonPreset.yy",},"order":3,},
     {"id":{"name":"debugPlacedChamber","path":"scripts/debugPlacedChamber/debugPlacedChamber.yy",},"order":4,},
     {"id":{"name":"nameForDirection","path":"scripts/nameForDirection/nameForDirection.yy",},"order":5,},
     {"id":{"name":"dungeonCreator","path":"objects/dungeonCreator/dungeonCreator.yy",},"order":0,},

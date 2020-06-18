@@ -278,4 +278,12 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 
 		debug("Done placing chambers (" + string(_placedChambers)+"/"+string(amountOfChambersToPlace)+")");
 	}
+	
+	static toString = function() {
+		var _debugString = "============================= DUNGEON PRESET ==============================\n";
+		_debugString += "widthInPixel: " +string(self.widthInPixel) + "\n";
+		_debugString += "heightInPixel: " +string(self.heightInPixel) + "\n";
+		_debugString += "PlacedChambers (count): " +string(ds_list_size(self.placedChambers)) + "\n";
+		return _debugString;
+	}
 }
