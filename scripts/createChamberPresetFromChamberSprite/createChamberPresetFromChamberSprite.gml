@@ -13,34 +13,29 @@ function createChamberPresetFromChamberSprite() {
 	//	Find chamber vertical connectors -> output coordinates and dimensions to 2d array or map
 	//	Find chamber horizontal connectors -> output coordinars and dimensions to 2d array or map
 
-	var _chamberPreset = emptyChamberPreset();
-	_chamberPreset[? ChamberPresetProps.Sprite] = _chamberSprite;
+	var _chamberPreset = new ChamberPreset();
+	_chamberPreset.sprite = _chamberSprite;
 
 	var _chamberSpriteWidth, _chamberSpriteHeight;
 	_chamberSpriteWidth = sprite_get_width(_chamberSprite);
 	_chamberSpriteHeight = sprite_get_height(_chamberSprite);
 
-	_chamberPreset[? ChamberPresetProps.TotalWidth] = _chamberSpriteWidth+(_padding*2);
-	_chamberPreset[? ChamberPresetProps.TotalHeight] = _chamberSpriteHeight+(_padding*2);
+	_chamberPreset.totalWidth = _chamberSpriteWidth+(_padding*2);
+	_chamberPreset.totalHeight = _chamberSpriteHeight+(_padding*2);
 
 	var _grids = createPixelGridAndDatatypeGridFromSprite(_chamberSprite, _colorAssignments, _padding);
 	var _valueTypeGrid = newValueTypeGrid(_chamberSpriteWidth+(_padding*2), _chamberSpriteHeight+(_padding*2),false);
 	_valueTypeGrid[? ValueTypeGridProps.Values] = _grids[0];
 	_valueTypeGrid[? ValueTypeGridProps.Types] = _grids[1];
-	_chamberPreset[? ChamberPresetProps.ValueTypeGrid] = _valueTypeGrid;
-
-	_chamberPreset[? ChamberPresetProps.Padding] = _padding;
+	_chamberPreset.valueTypeGrid = _valueTypeGrid;
+	_chamberPreset.padding = _padding;
 
 	var _connectorColor, _chamberColor;
 	_chamberColor = findColorForColorAssignment(_colorAssignments, ColorAssignment.ChamberGround);
 	_connectorColor = findColorForColorAssignment(_colorAssignments, ColorAssignment.Connector);
 
-	createAndAssignConnectorsOnChamberPreset(_chamberPreset, _connectorColor, _chamberColor);
-	assignDirectionsToConnectToOnChamberPreset(_chamberPreset);
-
-	debugChamberPreset(_chamberPreset);
-
+	_chamberPreset.createAndAssignConnectorsOnChamberPreset(_connectorColor, _chamberColor);
+	_chamberPreset.assignDirectionsToConnectToOnChamberPreset();
+	
 	return _chamberPreset;
-
-
 }

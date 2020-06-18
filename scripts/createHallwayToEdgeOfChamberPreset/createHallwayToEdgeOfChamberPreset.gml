@@ -16,8 +16,8 @@ function createHallwayToEdgeOfChamberPreset() {
 	_placedChamberYPosition = _placedChamber[? PlacedChamberProps.yPositionInDungeon];
 
 	_chamberPreset = _placedChamber[? PlacedChamberProps.ChamberPreset];
-	_placedChamberWidth = _chamberPreset[? ChamberPresetProps.TotalWidth];
-	_placedChamberHeight = _chamberPreset[? ChamberPresetProps.TotalHeight];
+	_placedChamberWidth = _chamberPreset.totalWidth;
+	_placedChamberHeight = _chamberPreset.totalHeight;
 
 	var _Direction, _connectorWidth, _connectorHeight;
 	_Direction = _connectorPreset[? ConnectorPresetProps.FacingDirection];

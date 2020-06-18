@@ -62,12 +62,12 @@ function populateDungeonPresetWithChamberPresets() {
 	
 			var _previousPlacedChamberChamberPreset, _previousChamberPresetTotalWidth, _previousChamberPresetTotalHeight;
 			_previousPlacedChamberChamberPreset = _previouslyPlacedChamber[? PlacedChamberProps.ChamberPreset];
-			_previousChamberPresetTotalWidth = _previousPlacedChamberChamberPreset[? ChamberPresetProps.TotalWidth];
-			_previousChamberPresetTotalHeight = _previousPlacedChamberChamberPreset[? ChamberPresetProps.TotalHeight];
+			_previousChamberPresetTotalWidth = _previousPlacedChamberChamberPreset.totalWidth;
+			_previousChamberPresetTotalHeight = _previousPlacedChamberChamberPreset.totalHeight;
 	
 			var _thisChamberWidth, _thisChamberHeight;
-			_thisChamberWidth = _chosenChamberPreset[? ChamberPresetProps.TotalWidth];
-			_thisChamberHeight = _chosenChamberPreset[? ChamberPresetProps.TotalHeight];
+			_thisChamberWidth = _chosenChamberPreset.totalWidth;
+			_thisChamberHeight = _chosenChamberPreset.totalHeight;
 		
 			switch (_directionToMoveToNext) {
 		
@@ -121,7 +121,7 @@ function populateDungeonPresetWithChamberPresets() {
 			}
 		}
 	
-		var _typeGridOnChosenChamber = typeGridFromValueTypeGrid(_chosenChamberPreset[? ChamberPresetProps.ValueTypeGrid]);
+		var _typeGridOnChosenChamber = typeGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
 	
 		//	Move the chamber a bit if a collision is detected. Main axis to move on is defined by direction of the first chamber 
 		while (checkForCollisionWithChildGridOnParentGrid(_typeGridOnChosenChamber, _dungeonTypeGrid,_chosenColumn,_chosenRow) == true) {
@@ -167,12 +167,12 @@ function populateDungeonPresetWithChamberPresets() {
 		_directionToMoveToNext = randomDirectionFromPlacedChamberDirections(_placedChamber);		
 		_placedChamber[? PlacedChamberProps.DesiredDirectionToConnectTo] = _directionToMoveToNext;
 	
-		var _valueGridOnChamberPreset = valueGridFromValueTypeGrid(_chosenChamberPreset[? ChamberPresetProps.ValueTypeGrid]);
-		var _typeGridOnChamberPreset = typeGridFromValueTypeGrid(_chosenChamberPreset[? ChamberPresetProps.ValueTypeGrid]);
+		var _valueGridOnChamberPreset = valueGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
+		var _typeGridOnChamberPreset = typeGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
 	
 		var _chamberPresetTotalWidth, _chamberPresetTotalHeight;
-		_chamberPresetTotalWidth = _chosenChamberPreset[? ChamberPresetProps.TotalWidth];
-		_chamberPresetTotalHeight = _chosenChamberPreset[? ChamberPresetProps.TotalHeight];
+		_chamberPresetTotalWidth = _chosenChamberPreset.totalWidth;
+		_chamberPresetTotalHeight = _chosenChamberPreset.totalHeight;
 		ds_grid_set_grid_region(_dungeonPixelGrid,_valueGridOnChamberPreset,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 		ds_grid_set_grid_region(_dungeonTypeGrid, _typeGridOnChamberPreset,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 	

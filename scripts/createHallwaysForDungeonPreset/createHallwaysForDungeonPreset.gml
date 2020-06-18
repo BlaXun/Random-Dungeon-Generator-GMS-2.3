@@ -17,8 +17,8 @@ function createHallwaysForDungeonPreset() {
 	_targetPreset = _targetChamber[? PlacedChamberProps.ChamberPreset];
 
 	var _allConnectorsOnStart, _allConnectorsOnTarget;
-	_allConnectorsOnStart = _startPreset[? ChamberPresetProps.AllConnectors];
-	_allConnectorsOnTarget = _targetPreset[? ChamberPresetProps.AllConnectors];
+	_allConnectorsOnStart = _startPreset.allConnectors;
+	_allConnectorsOnTarget = _targetPreset.allConnectors;
 
 	var _chosenStartConnector, _chosenTargetConnector;
 	_chosenStartConnector = _allConnectorsOnStart[@ floor(random(array_length_1d(_allConnectorsOnStart)))];

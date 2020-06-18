@@ -7,13 +7,10 @@ function placedChamberFromChamberPreset() {
 
 	_placedChamber = emptyPlacedChamber();
 	_placedChamber[? PlacedChamberProps.ChamberPreset] = _chamberPreset;
-	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromBottomSide] = _chamberPreset[? ChamberPresetProps.AllowsConnectionOnAndFromBottomSide];
-	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromTopSide] = _chamberPreset[? ChamberPresetProps.AllowsConnectionOnAndFromTopSide];
-	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromLeftSide] = _chamberPreset[? ChamberPresetProps.AllowsConnectionOnAndFromLeftSide];
-	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromRightSide] = _chamberPreset[? ChamberPresetProps.AllowsConnectionOnAndFromRightSide];
+	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromBottomSide] = _chamberPreset.allowsConnectionOnAndFromBottomSide;
+	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromTopSide] = _chamberPreset.allowsConnectionOnAndFromTopSide;
+	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromLeftSide] = _chamberPreset.allowsConnectionOnAndFromLeftSide;
+	_placedChamber[? PlacedChamberProps.AllowsConnectionOnAndFromRightSide] = _chamberPreset.allowsConnectionOnAndFromRightSide;
 
 	return _placedChamber;
-
-
-
 }

@@ -10,7 +10,7 @@ function debugPlacedChamber() {
 	debug("PreviousChambers (size): " + string(ds_list_size(_placedChamber[? PlacedChamberProps.PreviousChambers])));
 	debug("xPositionInDungeon: " + string(_placedChamber[? PlacedChamberProps.xPositionInDungeon]));
 	debug("yPositionInDungeon: " + string(_placedChamber[? PlacedChamberProps.yPositionInDungeon]));
-	debug("Sprite: " + sprite_get_name(_chamberPreset[? ChamberPresetProps.Sprite]));
+	debug("Sprite: " + sprite_get_name(_chamberPreset.sprite));
 
 	debug("");
 

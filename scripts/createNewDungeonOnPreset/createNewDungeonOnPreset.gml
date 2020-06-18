@@ -31,10 +31,5 @@ function createNewDungeonOnPreset() {
 	ds_grid_set_grid_region(_resizedValueGrid,valueGridFromDungeonPresetValueTypeGrid,croppedPositions[Position.Left],croppedPositions[Position.Top],croppedPositions[Position.Left]+_newWidth+1,croppedPositions[Position.Top]+_newHeight+1,0,0);
 	replaceValueGridOnValueTypeGrid(_resizedValueGrid, valueTypeGridOnDungeonPreset);
 
-	show_debug_message("Size: " + string(ds_list_size(_dungeonPreset[? DungeonPresetProps.PlacedChambers])));
-	/*for (var _i=0;_i<ds_list_size(_dungeonPreset[? DungeonPresetProps.PlacedChambers]);_i++) {
-		debugPlacedChamber(ds_list_find_value(_dungeonPreset[? DungeonPresetProps.PlacedChambers],_i));
-	}*/
-
-
+	show_debug_message("Size: " + string(ds_list_size(_dungeonPreset[? DungeonPresetProps.PlacedChambers])));	
 }

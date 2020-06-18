@@ -20,7 +20,7 @@ function chamberThatAllowsConnectionOnSide() {
 	for (var _i=0;_i<ds_list_size(_availableChamberPresets);_i++) {	
 	
 		_currentPreset = _availableChamberPresets[| _i];
-		allSidesOnChamberPresetThatAllowConnections(_currentPreset,_sidesOnWhichConnectionsAreAllowed);
+		_currentPreset.allSidesThatAllowConnections(_sidesOnWhichConnectionsAreAllowed);
 	
 		//	Check if the needed direction exists (this is where we want to connect to)
 		if (ds_list_find_index(_sidesOnWhichConnectionsAreAllowed,_direction) != -1) {
