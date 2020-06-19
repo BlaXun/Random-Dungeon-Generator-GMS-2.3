@@ -31,12 +31,19 @@ function RandomDungonGenerator(options) constructor {
 	
 	self._requiredMaximumGridDimensions = 0;
 	
+	/*	
+		@function calculateRequiredMaximumGridSpace();
+		@description	Calculates the maximum grid dimensions for the dungeon grid
+						that would be needed if only the largest chamber would repeatedly be used.
+		
+						With this dimensions all further combinations should be possible.
+						The grid will be cropped in the end anyway. Still, there seems to be a limit
+						on how much memory can be allocated. */
 	static calculateRequiredMaximumGridSpace = function() {
 		var _maxSpriteDimension = maximumDimensionFromSprites(self.options.chamberSprites);
 		_maxSpriteDimension += self.options.paddingToApplyToChamberPresets*2;	
 		_neededMaximumSpace = ((_maxSpriteDimension+self.options.maximumRandomOffsetBetweenPlacedChambers)*self.options.amountOfChambersToPlace)*2;
-		debug("Needs a " + string(_neededMaximumSpace) + " * " + string(_neededMaximumSpace) + " grid");
-		
+		debug("Needs a " + string(_neededMaximumSpace) + " * " + string(_neededMaximumSpace) + " grid");		
 		self._requiredMaximumGridDimensions = _neededMaximumSpace;
 	}
 	
