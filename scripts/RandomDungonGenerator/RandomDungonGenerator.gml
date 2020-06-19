@@ -12,11 +12,11 @@ function RandomDungonGenerator(colorAssignment, spritesToUseForChambers) constru
 	global.__initialDungeonDimensions = 2000;	//	TODO: Add comment //	TODO: This must be calculated
 
 	self.paddingToApplyToChamberPresets = 4;
-	self.colorAssignments = colorAssignment; //new ColorAssignment(); //newMap();
+	self.colorAssignments = colorAssignment; //new ColorAssignment(); //createMap();
 	
 	self.dungeonWasCreated = false;	//	Wether the dungeon generating is done	
 	self.amountOfChambersToPlace = 10;
-	self.chamberPresets = newList();
+	self.chamberPresets = createList();
 	self.chamberSprites = spritesToUseForChambers;
 	
 	self.dungeonPreset = undefined;

@@ -14,8 +14,6 @@ function createHallwayPartOnDungeonPreset() {
 	_xEnd = argument[3];
 	_yEnd = argument[4];
 
-	var _valueTypeGridOnDungeon = _dungeonPreset.valueTypeGrid;
 	var _hallwayColor = _dungeonPreset.colorAssignments.colorUsedToDrawHallways;
-
-	setValueAndTypeForAreaOnValueTypeGrid(_hallwayColor, ColorMeaning.Hallway, _xStart, _yStart, _xEnd, _yEnd, _valueTypeGridOnDungeon);
+	_dungeonPreset.valueTypeGrid.setValueAndTypeForArea(_hallwayColor, ColorMeaning.Hallway, _xStart, _yStart, _xEnd, _yEnd);
 }

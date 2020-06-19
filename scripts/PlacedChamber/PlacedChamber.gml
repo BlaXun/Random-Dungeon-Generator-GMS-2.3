@@ -9,8 +9,8 @@ function PlacedChamber(chamberPreset) constructor {
 
 	self.chamberPreset = chamberPreset;
 	self.index = -1;
-	self.nextChambers = newList();
-	self.previousChambers = newList();
+	self.nextChambers = createList();
+	self.previousChambers = createList();
 	self.xPositionInDungeon = -1;
 	self.yPositionInDungeon = -1;
 	self.desiredDirectionToConnectTo = Direction.None;

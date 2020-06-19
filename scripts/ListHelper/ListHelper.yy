@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Map Management",
-    "path": "folders/Scripts/Utils/Map Management.yy",
+    "name": "Utils",
+    "path": "folders/Scripts/Utils.yy",
   },
   "resourceVersion": "1.0",
-  "name": "destroyAllMaps",
+  "name": "ListHelper",
   "tags": [],
   "resourceType": "GMScript",
 }

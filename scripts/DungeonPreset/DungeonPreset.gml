@@ -2,24 +2,19 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor {
 	
-	self.valueTypeGrid = newValueTypeGrid(maximumWidth,maximumHeight,true);
+	self.valueTypeGrid = new ValueTypeGrid(maximumWidth,maximumHeight,true);
 	self.widthInPixel = maximumWidth;
 	self.heightInPixel = maximumHeight;
 	self.colorAssignments = colorAssignments;
-	self.placedChambers = newList();
+	self.placedChambers = createList();
 	
 	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace) {
 
 		self.populateWithChamberPresets(chamberPresets, amountOfChambersToPlace);
 		createHallwaysForDungeonPreset(self);
 
-		var valueTypeGridOnDungeonPreset, valueGridFromDungeonPresetValueTypeGrid, typeGridFromDungeonPresetValueTypeGrid;
-		valueTypeGridOnDungeonPreset = self.valueTypeGrid;
-		valueGridFromDungeonPresetValueTypeGrid = valueGridFromValueTypeGrid(valueTypeGridOnDungeonPreset);
-		typeGridFromDungeonPresetValueTypeGrid = typeGridFromValueTypeGrid(valueTypeGridOnDungeonPreset);
-
 		var cropResultForDungeonTypeGrid, croppedTypeGrid, croppedPositions;
-		cropResultForDungeonTypeGrid = croppedGridFromGrid(typeGridFromDungeonPresetValueTypeGrid);
+		cropResultForDungeonTypeGrid = croppedGridFromGrid(self.valueTypeGrid.types);
 		croppedTypeGrid = cropResultForDungeonTypeGrid[0];
 		croppedPositions = cropResultForDungeonTypeGrid[1];
 
@@ -27,17 +22,12 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_newWidth = ds_grid_width(croppedTypeGrid);
 		_newHeight = ds_grid_height(croppedTypeGrid);
 
-		replaceTypeGridOnValueTypeGrid(croppedTypeGrid, valueTypeGridOnDungeonPreset);
+		var _resizedValueGrid = createGrid(_newWidth,_newHeight);
+		ds_grid_set_grid_region(_resizedValueGrid,self.valueTypeGrid.values,croppedPositions[Position.Left],croppedPositions[Position.Top],croppedPositions[Position.Left]+_newWidth+1,croppedPositions[Position.Top]+_newHeight+1,0,0);
+		
+		self.valueTypeGrid.replaceValueAndTypeGrid(_resizedValueGrid, croppedTypeGrid);
 		
 		self.updatePositionsOfAllPlacedChambersFromCroppedSpaces(croppedPositions);
-
-		self.widthInPixel = _newWidth;
-		self.heightInPixel = _newHeight;
-
-		var _resizedValueGrid = newGrid(_newWidth,_newHeight);
-		ds_grid_set_grid_region(_resizedValueGrid,valueGridFromDungeonPresetValueTypeGrid,croppedPositions[Position.Left],croppedPositions[Position.Top],croppedPositions[Position.Left]+_newWidth+1,croppedPositions[Position.Top]+_newHeight+1,0,0);
-		replaceValueGridOnValueTypeGrid(_resizedValueGrid, valueTypeGridOnDungeonPreset);
-
 		show_debug_message("Size: " + string(ds_list_size(self.placedChambers)));	
 	}
 	
@@ -47,32 +37,25 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	///	@param {real} y	The y-coordinate where to draw the dungeon
 	static drawDungeon = function(x,y) {
 
-		var _dungeonPixelGrid = valueGridFromValueTypeGrid(self.valueTypeGrid);
-		var _dungeonTypeGrid = typeGridFromValueTypeGrid(self.valueTypeGrid);
-
-		var _gridWidth, _gridHeight;
-		_gridWidth = ds_grid_width(_dungeonPixelGrid);
-		_gridHeight = ds_grid_height(_dungeonPixelGrid);
-
 		var _content = undefined;
 		var _colorToDraw = noone;
-		for (var _yPos=0;_yPos<_gridHeight;_yPos++) {
+		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 	
-			for (var _xPos=0;_xPos<_gridWidth;_xPos++) {
+			for (var _xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
 		
-				_content = _dungeonTypeGrid[# _xPos, _yPos];		
+				_content = self.valueTypeGrid.types[# _xPos, _yPos];		
 				_colorToDraw = undefined;
 		
 				if (_content != noone) {
 					switch (_content) {
 				
 						case ColorMeaning.ChamberGround: 					
-							_colorToDraw = _dungeonPixelGrid[# _xPos, _yPos];
+							_colorToDraw = self.valueTypeGrid.values[# _xPos, _yPos];
 						break;			
 				
 						case ColorMeaning.Connector: 
 						if (self.colorAssignments.colorUsedToDrawConnectors == undefined) {
-							_colorToDraw = _dungeonPixelGrid[# _xPos, _yPos];
+							_colorToDraw = self.valueTypeGrid.values[# _xPos, _yPos];
 						} else {
 							_colorToDraw = self.colorAssignments.colorUsedToDrawConnectors;
 						}
@@ -107,13 +90,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 
 		randomize();
 
-		var _dungeonPixelGrid = valueGridFromValueTypeGrid(self.valueTypeGrid);
-		var _dungeonTypeGrid = typeGridFromValueTypeGrid(self.valueTypeGrid);
-
-		var _dungeonGridWidth, _dungeonGridHeight;
-		_dungeonGridWidth = ds_grid_width(_dungeonPixelGrid);
-		_dungeonGridHeight = ds_grid_height(_dungeonPixelGrid);
-
 		debug("Placing " + string(amountOfChambersToPlace) +" chambers.");
 
 		var _chosenColumn, _chosenRow, _chosenChamberPreset, _placedChambers;
@@ -121,8 +97,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_placedChambers = 0;
 
 		var _startX, _startY;
-		_startX = floor(_dungeonGridWidth/2);
-		_startY = floor(_dungeonGridHeight/2);
+		_startX = floor(self.valueTypeGrid.width/2);
+		_startY = floor(self.valueTypeGrid.height/2);
 
 		var _minimumRandomOffsetOnAxis, _maximumRandomOffsetOnAxis;
 		_minimumRandomOffsetOnAxis = 2;
@@ -219,10 +195,9 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				}
 			}
 	
-			var _typeGridOnChosenChamber = typeGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
 	
 			//	Move the chamber a bit if a collision is detected. Main axis to move on is defined by direction of the first chamber 
-			while (checkForCollisionWithChildGridOnParentGrid(_typeGridOnChosenChamber, _dungeonTypeGrid,_chosenColumn,_chosenRow) == true) {
+			while (checkForCollisionWithChildGridOnParentGrid(_chosenChamberPreset.valueTypeGrid.types, self.valueTypeGrid.types,_chosenColumn,_chosenRow) == true) {
 		
 				switch (_firstChamberDirection) {
 			
@@ -265,14 +240,11 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 			_directionToMoveToNext = _placedChamber.randomDirectionFromAvailableDirections();		
 			_placedChamber.desiredDirectionToConnectTo = _directionToMoveToNext;
 	
-			var _valueGridOnChamberPreset = valueGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
-			var _typeGridOnChamberPreset = typeGridFromValueTypeGrid(_chosenChamberPreset.valueTypeGrid);
-	
 			var _chamberPresetTotalWidth, _chamberPresetTotalHeight;
 			_chamberPresetTotalWidth = _chosenChamberPreset.totalWidth;
 			_chamberPresetTotalHeight = _chosenChamberPreset.totalHeight;
-			ds_grid_set_grid_region(_dungeonPixelGrid,_valueGridOnChamberPreset,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
-			ds_grid_set_grid_region(_dungeonTypeGrid, _typeGridOnChamberPreset,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
+			ds_grid_set_grid_region(self.valueTypeGrid.values,_chosenChamberPreset.valueTypeGrid.values,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
+			ds_grid_set_grid_region(self.valueTypeGrid.types, _chosenChamberPreset.valueTypeGrid.types,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 	
 
 			_previouslyPlacedChamber = _placedChamber;

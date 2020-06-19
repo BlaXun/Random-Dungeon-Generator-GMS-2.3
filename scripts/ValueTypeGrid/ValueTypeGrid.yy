@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "List Management",
-    "path": "folders/Scripts/Utils/List Management.yy",
+    "name": "Utils",
+    "path": "folders/Scripts/Utils.yy",
   },
   "resourceVersion": "1.0",
-  "name": "destroyAllLists",
+  "name": "ValueTypeGrid",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -64,28 +64,24 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		_rightFacingConnectors = [];
 		_allConnectors = [];
 	
-		var _pixelGrid = valueGridFromValueTypeGrid(self.valueTypeGrid);
+		var _xPos, _yPos;
 	
-		var _gridWidth, _gridHeight, _xPos, _yPos;
-		_gridWidth = ds_grid_width(_pixelGrid);
-		_gridHeight = ds_grid_height(_pixelGrid);
-	
-		var _pixelGridCopy = newGrid(_gridWidth,_gridHeight); 
-		ds_grid_copy(_pixelGridCopy, _pixelGrid);	
+		var _pixelGridCopy = createGrid(self.valueTypeGrid.width,self.valueTypeGrid.height); 
+		ds_grid_copy(_pixelGridCopy, self.valueTypeGrid.values);	
 	
 		show_debug_message("createAndAssignConnectors -> " + string(colorAssignments));
 		var _pixel, _connectorDirection, _neighborPixelRight, _neighborPixelBottom, _neighborPixelTop, _neighborPixelLeft;	
-		for (_yPos=0;_yPos<_gridHeight;_yPos++) {
+		for (_yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 				
-			for (_xPos=0;_xPos<_gridWidth;_xPos++) {
+			for (_xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
 				_connectorDirection = Direction.None;
 			
 				_pixel = _pixelGridCopy[# _xPos,_yPos];
 			
 				if (colorAssignments.meaningForColor(_pixel) == ColorMeaning.Connector) {
 				
-					_neighborPixelRight = _xPos < _gridWidth-1 ? _pixelGridCopy[# _xPos+1,_yPos] : noone;
-					_neighborPixelBottom = _yPos < _gridHeight-1 ? _pixelGridCopy[# _xPos,_yPos+1] : noone;
+					_neighborPixelRight = _xPos < self.valueTypeGrid.width-1 ? _pixelGridCopy[# _xPos+1,_yPos] : noone;
+					_neighborPixelBottom = _yPos < self.valueTypeGrid.height-1 ? _pixelGridCopy[# _xPos,_yPos+1] : noone;
 				
 					if (colorAssignments.meaningForColor(_neighborPixelRight) != ColorMeaning.Connector && colorAssignments.meaningForColor(_neighborPixelBottom) != ColorMeaning.Connector) {					
 						continue;
@@ -122,7 +118,7 @@ function ChamberPreset(chamberSprite, padding) constructor {
 						var _width = 1;
 						while(_neighborIsBlankOrGround == false) {
 						
-							_neighborPixelRight = (_xPos+_width > _gridWidth-1) ? noone : _pixelGridCopy[# _xPos+_width,_yPos];
+							_neighborPixelRight = (_xPos+_width > self.valueTypeGrid.width-1) ? noone : _pixelGridCopy[# _xPos+_width,_yPos];
 						
 							if (_neighborPixelRight == noone || colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
@@ -167,7 +163,7 @@ function ChamberPreset(chamberSprite, padding) constructor {
 						var _height = 1;
 						while(_neighborIsBlankOrGround == false) {
 						
-							_neighborPixelBottom = (_yPos+_height > _gridHeight-1) ? noone : _pixelGridCopy[# _xPos,_yPos+_height];
+							_neighborPixelBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? noone : _pixelGridCopy[# _xPos,_yPos+_height];
 						
 							if (_neighborPixelBottom == noone || colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
@@ -233,9 +229,9 @@ function chamberThatAllowsConnectionOnSide(availableChamberPresets, sideToConnec
 	var _neededFaceDirection = Direction.None;
 	_neededFaceDirection = oppositeDirectionForDirection(sideToConnectOn);
 
-	var _compatibleChamberPresets = newList();
+	var _compatibleChamberPresets = createList();
 	var _currentPreset = undefined;
-	var _sidesOnWhichConnectionsAreAllowed = newList();
+	var _sidesOnWhichConnectionsAreAllowed = createList();
 	for (var _i=0;_i<ds_list_size(availableChamberPresets);_i++) {	
 	
 		_currentPreset = availableChamberPresets[| _i];
@@ -279,10 +275,10 @@ function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments,pad
 	var _chamberPreset = new ChamberPreset(chamberSprite, padding);
 
 	var _grids = createPixelGridAndDatatypeGridFromSprite(chamberSprite, colorAssignments, padding);
-	var _valueTypeGrid = newValueTypeGrid(_chamberPreset.totalWidth, _chamberPreset.totalHeight,false);
-	_valueTypeGrid[? ValueTypeGridProps.Values] = _grids[0];
-	_valueTypeGrid[? ValueTypeGridProps.Types] = _grids[1];
-	_chamberPreset.valueTypeGrid = _valueTypeGrid;	
+	var _valueTypeGrid = new ValueTypeGrid(_chamberPreset.totalWidth, _chamberPreset.totalHeight,false);
+	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
+	_chamberPreset.valueTypeGrid = _valueTypeGrid;
+	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
 	
 	return _chamberPreset;

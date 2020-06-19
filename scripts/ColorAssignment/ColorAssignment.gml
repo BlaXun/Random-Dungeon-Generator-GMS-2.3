@@ -11,14 +11,14 @@ enum ColorMeaning {
 
 function ColorAssignment() constructor {
 
-	self.colorsDetectedAsConnector = newList();
-	self.colorsDetectedAsChamberGround = newList();
+	self.colorsDetectedAsConnector = createList();
+	self.colorsDetectedAsChamberGround = createList();
 	self.colorUsedToDrawHallways = make_color_rgb(0,0,255);
 	self.colorUsedToDrawPadding = undefined;
 	self.colorUsedToDrawConnectors = undefined;
 	self.backgroundColor = c_black;	
 	
-	self._colorMeanings = newMap();
+	self._colorMeanings = createMap();
 	
 	static addConnectorColor = function(color) {
 		self.colorsDetectedAsConnector[| ds_list_size(self.colorsDetectedAsConnector)] = color; 
