@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Debugging.yy",
   },
   "resourceVersion": "1.0",
-  "name": "debug",
+  "name": "DebugHelper",
   "tags": [],
   "resourceType": "GMScript",
 }

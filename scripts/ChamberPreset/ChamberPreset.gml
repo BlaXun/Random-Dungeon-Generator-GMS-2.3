@@ -1,5 +1,7 @@
-///	@function ChamerPreset()
-///	@description ChamberPreset-Constructor
+/*	@function					ChamerPreset();
+	@description				ChamberPreset-Constructor
+	@param {real} chamberSprite	Index of the sprite to use for this chamber preset
+	@param {real} padding		Amount of padding to apply on each side of the chamber */
 function ChamberPreset(chamberSprite, padding) constructor {
 
 	self.leftFacingConnectors = [];
@@ -19,12 +21,13 @@ function ChamberPreset(chamberSprite, padding) constructor {
 	self.allowsConnectionOnAndFromTopSide = false;
 	self.allowsConnectionOnAndFromBottomSide = false;
 	
-	///	@function allSidesOnThatAllowConnections(listToPopulate);
-	///	@description	Populates the given list with all sides (Direction) on the current ChamberPreset allows a connection
-	/// @param {ds_list} listToPopulate			The list which will get all the sides (Direction) assigned
+	
+	/*	@function						allSidesOnThatAllowConnections(listToPopulate);
+		@description					Populates the given list with all sides (Direction) on the current ChamberPreset that allow a connection
+		@param {ds_list} listToPopulate	The list which will get all the sides (Direction) assigned */	
 	static allSidesThatAllowConnections = function(listToPopulate) {
 
-		if (self.allowsConnectionOnAndFromBottomSide == true) {
+		if (self.allowsConnectionOnAndFromLeftSide == true) {
 			listToPopulate[| ds_list_size(listToPopulate)] = Direction.Left;
 		}
 
@@ -41,8 +44,8 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		}
 	}
 	
-	///	@function assignDirectionsToConnectTo();
-	///	@description	Depending on the connectors on the chamber preset we will set the directions the chamber could connect to
+	/*	@function		assignDirectionsToConnectTo();
+		@description	Sets the allowed connection sides depending on the currently assigned connectors */
 	static assignDirectionsToConnectTo = function() {
 
 		self.allowsConnectionOnAndFromLeftSide = array_length(self.leftFacingConnectors) > 0;
@@ -51,10 +54,9 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		self.allowsConnectionOnAndFromBottomSide = array_length(self.downFacingConnectors) > 0;
 	}
 	
-	///	@function		createAndAssignConnectors(connectorColor,chamberColor);
-	///	@description	Searches for connectors on the chamber preset and assigns them
-	///	@param connectorColor {color}	The color used to detect connectors
-	///	@param chamberColor {color}	The color used to detect chamber ground
+	/*	@function									createAndAssignConnectors(colorAssignments);
+		@description								Searches for connectors on the chamber preset and assigns them
+		@param colorAssignments {ColorAssignment}	Instance of ColorAssignment. These are the colors used to analyze the sprite */
 	static createAndAssignConnectors = function(colorAssignments) {
 
 		var _upFacingConnectors, _downFacingConnectors, _rightFacingConnectors, _leftFacingConnectors, _allConnectors;
@@ -64,31 +66,32 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		_rightFacingConnectors = [];
 		_allConnectors = [];
 	
-		var _xPos, _yPos;
-	
 		var _pixelGridCopy = createGrid(self.valueTypeGrid.width,self.valueTypeGrid.height); 
 		ds_grid_copy(_pixelGridCopy, self.valueTypeGrid.values);	
 	
 		show_debug_message("createAndAssignConnectors -> " + string(colorAssignments));
 		var _pixel, _connectorDirection, _neighborPixelRight, _neighborPixelBottom, _neighborPixelTop, _neighborPixelLeft;	
-		for (_yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
+		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 				
-			for (_xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
+			for (var _xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
 				_connectorDirection = Direction.None;
-			
 				_pixel = _pixelGridCopy[# _xPos,_yPos];
 			
+				if (_pixel == 0) {
+					continue;
+				}
+				
 				if (colorAssignments.meaningForColor(_pixel) == ColorMeaning.Connector) {
 				
-					_neighborPixelRight = _xPos < self.valueTypeGrid.width-1 ? _pixelGridCopy[# _xPos+1,_yPos] : noone;
-					_neighborPixelBottom = _yPos < self.valueTypeGrid.height-1 ? _pixelGridCopy[# _xPos,_yPos+1] : noone;
+					_neighborPixelRight = _xPos < self.valueTypeGrid.width-1 ? _pixelGridCopy[# _xPos+1,_yPos] : 0;
+					_neighborPixelBottom = _yPos < self.valueTypeGrid.height-1 ? _pixelGridCopy[# _xPos,_yPos+1] : 0;
 				
 					if (colorAssignments.meaningForColor(_neighborPixelRight) != ColorMeaning.Connector && colorAssignments.meaningForColor(_neighborPixelBottom) != ColorMeaning.Connector) {					
 						continue;
 					}
 				
-					_neighborPixelLeft = _xPos == 0 ? noone : _pixelGridCopy[# _xPos-1, _yPos];
-					_neighborPixelTop = _yPos == 0 ? noone : _pixelGridCopy[# _xPos, _yPos-1];
+					_neighborPixelLeft = _xPos == 0 ? 0 : _pixelGridCopy[# _xPos-1, _yPos];
+					_neighborPixelTop = _yPos == 0 ? 0 : _pixelGridCopy[# _xPos, _yPos-1];
 				
 					//	New Connector found
 					var _newConnector = new ConnectorPreset(_xPos,_yPos); 
@@ -98,9 +101,9 @@ function ChamberPreset(chamberSprite, padding) constructor {
 					
 						//	Vertical Connector										
 						var _connectorDirection = Direction.None;
-						if (_neighborPixelBottom == noone && colorAssignments.meaningForColor(_neighborPixelTop) == ColorMeaning.ChamberGround) {
+						if (_neighborPixelBottom == 0 && colorAssignments.meaningForColor(_neighborPixelTop) == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Down;
-						} else if (_neighborPixelTop == noone && colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
+						} else if (_neighborPixelTop == 0 && colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Up;
 						}
 					
@@ -118,9 +121,9 @@ function ChamberPreset(chamberSprite, padding) constructor {
 						var _width = 1;
 						while(_neighborIsBlankOrGround == false) {
 						
-							_neighborPixelRight = (_xPos+_width > self.valueTypeGrid.width-1) ? noone : _pixelGridCopy[# _xPos+_width,_yPos];
+							_neighborPixelRight = (_xPos+_width > self.valueTypeGrid.width-1) ? 0 : _pixelGridCopy[# _xPos+_width,_yPos];
 						
-							if (_neighborPixelRight == noone || colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
+							if (_neighborPixelRight == 0 || colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
 							} else {
 								//	Mask neighbor with chamber color to prevent duplicate detection
@@ -143,9 +146,9 @@ function ChamberPreset(chamberSprite, padding) constructor {
 					
 						//	Horizontal Connector
 						var _connectorDirection = Direction.None;
-						if (_neighborPixelRight == noone && colorAssignments.meaningForColor(_neighborPixelLeft) == ColorMeaning.ChamberGround) {
+						if (_neighborPixelRight == 0 && colorAssignments.meaningForColor(_neighborPixelLeft) == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Right;
-						} else if (_neighborPixelLeft == noone && colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
+						} else if (_neighborPixelLeft == 0 && colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Left;
 						}
 					
@@ -163,9 +166,9 @@ function ChamberPreset(chamberSprite, padding) constructor {
 						var _height = 1;
 						while(_neighborIsBlankOrGround == false) {
 						
-							_neighborPixelBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? noone : _pixelGridCopy[# _xPos,_yPos+_height];
+							_neighborPixelBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? 0 : _pixelGridCopy[# _xPos,_yPos+_height];
 						
-							if (_neighborPixelBottom == noone || colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
+							if (_neighborPixelBottom == 0 || colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
 							} else {										
 								//	Mask neighbor with chamber color to prevent duplicate detection
@@ -214,16 +217,44 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		_debugString += "allowsConnectionOnAndFromTopSide: " +string(self.allowsConnectionOnAndFromTopSide) + "\n";
 		_debugString += "allowsConnectionOnAndFromRightSide: " +string(self.allowsConnectionOnAndFromRightSide) + "\n";
 		_debugString += "allowsConnectionOnAndFromBottomSide: " +string(self.allowsConnectionOnAndFromBottomSide) + "\n";
+		_debugString += "=============================================================================";
 		return _debugString;
+	}
+
+	static allowsConnectionOnSideAndAtLeastOneOtherSideButTheExcludedSide = function(requestedSideToConnectOn, sideToIgnore) {
+		var _allowsConnectionOnRequestedSide = false;
+		var _hasAnotherSideToConnectOnBesidesTheSideToIgnore = false;
+		
+		var _sidesThatAllowConnections = createList();
+		self.allSidesThatAllowConnections(_sidesThatAllowConnections);
+	
+		//	Check if the needed direction exists (this is where we want to connect to)
+		if (ds_list_find_index(_sidesThatAllowConnections,requestedSideToConnectOn) > -1) {
+			_allowsConnectionOnRequestedSide = true;
+			
+			//	What sides remain after this one?
+			ds_list_delete(_sidesThatAllowConnections, ds_list_find_index(_sidesThatAllowConnections,requestedSideToConnectOn));
+			if (ds_list_size(_sidesThatAllowConnections) == 1 && ds_list_find_index(_sidesThatAllowConnections, sideToIgnore) > -1) {
+				_hasAnotherSideToConnectOnBesidesTheSideToIgnore = false;
+				//	This chamber is not compatible because it offers no remaining sides from which it can build new connections
+			} else {
+				_hasAnotherSideToConnectOnBesidesTheSideToIgnore = true;
+			}		
+		}
+	
+		destroyList(_sidesThatAllowConnections);
+		return _allowsConnectionOnRequestedSide && _hasAnotherSideToConnectOnBesidesTheSideToIgnore;
 	}
 }
 
-///	@function chamberThatAllowsConnectionOnSide(availableChamberPresets,sideToConnectOn,directionToExclude);
-///	@description	Returns a ChamberPreset from the given available chamber presets that is compatible with the given chamber flow
-///	@param {ds_list<ChamberPreset>}				availableChamberPresets	The list of available chamber presets to choose from
-///	@param {Direction} sideToConnectOn			The side on which a connection must be possible
-/// @param {ChamberFlow} directionToExclude		Do not return ChamberPresets that offer only this other direction beside the needed direction
-///	@return	A ChamberPreset
+/*	@function chamberThatAllowsConnectionOnSide(availableChamberPresets,sideToConnectOn,directionToExclude);
+	@description Returns a ChamberPreset from the given available chamber presets that allows for connection on the given side
+	
+	@param {ds_list<ChamberPreset>}	availableChamberPresets		The list of available chamber presets to choose from
+	@param {Direction} sideToConnectOn							The side on which a connection must be possible
+	@param {Direction} directionToExclude						Do not return ChamberPresets that offer only this other direction beside the requested side on which a connection must be possible
+	
+	@return	A ChamberPreset */
 function chamberThatAllowsConnectionOnSide(availableChamberPresets, sideToConnectOn, directionToExclude) {
 
 	var _neededFaceDirection = Direction.None;
@@ -231,29 +262,14 @@ function chamberThatAllowsConnectionOnSide(availableChamberPresets, sideToConnec
 
 	var _compatibleChamberPresets = createList();
 	var _currentPreset = undefined;
-	var _sidesOnWhichConnectionsAreAllowed = createList();
 	for (var _i=0;_i<ds_list_size(availableChamberPresets);_i++) {	
 	
 		_currentPreset = availableChamberPresets[| _i];
-		_currentPreset.allSidesThatAllowConnections(_sidesOnWhichConnectionsAreAllowed);
-	
-		//	Check if the needed direction exists (this is where we want to connect to)
-		if (ds_list_find_index(_sidesOnWhichConnectionsAreAllowed,sideToConnectOn) != -1) {
-		
-			//	What sides remain after this one?
-			ds_list_delete(_sidesOnWhichConnectionsAreAllowed, ds_list_find_index(_sidesOnWhichConnectionsAreAllowed,sideToConnectOn));
-			if (ds_list_size(_sidesOnWhichConnectionsAreAllowed) == 1 && ds_list_find_index(_sidesOnWhichConnectionsAreAllowed, directionToExclude) != -1) {
-				//	This chamber is not compatible because it offers no remaining sides from which it can build new conenctions
-			} else {
-				//	Found a compatible chamber
-				_compatibleChamberPresets[| ds_list_size(_compatibleChamberPresets)] = _currentPreset;	
-			}		
+		if (_currentPreset.allowsConnectionOnSideAndAtLeastOneOtherSideButTheExcludedSide(sideToConnectOn, directionToExclude) == true) {
+			_compatibleChamberPresets[| ds_list_size(_compatibleChamberPresets)] = _currentPreset;	
 		}
-	
-		ds_list_clear(_sidesOnWhichConnectionsAreAllowed);
 	}
 
-	destroyList(_sidesOnWhichConnectionsAreAllowed);
 	ds_list_shuffle(_compatibleChamberPresets);
 
 	var _chamberPresetToReturn = _compatibleChamberPresets[| 0];
@@ -262,23 +278,20 @@ function chamberThatAllowsConnectionOnSide(availableChamberPresets, sideToConnec
 	return _chamberPresetToReturn;
 }
 
-///	@function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments,padding);
-///	@description Cretes a chamber preset from the given sprite using the given colors
-///	@param {real} chamberSprite The index of the sprite to use
-/// @param {color} colorAssignments A map that defines the meaning of the encountered colors
-///	@param {real} padding A padding to apply around the pixel grid
+/*	@function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments,padding);
+	@description Creates a chamber preset from the given sprite using the given colors and padding
+	
+	@param {real} chamberSprite		The index of the sprite to use
+	@param {color} colorAssignments A ColorAssignment-Instance that holds information regarding color and meaning
+	@param {real} padding			A padding to apply around the pixel grid */
 function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments,padding) {
 
-	//	Find chamber content -> output to 2d array or map
-	//	Find chamber vertical connectors -> output coordinates and dimensions to 2d array or map
-	//	Find chamber horizontal connectors -> output coordinars and dimensions to 2d array or map
 	var _chamberPreset = new ChamberPreset(chamberSprite, padding);
 
 	var _grids = createPixelGridAndDatatypeGridFromSprite(chamberSprite, colorAssignments, padding);
 	var _valueTypeGrid = new ValueTypeGrid(_chamberPreset.totalWidth, _chamberPreset.totalHeight,false);
 	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
 	_chamberPreset.valueTypeGrid = _valueTypeGrid;
-	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
 	
 	return _chamberPreset;

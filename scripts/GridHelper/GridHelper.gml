@@ -9,7 +9,6 @@ function createGrid(width,height) {
 	}
 
 	var _grid = ds_grid_create(width, height);
-	ds_grid_clear(_grid,noone);
 	ds_list_add(global.__grids, _grid);
 
 	return _grid;
@@ -40,8 +39,7 @@ function destroyAllGrids() {
 	if (variable_global_exists("__grids")) {
 	
 		var gridReference = noone;	
-		var _i;
-		for (_i=0;_i<ds_list_size(global.__grids);_i++) {		
+		for (var _i=0;_i<ds_list_size(global.__grids);_i++) {		
 			gridReference = global.__grids[| _i];
 		
 			if (ds_exists(gridReference,ds_type_grid)) {
@@ -71,30 +69,30 @@ function croppedGridFromGrid(gridToCrop) {
 	var _gridWidth, _gridHeight;
 	_gridWidth = ds_grid_width(gridToCrop);
 	_gridHeight = ds_grid_height(gridToCrop);
-
+	
 	for (var _yPos=0;_yPos<_gridHeight;_yPos+=1) {
-		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != noone) {		
+		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != 0) {
 			_yStart = _yPos;
 			break;
 		}
 	}
 
 	for (var _yPos=_gridHeight-1;_yPos>=0;_yPos-=1) {
-		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != noone) {
+		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != 0) {
 			_yEnd = _yPos+1;
 			break;
 		}
 	}
 
 	for (var _xPos=0;_xPos<_gridWidth;_xPos+=1) {
-		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != noone) {
+		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != 0) {
 			_xStart = _xPos;
 			break;
 		}
 	}
 
 	for (var _xPos=_gridWidth-1;_xPos>=0;_xPos-=1) {
-		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != noone) {
+		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != 0) {
 			_xEnd = _xPos+1;
 			break;
 		}
@@ -132,7 +130,7 @@ function checkForCollisionWithChildGridOnParentGrid(childGrid, parentGrid, x, y)
 	for (var _yPos=y;_yPos<y+ds_grid_height(childGrid);_yPos+=1) {
 		for (var _xPos=x;_xPos<x+ds_grid_width(childGrid);_xPos+=1) {
 	
-			if (ds_grid_get(parentGrid,_xPos,_yPos) != noone) {
+			if (ds_grid_get(parentGrid,_xPos,_yPos) != 0) {
 				didFindCollision = true;
 				break;
 			}
@@ -189,7 +187,7 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments,
 			_pixelColor = surface_getpixel(_surf,_xPos,_yPos);
 		
 			var _colorMeaning = colorAssignments.meaningForColor(_pixelColor);
-			if (is_undefined(_colorMeaning) == false) {				
+			if (is_undefined(_colorMeaning) == false) {		
 				_pixelGrid[# _equalOffset+_xPos, _equalOffset+_yPos] = _pixelColor;
 				_pixelGridContents[# _equalOffset+_xPos, _equalOffset+_yPos] = _colorMeaning;
 			}

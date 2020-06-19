@@ -9,15 +9,22 @@ function RandomDungonGenerator(colorAssignment, spritesToUseForChambers) constru
 	self._didCreateChambers = false;
 	
 	global.__debugging = true;	//	Enables / Disables debugging output on console
-	global.__initialDungeonDimensions = 2000;	//	TODO: Add comment //	TODO: This must be calculated
 
 	self.paddingToApplyToChamberPresets = 4;
 	self.colorAssignments = colorAssignment; //new ColorAssignment(); //createMap();
 	
 	self.dungeonWasCreated = false;	//	Wether the dungeon generating is done	
-	self.amountOfChambersToPlace = 10;
+	self.amountOfChambersToPlace = 20;
 	self.chamberPresets = createList();
 	self.chamberSprites = spritesToUseForChambers;
+	self.minimumRandomOffsetBetweenPlacedChambers = 2;
+	self.maximumRandomOffsetBetweenPlacedChambers = 20;
+	
+	var _maxSpriteDimension = maximumDimensionFromSprites(self.chamberSprites);
+	_maxSpriteDimension += paddingToApplyToChamberPresets*2;	
+	_neededMaximumSpace = ((_maxSpriteDimension+maximumRandomOffsetBetweenPlacedChambers)*amountOfChambersToPlace)*2;
+	
+	global.__initialDungeonDimensions = _neededMaximumSpace;
 	
 	self.dungeonPreset = undefined;
 	self.dungeonSurface = undefined;
@@ -50,7 +57,7 @@ function RandomDungonGenerator(colorAssignment, spritesToUseForChambers) constru
 		}
 		
 		self.dungeonPreset = new DungeonPreset(self.colorAssignments,global.__initialDungeonDimensions,global.__initialDungeonDimensions);
-		self.dungeonPreset.createNewDungeon(self.chamberPresets, self.amountOfChambersToPlace);
+		self.dungeonPreset.createNewDungeon(self.chamberPresets, self.amountOfChambersToPlace,self.minimumRandomOffsetBetweenPlacedChambers,self.maximumRandomOffsetBetweenPlacedChambers);
 		self.dungeonWasCreated = true;
 	}
 	

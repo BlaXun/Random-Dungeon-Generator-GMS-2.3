@@ -102,5 +102,4 @@ function PlacedChamber(chamberPreset) constructor {
 		
 		return _debugString;
 	}
-
 }

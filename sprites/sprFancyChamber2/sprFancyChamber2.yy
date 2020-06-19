@@ -69,8 +69,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"34a0ba5e-21f2-452b-ad22-9dbe06f92fde","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "Chambers",
+    "path": "folders/Sprites/Chambers.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprFancyChamber2",

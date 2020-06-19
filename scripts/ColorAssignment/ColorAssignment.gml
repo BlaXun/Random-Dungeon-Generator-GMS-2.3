@@ -41,6 +41,11 @@ function ColorAssignment() constructor {
 	}
 
 	static meaningForColor = function(color) {
+		
+		if (color == undefined) {
+			return undefined;
+		}
+		
 		var _meaning = self._colorMeanings[? self.uniformIdentifierForColor(color)];
 		return _meaning == undefined ? ColorMeaning.Unknown : _meaning;
 	}

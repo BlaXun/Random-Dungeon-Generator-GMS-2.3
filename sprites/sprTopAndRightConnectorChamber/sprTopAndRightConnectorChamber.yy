@@ -69,8 +69,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"acda08fc-9f24-4c74-8800-5572e8e7aae2","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "Chambers",
+    "path": "folders/Sprites/Chambers.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprTopAndRightConnectorChamber",

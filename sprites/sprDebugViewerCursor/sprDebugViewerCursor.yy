@@ -69,8 +69,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"f82b5913-e92f-440d-8f59-7b6047c4e5e3","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "System",
+    "path": "folders/Sprites/System.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprDebugViewerCursor",

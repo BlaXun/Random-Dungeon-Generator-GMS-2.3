@@ -8,9 +8,9 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	self.colorAssignments = colorAssignments;
 	self.placedChambers = createList();
 	
-	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace) {
+	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset) {
 
-		self.populateWithChamberPresets(chamberPresets, amountOfChambersToPlace);
+		self.populateWithChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
 		createHallwaysForDungeonPreset(self);
 
 		var cropResultForDungeonTypeGrid, croppedTypeGrid, croppedPositions;
@@ -39,6 +39,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 
 		var _content = undefined;
 		var _colorToDraw = noone;
+		
 		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 	
 			for (var _xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
@@ -46,7 +47,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				_content = self.valueTypeGrid.types[# _xPos, _yPos];		
 				_colorToDraw = undefined;
 		
-				if (_content != noone) {
+				if (_content != 0) {
 					switch (_content) {
 				
 						case ColorMeaning.ChamberGround: 					
@@ -86,7 +87,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	///	@function	populateDungeonPresetWithChamberPresets(dungeonPreset,chamberPresets,amountOfChambersToPlace)
 	///	@param {ds_list} chamberPresets			A list of chamber presets that are available to be used for populating
 	///	@param {real} amountOfChambersToPlace	The amount of chambers that the dungeon should consist of
-	static populateWithChamberPresets = function(chamberPresets,amountOfChambersToPlace) {
+	static populateWithChamberPresets = function(chamberPresets,amountOfChambersToPlace,minimumRandomOffset, maximumRandomOffset) {
 
 		randomize();
 
@@ -99,10 +100,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		var _startX, _startY;
 		_startX = floor(self.valueTypeGrid.width/2);
 		_startY = floor(self.valueTypeGrid.height/2);
-
-		var _minimumRandomOffsetOnAxis, _maximumRandomOffsetOnAxis;
-		_minimumRandomOffsetOnAxis = 2;
-		_maximumRandomOffsetOnAxis = 20;
 
 		//	We need to prevent at least one ChamberFlow on all PlacedChambers that are created after the first one. This is to prevent collisons
 		var _directionToPreventOnAllFollowingPlacedChambers = Direction.None;
@@ -132,7 +129,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		
 				//	Set the x and y positions for this next PlacedChamber
 				var _randomizedOffset = 0;
-				_randomizedOffset = floor(random(_maximumRandomOffsetOnAxis-_minimumRandomOffsetOnAxis));
+				_randomizedOffset = floor(random(maximumRandomOffset-minimumRandomOffset));
 	
 				var _previousPlacedChamberChamberPreset, _previousChamberPresetTotalWidth, _previousChamberPresetTotalHeight;
 				_previousPlacedChamberChamberPreset = _previouslyPlacedChamber.chamberPreset;
@@ -145,7 +142,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		
 				switch (_directionToMoveToNext) {
 		
-				//	TODO: Der Random-Faktor darf NICHT mit der direction to prevent kollidieren
+					//	TODO: Der Random-Faktor darf NICHT mit der direction to prevent kollidieren
 					case Direction.Right:			
 						_chosenColumn += _previousChamberPresetTotalWidth + _randomizedOffset;
 						//_chosenRow+=_randomizedOffset;				
@@ -161,8 +158,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 							//_chosenColumn+=_randomizedOffset;
 					break;
 		
-					case Direction.Up:
-						_chosenRow -= _thisChamberHeight+_randomizedOffset;
+					case Direction.Up:					
+						_chosenRow -= _thisChamberHeight+_randomizedOffset;					
 						//_chosenColumn-=_randomizedOffset;
 					break;
 		
@@ -202,7 +199,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				switch (_firstChamberDirection) {
 			
 					case Direction.Right:			
-					_chosenColumn += 1;
+						_chosenColumn += 1;
 					break;
 		
 					case Direction.Left:
@@ -255,23 +252,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		debug("Done placing chambers (" + string(_placedChambers)+"/"+string(amountOfChambersToPlace)+")");
 	}
 	
-	///	@function correctPlacedChamberPositionsOnDungeonPreset(dungeonPreset,croppedSpaces);
-	/// @description							Corrects the starting x and y position for all PlacedChambers on the given DungeonPreset using the given croppedSpaces-Array
-	///	@param {array<real>}	croppedSpaces	A array with Position-Enum entries as key and pixels as value
-	static correctPlacedChamberPositionsOnDungeonPreset = function(croppedSpaces) {
-
-		var _cropLeft = croppedSpaces[Position.Left];
-		var _cropTop = croppedSpaces[Position.Top];
-		var _placedChamber = undefined;
-
-		var _placedChambersList = self.placedChambers;
-		for (var _i=0;_i<ds_list_size(_placedChambersList);_i++) {
-			_placedChamber = _placedChambersList[| _i];
-			_placedChamber.xPositionInDungeon = _placedChamber.xPositionInDungeon-_cropLeft;
-			_placedChamber.yPositionInDungeon = _placedChamber.yPositionInDungeon-_cropTop;
-		}
-	}
-
 	static updatePositionsOfAllPlacedChambersFromCroppedSpaces = function(croppedSpaces) {
 		
 		var _currentPlacedChamber = undefined;
