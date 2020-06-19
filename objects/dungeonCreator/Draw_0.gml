@@ -1,5 +1,5 @@
 /// @description Insert description here
 // You can write your code in this editor
-if (dungeonWasCreated) {
-	draw_surface(dungeonSurface,0,0);
+if (self.rdg.dungeonWasCreated == true && surface_exists(self.rdg.dungeonSurface) == true) {
+	draw_surface(self.rdg.dungeonSurface,0,0);
 }

@@ -7,6 +7,11 @@ function createHallwaysForDungeonPreset() {
 	var _placedChambers  = _dungeonPreset.placedChambers;
 
 	var _startingChamber, _targetChamber;
+	
+	if (ds_list_size(_placedChambers) == 0) {
+		exit;
+	}
+	
 	_startingChamber = _placedChambers[| 0];
 
 	var _nextChambersList = _startingChamber.nextChambers;
@@ -40,6 +45,4 @@ function createHallwaysForDungeonPreset() {
 	//	TODO: Create branching hallways 
 	//	TODO: Create rounded corners in hallways
 	//	TODO: Prevent overlapping hallways
-
-
 }

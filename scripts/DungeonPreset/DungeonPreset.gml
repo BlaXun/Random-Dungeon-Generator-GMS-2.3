@@ -54,43 +54,46 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_gridWidth = ds_grid_width(_dungeonPixelGrid);
 		_gridHeight = ds_grid_height(_dungeonPixelGrid);
 
-		var _chamberColor, _connectorColor, _paddingColor, _hallwayColor;
-		_chamberColor = findColorForColorAssignment(self.colorAssignments,ColorAssignment.ChamberGround);
-		_connectorColor = findColorForColorAssignment(self.colorAssignments,ColorAssignment.Connector);
-		_paddingColor = findColorForColorAssignment(self.colorAssignments,ColorAssignment.Padding);
-		_hallwayColor = findColorForColorAssignment(self.colorAssignments,ColorAssignment.Hallway);
-
-		var _contents = undefined;
+		var _content = undefined;
 		var _colorToDraw = noone;
 		for (var _yPos=0;_yPos<_gridHeight;_yPos++) {
 	
 			for (var _xPos=0;_xPos<_gridWidth;_xPos++) {
 		
-				_contents = _dungeonTypeGrid[# _xPos, _yPos];		
-				_colorToDraw = noone;
+				_content = _dungeonTypeGrid[# _xPos, _yPos];		
+				_colorToDraw = undefined;
 		
-				if (_contents != noone) {
-					switch (_contents) {
+				if (_content != noone) {
+					switch (_content) {
 				
-						case GridContentType.ChamberGround: 					
-							_colorToDraw = _chamberColor;
+						case ColorMeaning.ChamberGround: 					
+							_colorToDraw = _dungeonPixelGrid[# _xPos, _yPos];
 						break;			
 				
-						case GridContentType.Connector: 
-							_colorToDraw = _connectorColor;
+						case ColorMeaning.Connector: 
+						if (self.colorAssignments.colorUsedToDrawConnectors == undefined) {
+							_colorToDraw = _dungeonPixelGrid[# _xPos, _yPos];
+						} else {
+							_colorToDraw = self.colorAssignments.colorUsedToDrawConnectors;
+						}
+							
 						break;
 				
-						case GridContentType.Padding: 
-							_colorToDraw = _paddingColor;
+						case ColorMeaning.Padding: 
+							_colorToDraw = self.colorAssignments.colorUsedToDrawPadding;
 						break;
 				
-						case GridContentType.Hallway: 
-							_colorToDraw = _hallwayColor;
+						case ColorMeaning.Hallway: 
+							_colorToDraw = self.colorAssignments.colorUsedToDrawHallways;
+						break;
+						
+						default:
+							_colorToDraw = undefined;
 						break;
 					}
 				}
 		
-				if (_colorToDraw != noone) {
+				if (_colorToDraw != undefined) {
 					draw_point_color(x+_xPos,y+_yPos, _colorToDraw);
 				}
 			}

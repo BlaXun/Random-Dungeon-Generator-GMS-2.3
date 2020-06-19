@@ -7,7 +7,7 @@
 function croppedGridFromGrid() {
 
 	var _sourceGrid = argument[0];
-	var _xStart, _yStart, _xEnd, _yEnd = 0;
+	var _xStart = 0, _yStart = 0, _xEnd = 0, _yEnd = 0;
 	var _cutPixelsOnSides = [];
 	_cutPixelsOnSides[Position.Top] = 0;
 	_cutPixelsOnSides[Position.Right] = 0;

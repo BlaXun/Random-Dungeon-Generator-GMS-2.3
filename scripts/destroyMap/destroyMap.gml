@@ -16,8 +16,4 @@ function destroyMap() {
 	if (_pos != -1) {
 		ds_list_delete(global.__maps,_pos);	
 	}
-
-
-
-
 }

@@ -6,7 +6,7 @@
     "path": "folders/Scripts/RandomDungeonGenerator.yy",
   },
   "resourceVersion": "1.0",
-  "name": "initRandomDungeonGenerator",
+  "name": "ColorAssignment",
   "tags": [],
   "resourceType": "GMScript",
 }

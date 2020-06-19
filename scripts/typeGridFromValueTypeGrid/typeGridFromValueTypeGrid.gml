@@ -5,6 +5,4 @@ function typeGridFromValueTypeGrid() {
 
 	var _valueTypeGrid = argument[0];
 	return _valueTypeGrid[? ValueTypeGridProps.Types];
-
-
 }

@@ -35,10 +35,10 @@ function createPixelGridAndDatatypeGridFromSprite() {
 		_pixelGridWidth = ds_grid_width(_pixelGrid);
 		_pixelGridHeight = ds_grid_height(_pixelGrid);
 	
-		ds_grid_set_region(_pixelGridContents,0,0,_pixelGridWidth,_padding-1,GridContentType.Padding);	//	Top-Left to Top-Right
-		ds_grid_set_region(_pixelGridContents,0,0,_padding-1,_pixelGridHeight,GridContentType.Padding);	//	Top-Left to Bottom-Left
-		ds_grid_set_region(_pixelGridContents,0,_pixelGridHeight-_padding,_pixelGridWidth-1,_pixelGridHeight-1,GridContentType.Padding);	//	Bottom-Left to Bottom-Right	
-		ds_grid_set_region(_pixelGridContents,_pixelGridWidth-_padding,0,_pixelGridWidth+1,_pixelGridHeight,GridContentType.Padding);	//	Top-Right to Bottom-Right
+		ds_grid_set_region(_pixelGridContents,0,0,_pixelGridWidth,_padding-1,ColorMeaning.Padding);	//	Top-Left to Top-Right
+		ds_grid_set_region(_pixelGridContents,0,0,_padding-1,_pixelGridHeight,ColorMeaning.Padding);	//	Top-Left to Bottom-Left
+		ds_grid_set_region(_pixelGridContents,0,_pixelGridHeight-_padding,_pixelGridWidth-1,_pixelGridHeight-1,ColorMeaning.Padding);	//	Bottom-Left to Bottom-Right	
+		ds_grid_set_region(_pixelGridContents,_pixelGridWidth-_padding,0,_pixelGridWidth+1,_pixelGridHeight,ColorMeaning.Padding);	//	Top-Right to Bottom-Right
 	}
 
 	var _pixelColor = noone;
@@ -48,8 +48,8 @@ function createPixelGridAndDatatypeGridFromSprite() {
 		
 			_pixelColor = surface_getpixel(_surf,_xPos,_yPos);
 		
-			var _colorMeaning = ds_map_find_value(_colorAssignments,_pixelColor);
-			if (is_undefined(_colorMeaning) == false) {
+			var _colorMeaning = _colorAssignments.meaningForColor(_pixelColor);
+			if (is_undefined(_colorMeaning) == false) {				
 				_pixelGrid[# _equalOffset+_xPos, _equalOffset+_yPos] = _pixelColor;
 				_pixelGridContents[# _equalOffset+_xPos, _equalOffset+_yPos] = _colorMeaning;
 			}
