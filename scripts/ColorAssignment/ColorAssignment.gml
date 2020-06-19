@@ -29,7 +29,7 @@ function ColorAssignment() constructor {
 		self.colorsDetectedAsChamberGround[| ds_list_size(self.colorsDetectedAsConnector)] = color;
 		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.ChamberGround;
 	}
-	
+		
 	static setHallwayDrawColor = function(color) {
 		self.colorUsedToDrawHallways = color;
 		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.Hallway;
@@ -43,7 +43,7 @@ function ColorAssignment() constructor {
 	static meaningForColor = function(color) {
 		
 		if (color == undefined) {
-			return undefined;
+			throw ("Passed undefined on color parameter in meaningForColor");
 		}
 		
 		var _meaning = self._colorMeanings[? self.uniformIdentifierForColor(color)];

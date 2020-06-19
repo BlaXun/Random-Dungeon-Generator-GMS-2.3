@@ -3,6 +3,7 @@
 function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor {
 	
 	self.valueTypeGrid = new ValueTypeGrid(maximumWidth,maximumHeight,true);
+	
 	self.widthInPixel = maximumWidth;
 	self.heightInPixel = maximumHeight;
 	self.colorAssignments = colorAssignments;
@@ -22,6 +23,9 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_newWidth = ds_grid_width(croppedTypeGrid);
 		_newHeight = ds_grid_height(croppedTypeGrid);
 
+		self.widthInPixel = _newWidth;		
+		self.heightInPixel = _newHeight;
+		
 		var _resizedValueGrid = createGrid(_newWidth,_newHeight);
 		ds_grid_set_grid_region(_resizedValueGrid,self.valueTypeGrid.values,croppedPositions[Position.Left],croppedPositions[Position.Top],croppedPositions[Position.Left]+_newWidth+1,croppedPositions[Position.Top]+_newHeight+1,0,0);
 		
@@ -40,6 +44,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		var _content = undefined;
 		var _colorToDraw = noone;
 		
+		var _drawnConnectors = 0;
 		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 	
 			for (var _xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
@@ -47,7 +52,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				_content = self.valueTypeGrid.types[# _xPos, _yPos];		
 				_colorToDraw = undefined;
 		
-				if (_content != 0) {
+				if (_content != ColorMeaning.Unknown) {
 					switch (_content) {
 				
 						case ColorMeaning.ChamberGround: 					
@@ -55,7 +60,9 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 						break;			
 				
 						case ColorMeaning.Connector: 
-						if (self.colorAssignments.colorUsedToDrawConnectors == undefined) {
+						_drawnConnectors++;
+						if (self.colorAssignments.colorUsedToDrawConnectors == undefined) {							
+							show_debug_message(self.colorAssignments);
 							_colorToDraw = self.valueTypeGrid.values[# _xPos, _yPos];
 						} else {
 							_colorToDraw = self.colorAssignments.colorUsedToDrawConnectors;
@@ -110,7 +117,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_chosenColumn = _startX;
 		_chosenRow = _startY;
 
-		var _directionToMoveToNext = choose(Direction.Left, Direction.Up, Direction.Right, Direction.Down);
+		var _availableDirectionsFromAllChamberPresets = allAvailableDirectionsOutOfChambers(chamberPresets);
+		var _directionToMoveToNext = _availableDirectionsFromAllChamberPresets[floor(random(array_length(_availableDirectionsFromAllChamberPresets)))];		
 		_firstChamberDirection = _directionToMoveToNext;
 
 		while (_placedChambers != amountOfChambersToPlace) {
@@ -119,6 +127,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 			if (_chosenChamberPreset == undefined) {
 				//	Could not find a matching chamber to place next
+				show_debug_message("EXITING BECAUSE I DIDNT FIND A MATCHING CHAMBER PRESET");
 				break;
 			}
 	
@@ -242,7 +251,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 			_chamberPresetTotalHeight = _chosenChamberPreset.totalHeight;
 			ds_grid_set_grid_region(self.valueTypeGrid.values,_chosenChamberPreset.valueTypeGrid.values,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 			ds_grid_set_grid_region(self.valueTypeGrid.types, _chosenChamberPreset.valueTypeGrid.types,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
-	
+
 
 			_previouslyPlacedChamber = _placedChamber;
 			ds_list_add(self.placedChambers,_placedChamber);
@@ -268,4 +277,45 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_debugString += "PlacedChambers (count): " +string(ds_list_size(self.placedChambers)) + "\n";
 		return _debugString;
 	}
+}
+
+/*	@function allAvailableDirectionsOutOfChambers(chambers);
+	@description	Returns all possible directions by summarizing the directions of the given chambers
+	@param {ds_list} chambers	A list of ChamberPresets
+	@return A array with Direction-Enum entries	*/
+function allAvailableDirectionsOutOfChambers(chambers) {
+	
+	var _didFindUp = false, _didFindDown = false, _didFindLeft = false, _didFindRight = false, _availableDirections;
+	_availableDirections = [];
+	
+	var _chamber;
+	for (var _i=0;_i<ds_list_size(chambers);_i++) {
+		_chamber = chambers[| _i];
+		
+		if (_chamber.allowsConnectionOnAndFromRightSide == true) {
+			_availableDirections[array_length(_availableDirections)] = Direction.Right;
+			_didFindRight = true;
+		}
+		
+		if (_chamber.allowsConnectionOnAndFromLeftSide == true) {
+			_availableDirections[array_length(_availableDirections)] = Direction.Left;
+			_didFindLeft = true;
+		}
+		
+		if (_chamber.allowsConnectionOnAndFromTopSide == true) {
+			_availableDirections[array_length(_availableDirections)] = Direction.Up;
+			_didFindUp = true;
+		}
+		
+		if (_chamber.allowsConnectionOnAndFromBottomSide == true) {
+			_availableDirections[array_length(_availableDirections)] = Direction.Down;
+			_didFindDown = true;
+		}
+		
+		if (_didFindRight == true && _didFindLeft == true && _didFindUp == true && _didFindDown == true) {
+			break;
+		}
+	}
+	
+	return _availableDirections;
 }

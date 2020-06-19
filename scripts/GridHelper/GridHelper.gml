@@ -1,3 +1,7 @@
+enum GridContent {
+	Empty = -1
+}
+
 ///	@function createGrid(width, height)
 ///	@description			Creates a new grid with the given dimension and stores it in a global list
 ///	@param {real} width		The width of the grid that will be created
@@ -9,6 +13,8 @@ function createGrid(width,height) {
 	}
 
 	var _grid = ds_grid_create(width, height);
+	ds_grid_clear(_grid,GridContent.Empty);
+	
 	ds_list_add(global.__grids, _grid);
 
 	return _grid;
@@ -71,28 +77,28 @@ function croppedGridFromGrid(gridToCrop) {
 	_gridHeight = ds_grid_height(gridToCrop);
 	
 	for (var _yPos=0;_yPos<_gridHeight;_yPos+=1) {
-		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != 0) {
+		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != GridContent.Empty) {
 			_yStart = _yPos;
 			break;
 		}
 	}
 
 	for (var _yPos=_gridHeight-1;_yPos>=0;_yPos-=1) {
-		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != 0) {
+		if (ds_grid_get_max(gridToCrop,0,_yPos,_gridWidth-1,_yPos) != GridContent.Empty) {
 			_yEnd = _yPos+1;
 			break;
 		}
 	}
 
 	for (var _xPos=0;_xPos<_gridWidth;_xPos+=1) {
-		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != 0) {
+		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != GridContent.Empty) {
 			_xStart = _xPos;
 			break;
 		}
 	}
 
 	for (var _xPos=_gridWidth-1;_xPos>=0;_xPos-=1) {
-		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != 0) {
+		if (ds_grid_get_max(gridToCrop,_xPos,0,_xPos,_gridHeight-1) != GridContent.Empty) {
 			_xEnd = _xPos+1;
 			break;
 		}
@@ -130,7 +136,7 @@ function checkForCollisionWithChildGridOnParentGrid(childGrid, parentGrid, x, y)
 	for (var _yPos=y;_yPos<y+ds_grid_height(childGrid);_yPos+=1) {
 		for (var _xPos=x;_xPos<x+ds_grid_width(childGrid);_xPos+=1) {
 	
-			if (ds_grid_get(parentGrid,_xPos,_yPos) != 0) {
+			if (ds_grid_get(parentGrid,_xPos,_yPos) != GridContent.Empty) {
 				didFindCollision = true;
 				break;
 			}
@@ -155,18 +161,13 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments,
 	_chamberSpriteWidth = sprite_get_width(spriteIndex);
 	_chamberSpriteHeight = sprite_get_height(spriteIndex);
 
-	var _pixelGrid = createGrid(_chamberSpriteWidth+(paddingToApply*2),_chamberSpriteHeight+(paddingToApply*2));
+	var _pixelGrid = createGrid(_chamberSpriteWidth+(paddingToApply*2),_chamberSpriteHeight+(paddingToApply*2));	
 	var _pixelGridContents = createGrid(_chamberSpriteWidth+(paddingToApply*2),_chamberSpriteHeight+(paddingToApply*2));
-
-	var _surf = surface_create(_chamberSpriteWidth, _chamberSpriteHeight);
-	surface_set_target(_surf);
-	draw_clear_alpha(c_black,0);
-	draw_sprite(spriteIndex,0,0,0);
+	ds_grid_clear(_pixelGridContents, ColorMeaning.Unknown);
 
 	//	As soon as padding is in use we do not populate the grid starting at 0,0 but we always have an offset
 	//	that is equal for both x and y
 	var _equalOffset = paddingToApply;
-
 	if (paddingToApply != 0) {
 	
 		var _pixelGridWidth, _pixelGridHeight;
@@ -179,17 +180,21 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments,
 		ds_grid_set_region(_pixelGridContents,_pixelGridWidth-paddingToApply,0,_pixelGridWidth+1,_pixelGridHeight,ColorMeaning.Padding);	//	Top-Right to Bottom-Right
 	}
 
+	var _surf = surface_create(_chamberSpriteWidth, _chamberSpriteHeight);
+	surface_set_target(_surf);
+	draw_clear_alpha(c_black,0);
+	draw_sprite(spriteIndex,0,0,0);
+	
 	var _pixelColor = noone;
-	var _yPos, _xPos;
-	for (_yPos=0;_yPos<_chamberSpriteHeight;_yPos++) {	
-		for (_xPos=0;_xPos<_chamberSpriteWidth;_xPos++) {
+	for (var _yPos=0;_yPos<_chamberSpriteHeight;_yPos++) {	
+		for (var _xPos=0;_xPos<_chamberSpriteWidth;_xPos++) {
 		
 			_pixelColor = surface_getpixel(_surf,_xPos,_yPos);
 		
 			var _colorMeaning = colorAssignments.meaningForColor(_pixelColor);
-			if (is_undefined(_colorMeaning) == false) {		
+			if (_colorMeaning != ColorMeaning.Unknown) {						
 				_pixelGrid[# _equalOffset+_xPos, _equalOffset+_yPos] = _pixelColor;
-				_pixelGridContents[# _equalOffset+_xPos, _equalOffset+_yPos] = _colorMeaning;
+				_pixelGridContents[# _equalOffset+_xPos, _equalOffset+_yPos] = _colorMeaning;			
 			}
 		}
 	}

@@ -52,6 +52,8 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		self.allowsConnectionOnAndFromRightSide = array_length(self.rightFacingConnectors) > 0;
 		self.allowsConnectionOnAndFromTopSide = array_length(self.upFacingConnectors) > 0;
 		self.allowsConnectionOnAndFromBottomSide = array_length(self.downFacingConnectors) > 0;
+		
+		show_debug_message("Assigning directions -> " + string(self.allowsConnectionOnAndFromLeftSide) + "," + string(self.allowsConnectionOnAndFromRightSide) + "," + string(self.allowsConnectionOnAndFromTopSide) + "," + string(self.allowsConnectionOnAndFromBottomSide));
 	}
 	
 	/*	@function									createAndAssignConnectors(colorAssignments);
@@ -66,50 +68,47 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		_rightFacingConnectors = [];
 		_allConnectors = [];
 	
-		var _pixelGridCopy = createGrid(self.valueTypeGrid.width,self.valueTypeGrid.height); 
-		ds_grid_copy(_pixelGridCopy, self.valueTypeGrid.values);	
+		var _typeGridCopy = createGrid(self.valueTypeGrid.width, self.valueTypeGrid.height); 
+		ds_grid_copy(_typeGridCopy, self.valueTypeGrid.types);	
 	
-		show_debug_message("createAndAssignConnectors -> " + string(colorAssignments));
-		var _pixel, _connectorDirection, _neighborPixelRight, _neighborPixelBottom, _neighborPixelTop, _neighborPixelLeft;	
+		var _content, _connectorDirection, _neighborContentRight, _neighborContentBottom, _neighborContentTop, _neighborContentLeft;	
 		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 				
 			for (var _xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
 				_connectorDirection = Direction.None;
-				_pixel = _pixelGridCopy[# _xPos,_yPos];
+				_content = _typeGridCopy[# _xPos,_yPos];
 			
-				if (_pixel == 0) {
+				if (_content == ColorMeaning.Unknown) {
 					continue;
 				}
 				
-				if (colorAssignments.meaningForColor(_pixel) == ColorMeaning.Connector) {
+				if (_content == ColorMeaning.Connector) {
+								
+					_neighborContentRight = _xPos < self.valueTypeGrid.width-1 ? _typeGridCopy[# _xPos+1,_yPos] : ColorMeaning.Unknown;
+					_neighborContentBottom = _yPos < self.valueTypeGrid.height-1 ? _typeGridCopy[# _xPos,_yPos+1] : ColorMeaning.Unknown;
 				
-					_neighborPixelRight = _xPos < self.valueTypeGrid.width-1 ? _pixelGridCopy[# _xPos+1,_yPos] : 0;
-					_neighborPixelBottom = _yPos < self.valueTypeGrid.height-1 ? _pixelGridCopy[# _xPos,_yPos+1] : 0;
-				
-					if (colorAssignments.meaningForColor(_neighborPixelRight) != ColorMeaning.Connector && colorAssignments.meaningForColor(_neighborPixelBottom) != ColorMeaning.Connector) {					
+					if (_neighborContentRight != ColorMeaning.Connector && _neighborContentBottom != ColorMeaning.Connector) {
 						continue;
 					}
 				
-					_neighborPixelLeft = _xPos == 0 ? 0 : _pixelGridCopy[# _xPos-1, _yPos];
-					_neighborPixelTop = _yPos == 0 ? 0 : _pixelGridCopy[# _xPos, _yPos-1];
+					_neighborContentLeft = _xPos == 0 ? ColorMeaning.Unknown : _typeGridCopy[# _xPos-1, _yPos];
+					_neighborContentTop = _yPos == 0 ? ColorMeaning.Unknown : _typeGridCopy[# _xPos, _yPos-1];
 				
 					//	New Connector found
 					var _newConnector = new ConnectorPreset(_xPos,_yPos); 
 					
 					//	Detecting wether its a horizontal or vertical connector				
-					if (colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.Connector) {				
+					if (_neighborContentRight == ColorMeaning.Connector) {				
 					
 						//	Vertical Connector										
 						var _connectorDirection = Direction.None;
-						if (_neighborPixelBottom == 0 && colorAssignments.meaningForColor(_neighborPixelTop) == ColorMeaning.ChamberGround) {
+						if ((_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.Padding) && _neighborContentTop == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Down;
-						} else if (_neighborPixelTop == 0 && colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
+						} else if ((_neighborContentTop == ColorMeaning.Unknown || _neighborContentTop == ColorMeaning.Padding) && _neighborContentBottom == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Up;
 						}
 					
 						if (_connectorDirection == Direction.None) {						
-						
-							//	Broken Connector Detected. Skipping
 							delete _newConnector;
 							continue;
 						}
@@ -121,13 +120,13 @@ function ChamberPreset(chamberSprite, padding) constructor {
 						var _width = 1;
 						while(_neighborIsBlankOrGround == false) {
 						
-							_neighborPixelRight = (_xPos+_width > self.valueTypeGrid.width-1) ? 0 : _pixelGridCopy[# _xPos+_width,_yPos];
+							_neighborContentRight = (_xPos+_width > self.valueTypeGrid.width-1) ? ColorMeaning.Unknown : _typeGridCopy[# _xPos+_width,_yPos];
 						
-							if (_neighborPixelRight == 0 || colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
+							if (_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
-							} else {
-								//	Mask neighbor with chamber color to prevent duplicate detection
-								_pixelGridCopy[# _xPos+_width,_yPos] = colorAssignments.colorsDetectedAsChamberGround[| 0];
+							} else if (_neighborContentRight == ColorMeaning.Connector) {
+								//	Mask neighbor with ChamberGround to prevent duplicate detection
+								_typeGridCopy[# _xPos+_width,_yPos] = ColorMeaning.ChamberGround;
 								_width +=1;
 							}
 						}
@@ -146,9 +145,9 @@ function ChamberPreset(chamberSprite, padding) constructor {
 					
 						//	Horizontal Connector
 						var _connectorDirection = Direction.None;
-						if (_neighborPixelRight == 0 && colorAssignments.meaningForColor(_neighborPixelLeft) == ColorMeaning.ChamberGround) {
+						if ((_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.Padding) && _neighborContentLeft == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Right;
-						} else if (_neighborPixelLeft == 0 && colorAssignments.meaningForColor(_neighborPixelRight) == ColorMeaning.ChamberGround) {
+						} else if ((_neighborContentLeft == ColorMeaning.Unknown || _neighborContentLeft == ColorMeaning.Padding) && _neighborContentRight == ColorMeaning.ChamberGround) {
 							_connectorDirection = Direction.Left;
 						}
 					
@@ -166,13 +165,13 @@ function ChamberPreset(chamberSprite, padding) constructor {
 						var _height = 1;
 						while(_neighborIsBlankOrGround == false) {
 						
-							_neighborPixelBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? 0 : _pixelGridCopy[# _xPos,_yPos+_height];
+							_neighborContentBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? ColorMeaning.Unknown : _typeGridCopy[# _xPos,_yPos+_height];
 						
-							if (_neighborPixelBottom == 0 || colorAssignments.meaningForColor(_neighborPixelBottom) == ColorMeaning.ChamberGround) {
+							if (_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
-							} else {										
-								//	Mask neighbor with chamber color to prevent duplicate detection
-								ds_grid_set(_pixelGridCopy,_xPos,_yPos+_height, colorAssignments.colorsDetectedAsChamberGround[| 0]);						
+							} else if (_neighborContentBottom == ColorMeaning.Connector) {										
+								//	Mask neighbor with ChamberGround to prevent duplicate detection
+								ds_grid_set(_typeGridCopy,_xPos,_yPos+_height, ColorMeaning.ChamberGround);						
 								_height +=1;
 							}
 						}
@@ -197,10 +196,12 @@ function ChamberPreset(chamberSprite, padding) constructor {
 		self.downFacingConnectors = _downFacingConnectors;
 		self.rightFacingConnectors = _rightFacingConnectors;
 	
+		show_debug_message("Did find connectors \n up: " + string(array_length(self.upFacingConnectors)) +"\nleft: " + string(array_length(self.leftFacingConnectors))+"\ndown: " + string(array_length(self.downFacingConnectors)) + "\nright: " + string(array_length(self.rightFacingConnectors)));
+	
 		self.allConnectors = _allConnectors;
 		self.assignDirectionsToConnectTo();
 
-		destroyGrid(_pixelGridCopy);
+		destroyGrid(_typeGridCopy);
 	}
 
 	static toString = function() {
@@ -291,7 +292,7 @@ function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments,pad
 	var _grids = createPixelGridAndDatatypeGridFromSprite(chamberSprite, colorAssignments, padding);
 	var _valueTypeGrid = new ValueTypeGrid(_chamberPreset.totalWidth, _chamberPreset.totalHeight,false);
 	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
-	_chamberPreset.valueTypeGrid = _valueTypeGrid;
+	_chamberPreset.valueTypeGrid = _valueTypeGrid;	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
 	
 	return _chamberPreset;
