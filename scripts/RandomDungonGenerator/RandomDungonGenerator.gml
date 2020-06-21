@@ -32,7 +32,7 @@ function RandomDungonGenerator(options) constructor {
 	self._requiredMaximumGridDimensions = 0;
 	
 	/*	
-		@function calculateRequiredMaximumGridSpace();
+		@function		calculateRequiredMaximumGridSpace();
 		@description	Calculates the maximum grid dimensions for the dungeon grid
 						that would be needed if only the largest chamber would repeatedly be used.
 		

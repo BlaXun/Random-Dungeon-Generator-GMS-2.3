@@ -3,7 +3,7 @@
   "volume": 1.0,
   "parentRoom": null,
   "views": [
-    {"inherit":false,"visible":true,"xview":0,"yview":0,"wview":800,"hview":600,"xport":0,"yport":0,"wport":800,"hport":600,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":{"name":"viewer","path":"objects/viewer/viewer.yy",},},
+    {"inherit":false,"visible":true,"xview":0,"yview":0,"wview":100,"hview":100,"xport":0,"yport":0,"wport":400,"hport":400,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":{"name":"viewer","path":"objects/viewer/viewer.yy",},},
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":1024,"hview":768,"xport":0,"yport":0,"wport":1024,"hport":768,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":1024,"hview":768,"xport":0,"yport":0,"wport":1024,"hport":768,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":1024,"hview":768,"xport":0,"yport":0,"wport":1024,"hport":768,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
@@ -30,13 +30,13 @@
   "sequenceId": null,
   "roomSettings": {
     "inheritRoomSettings": false,
-    "Width": 640,
-    "Height": 480,
+    "Width": 1024,
+    "Height": 768,
     "persistent": false,
   },
   "viewSettings": {
     "inheritViewSettings": false,
-    "enableViews": false,
+    "enableViews": true,
     "clearViewBackground": false,
     "clearDisplayBuffer": true,
   },

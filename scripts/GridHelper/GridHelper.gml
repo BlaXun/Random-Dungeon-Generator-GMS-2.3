@@ -154,31 +154,15 @@ function checkForCollisionWithChildGridOnParentGrid(childGrid, parentGrid, x, y)
 ///
 ///	@param {real}	sprite					The index of the sprite that should get converted to pixel grid
 /// @param {ds_map} colorAssignments		A map holding information about the colors that may be encountered
-///	@param {real}	padding					Padding to add to the grid. This basicly adds a invisible border around the sprite on the grid
-function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments, paddingToApply) {
+function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments) {
 
 	var _chamberSpriteWidth, _chamberSpriteHeight;
 	_chamberSpriteWidth = sprite_get_width(spriteIndex);
 	_chamberSpriteHeight = sprite_get_height(spriteIndex);
 
-	var _pixelGrid = createGrid(_chamberSpriteWidth+(paddingToApply*2),_chamberSpriteHeight+(paddingToApply*2));	
-	var _pixelGridContents = createGrid(_chamberSpriteWidth+(paddingToApply*2),_chamberSpriteHeight+(paddingToApply*2));
+	var _pixelGrid = createGrid(_chamberSpriteWidth,_chamberSpriteHeight);	
+	var _pixelGridContents = createGrid(_chamberSpriteWidth,_chamberSpriteHeight);
 	ds_grid_clear(_pixelGridContents, ColorMeaning.Unknown);
-
-	//	As soon as padding is in use we do not populate the grid starting at 0,0 but we always have an offset
-	//	that is equal for both x and y
-	var _equalOffset = paddingToApply;
-	if (paddingToApply != 0) {
-	
-		var _pixelGridWidth, _pixelGridHeight;
-		_pixelGridWidth = ds_grid_width(_pixelGrid);
-		_pixelGridHeight = ds_grid_height(_pixelGrid);
-	
-		ds_grid_set_region(_pixelGridContents,0,0,_pixelGridWidth,paddingToApply-1,ColorMeaning.Padding);	//	Top-Left to Top-Right
-		ds_grid_set_region(_pixelGridContents,0,0,paddingToApply-1,_pixelGridHeight,ColorMeaning.Padding);	//	Top-Left to Bottom-Left
-		ds_grid_set_region(_pixelGridContents,0,_pixelGridHeight-paddingToApply,_pixelGridWidth-1,_pixelGridHeight-1,ColorMeaning.Padding);	//	Bottom-Left to Bottom-Right	
-		ds_grid_set_region(_pixelGridContents,_pixelGridWidth-paddingToApply,0,_pixelGridWidth+1,_pixelGridHeight,ColorMeaning.Padding);	//	Top-Right to Bottom-Right
-	}
 
 	var _surf = surface_create(_chamberSpriteWidth, _chamberSpriteHeight);
 	surface_set_target(_surf);
@@ -193,8 +177,8 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments,
 		
 			var _colorMeaning = colorAssignments.meaningForColor(_pixelColor);
 			if (_colorMeaning != ColorMeaning.Unknown) {						
-				_pixelGrid[# _equalOffset+_xPos, _equalOffset+_yPos] = _pixelColor;
-				_pixelGridContents[# _equalOffset+_xPos, _equalOffset+_yPos] = _colorMeaning;			
+				_pixelGrid[# _xPos, _yPos] = _pixelColor;
+				_pixelGridContents[# _xPos, _yPos] = _colorMeaning;			
 			}
 		}
 	}
@@ -207,4 +191,29 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments,
 	_gridsToReturn[1] = _pixelGridContents;
 
 	return _gridsToReturn;
+}
+
+/*	@function applyPaddingToGridWithValue(grid,padding,valueToSet);
+	@description	Applies a padding to the mentioned grid using the values on the given padding struct and populating the new fields with the given value
+	@param {ds_grid} grid		The grid on which padding should be applied
+	@param {Padding} padding	A Padding-Struct containing the amount of padding to be applied to each side
+	@param {any} valueToSet		The value to be applied to the newly created fields on the grid
+*/
+function applyPaddingToGridWithValue(grid,padding,valueToSet) {
+	var _currentWidth, _currentHeight;
+	_currentWidth = ds_grid_width(grid);
+	_currentHeight = ds_grid_height(grid);
+	
+	var _newWidth, _newHeight;
+	_newWidth = _currentWidth+padding.left+padding.right;
+	_newHeight = _currentHeight+padding.top+padding.bottom;
+	
+	var _tempGrid = createGrid(_newWidth,_newHeight);
+	ds_grid_clear(_tempGrid,valueToSet);
+	ds_grid_set_grid_region(_tempGrid,grid,0,0,_currentWidth-1,_currentHeight-1,padding.left,padding.top);
+	
+	ds_grid_resize(grid,_newWidth,_newHeight);
+	ds_grid_copy(grid,_tempGrid);
+	
+	destroyGrid(_tempGrid);
 }

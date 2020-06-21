@@ -63,4 +63,21 @@ function ValueTypeGrid(width,height,generateGrids) constructor {
 		self.values[# x, y] = value;
 		self.types[# x, y] = type;
 	}
+
+	/*	@function applyPadding(paddingToApply);
+		@description	Applies the given padding to the current version of both the value and type grid
+						and fills the new fields with the given values
+						
+		@param {Padding} paddingToApply A Padding-Struct which contains the padding for each side
+		@param {any} valueGridValue	The value to be applied for the new fields on the value grid
+		@param {any} typeGridValue	The value to be applied for the new fields on the type grid
+	*/
+	static applyPadding = function(paddingToApply,valueGridValue,typeGridValue) {
+		
+		applyPaddingToGridWithValue(self.values,paddingToApply,valueGridValue);
+		applyPaddingToGridWithValue(self.types,paddingToApply,typeGridValue);
+		
+		self.width = ds_grid_width(self.types);
+		self.height = ds_grid_height(self.types);
+	}
 }
