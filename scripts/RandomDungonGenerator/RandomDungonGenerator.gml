@@ -2,7 +2,6 @@ function GeneratorOptions(colorAssignment, spritesToUseForChambers) constructor 
 	
 	self.colorAssignments = colorAssignment;
 	self.chamberSprites = spritesToUseForChambers
-	self.paddingToApplyToChamberPresets = 0;
 	self.amountOfChambersToPlace = 0;
 	self.minimumRandomOffsetBetweenPlacedChambers = 0;
 	self.maximumRandomOffsetBetweenPlacedChambers = 0;
@@ -29,7 +28,8 @@ function RandomDungonGenerator(options) constructor {
 	self.dungeonPreset = undefined;
 	self.dungeonSurface = undefined;
 	
-	self._requiredMaximumGridDimensions = 0;
+	self._requiredMaximumGridWidth = 0;
+	self._requiredMaximumGridHeight = 0;
 	
 	/*	
 		@function		calculateRequiredMaximumGridSpace();
@@ -40,11 +40,22 @@ function RandomDungonGenerator(options) constructor {
 						The grid will be cropped in the end anyway. Still, there seems to be a limit
 						on how much memory can be allocated. */
 	static calculateRequiredMaximumGridSpace = function() {
-		var _maxSpriteDimension = maximumDimensionFromSprites(self.options.chamberSprites);
-		_maxSpriteDimension += self.options.paddingToApplyToChamberPresets*2;	
-		_neededMaximumSpace = ((_maxSpriteDimension+self.options.maximumRandomOffsetBetweenPlacedChambers)*self.options.amountOfChambersToPlace)*2;
-		debug("Needs a " + string(_neededMaximumSpace) + " * " + string(_neededMaximumSpace) + " grid");		
-		self._requiredMaximumGridDimensions = _neededMaximumSpace;
+		var _maxChamberPresetWidth = 0;
+		var _maxChamberPresetHeight = 0;
+		
+		var _currentChamberPreset = undefined;
+		for (var _i=0;_i<ds_list_size(self.chamberPresets);_i++) {
+			_currentChamberPreset = self.chamberPresets[| _i];
+			_maxChamberPresetWidth = max(_maxChamberPresetWidth, _currentChamberPreset.totalWidth);
+			_maxChamberPresetHeight = max(_maxChamberPresetHeight, _currentChamberPreset.totalHeight);
+		}
+		
+		
+		var _neededMaximumWidth = ((_maxChamberPresetWidth+self.options.maximumRandomOffsetBetweenPlacedChambers)*self.options.amountOfChambersToPlace)*2;
+		var _neededMaximumHeight = ((_maxChamberPresetHeight+self.options.maximumRandomOffsetBetweenPlacedChambers)*self.options.amountOfChambersToPlace)*2;
+		debug("Needs a " + string(_neededMaximumWidth) + " * " + string(_neededMaximumHeight) + " grid");		
+		self._requiredMaximumGridWidth = _neededMaximumWidth;
+		self._requiredMaximumGridHeight = _neededMaximumHeight;
 	}
 	
 	/// @function createChamberPresetsFromSprites();
@@ -57,7 +68,7 @@ function RandomDungonGenerator(options) constructor {
 		
 		var _chamber = noone;		
 		for (var _i=0;_i<array_length(self.options.chamberSprites);_i++) {
-			_chamber = createChamberPresetFromChamberSprite(self.options.chamberSprites[_i], self.options.colorAssignments, self.options.paddingToApplyToChamberPresets);
+			_chamber = createChamberPresetFromChamberSprite(self.options.chamberSprites[_i], self.options.colorAssignments);
 			debug(_chamber);
 			self.chamberPresets[| ds_list_size(self.chamberPresets)] = _chamber;
 		}
@@ -75,7 +86,7 @@ function RandomDungonGenerator(options) constructor {
 			delete self.dungeonPreset;
 		}
 		
-		self.dungeonPreset = new DungeonPreset(self.options.colorAssignments,self._requiredMaximumGridDimensions,self._requiredMaximumGridDimensions);
+		self.dungeonPreset = new DungeonPreset(self.options.colorAssignments,self._requiredMaximumGridWidth,self._requiredMaximumGridHeight);
 		self.dungeonPreset.createNewDungeon(self.chamberPresets, self.options.amountOfChambersToPlace,self.options.minimumRandomOffsetBetweenPlacedChambers,self.options.maximumRandomOffsetBetweenPlacedChambers);
 		self.dungeonWasCreated = true;
 	}

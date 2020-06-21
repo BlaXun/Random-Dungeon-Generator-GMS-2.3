@@ -19,7 +19,6 @@ var _options = GeneratorOptions(self.colorAssignment,_chamberSprites);
 //	ein hallway gezeichnet werden kann MUSS das padding so gesetzt werden
 //	padding = maxConnectorDimension+ceil(maxConnectorDimension/2)
 
-_options.paddingToApplyToChamberPresets = 0;
 _options.amountOfChambersToPlace = 25;
 _options.minimumRandomOffsetBetweenPlacedChambers = 0;
 _options.maximumRandomOffsetBetweenPlacedChambers = 0;
