@@ -32,7 +32,7 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 		//	Start drawing from connector to border
 		var _x, _y, _xEnd, _yEnd, _startingCoordinates, _borderTargetCoordinates;
 		_startingCoordinates = startingCoordinatesForConnector(self);
-		_borderTargetCoordinates = borderCoordinatesForConnector(self);
+		_borderTargetCoordinates = borderCoordinatesForConnector(self);		
 		
 		_x = _startingCoordinates.x;
 		_y = _startingCoordinates.y;
@@ -46,6 +46,7 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 		_y = _connectingCoordinates.y;
 		_xEnd = _connectingCoordinates.xEnd;
 		_yEnd = _connectingCoordinates.yEnd;
+		
 		ds_grid_set_region(_typeGrid,_x,_y,_xEnd,_yEnd,ColorMeaning.ChamberGround);
 		
 		//	Draw from connecting hallway to target connector
@@ -58,7 +59,8 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 		_y = _finalCoordinates.y;
 		_xEnd = _finalCoordinates.xEnd;
 		_yEnd = _finalCoordinates.yEnd;
-		ds_grid_set_region(_typeGrid,_x,_y,_xEnd,_yEnd,ColorMeaning.Hallway);
+		ds_grid_set_region(_typeGrid,_x,_y,_xEnd,_yEnd,ColorMeaning.HallwayEnd);
+		
 		
 		//	Das hier muss alles noch je nach direction angepasst werden
 		//	Außerdem sind es min. 3 schritte um einen hallway zu zeichen
@@ -85,7 +87,7 @@ function startingCoordinatesForConnector(connector) {
 			_x=connector.parentPlacedChamber.xPositionInDungeon+connector.x-1;
 			_xEnd=_x;
 			_y=connector.parentPlacedChamber.yPositionInDungeon+connector.y;
-			_yEnd=_y+connector.height;
+			_yEnd=_y+connector.height-1;
 		}
 		break;
 		
@@ -93,13 +95,13 @@ function startingCoordinatesForConnector(connector) {
 			_x=connector.parentPlacedChamber.xPositionInDungeon+connector.x+1;
 			_xEnd=_x;
 			_y=connector.parentPlacedChamber.yPositionInDungeon+connector.y;
-			_yEnd=_y+connector.height;
+			_yEnd=_y+connector.height-1;
 		}
 		break;
 		
 		case Direction.Up: {
 			_x=connector.parentPlacedChamber.xPositionInDungeon+connector.x;
-			_xEnd=_x+connector.width;
+			_xEnd=_x+connector.width-1;
 			_y=connector.parentPlacedChamber.yPositionInDungeon+connector.y-1;
 			_yEnd=_y;
 		}
@@ -107,7 +109,7 @@ function startingCoordinatesForConnector(connector) {
 		
 		case Direction.Down: {
 			_x=connector.parentPlacedChamber.xPositionInDungeon+connector.x;
-			_xEnd=_x+connector.width;
+			_xEnd=_x+connector.width-1;
 			_y=connector.parentPlacedChamber.yPositionInDungeon+connector.y+1;
 			_yEnd=_y;
 		}
@@ -134,32 +136,32 @@ function borderCoordinatesForConnector(connector) {
 		case Direction.Left: {
 			_x=connector.parentPlacedChamber.xPositionInDungeon+1;
 			_y=connector.parentPlacedChamber.yPositionInDungeon + connector.y;
-			_xEnd = _x+1;
-			_yEnd = _y+connector.height;
+			_xEnd = _x;
+			_yEnd = _y+connector.height-1;
 		}
 		break;
 		
 		case Direction.Up: {
 			_x=connector.parentPlacedChamber.xPositionInDungeon + connector.x;
 			_y=connector.parentPlacedChamber.yPositionInDungeon+1;
-			_xEnd = connector.parentPlacedChamber.xPositionInDungeon + connector.x+connector.width;
-			_yEnd = _y+1;
+			_xEnd = _x+connector.width-1;
+			_yEnd = _y;
 		}
 		break;
 		
 		case Direction.Right: {
-			_x=connector.parentPlacedChamber.xPositionInDungeon+placedChamberWidth-1;
+			_x=connector.parentPlacedChamber.xPositionInDungeon+placedChamberWidth-2;
 			_y=connector.parentPlacedChamber.yPositionInDungeon + connector.y;
-			_xEnd = _x-1;
-			_yEnd = connector.parentPlacedChamber.yPositionInDungeon + connector.y+connector.height;
+			_xEnd = _x;
+			_yEnd = _y+connector.height-1;
 		}
 		break;
 		
 		case Direction.Down: {
 			_x=connector.parentPlacedChamber.xPositionInDungeon + connector.x;
-			_y=connector.parentPlacedChamber.yPositionInDungeon + placedChamberHeight-1;
-			_xEnd = connector.parentPlacedChamber.xPositionInDungeon + connector.x+connector.width;
-			_yEnd = _y-1;
+			_y=connector.parentPlacedChamber.yPositionInDungeon + placedChamberHeight-2;
+			_xEnd = _x+connector.width-1;
+			_yEnd = _y;
 		}
 		break;
 	}
@@ -178,12 +180,14 @@ function connectingHallwayCoordinatesForConnector(connector) {
 	var _x, _y, _xEnd, _yEnd;
 	var _borderCoordinates = borderCoordinatesForConnector(connector);
 	var _targetBorderCoordinates = borderCoordinatesForConnector(connector.targetPlacedConnector);
+	
 	switch (connector.facingDirection) {
 		
-		case Direction.Left: {
-			_x=_borderCoordinates.x-1;
+		case Direction.Left: {			
 			_y=min(_borderCoordinates.y,_targetBorderCoordinates.y);
-			_xEnd = _borderCoordinates.x+connector.height-1;
+			_x = _borderCoordinates.x;
+			_xEnd = _x+(connector.height-1);
+			
 			_yEnd = max(_borderCoordinates.yEnd,_targetBorderCoordinates.yEnd);
 		}
 		break;
@@ -192,12 +196,12 @@ function connectingHallwayCoordinatesForConnector(connector) {
 			_x=min(_borderCoordinates.x,_targetBorderCoordinates.x);
 			_y=_borderCoordinates.y-1;
 			_xEnd = max(_borderCoordinates.xEnd,_targetBorderCoordinates.xEnd);
-			_yEnd = _y+connector.width;
+			_yEnd = _y+connector.width-1;
 		}
 		break;
 		
 		case Direction.Right: {
-			_x=_borderCoordinates.x-connector.height;
+			_x=_borderCoordinates.x-connector.height-1;
 			_y=min(_borderCoordinates.y,_targetBorderCoordinates.y);
 			_xEnd = _borderCoordinates.xEnd+1;
 			_yEnd = max(_borderCoordinates.yEnd,_targetBorderCoordinates.yEnd);
@@ -206,7 +210,7 @@ function connectingHallwayCoordinatesForConnector(connector) {
 		
 		case Direction.Down: {
 			_x=min(_borderCoordinates.x,_targetBorderCoordinates.x);
-			_y=_borderCoordinates.yEnd+1-connector.width;
+			_y=_borderCoordinates.yEnd+1-connector.width-1;
 			_xEnd = max(_borderCoordinates.xEnd,_targetBorderCoordinates.xEnd);
 			_yEnd = _borderCoordinates.y;
 		}
@@ -231,15 +235,11 @@ function endingCoordinatesForConnector(connector) {
 		case Direction.Left: {
 			
 			_x=_targetStartingCoordinates.x;
-			_xEnd = _connectingHallwayCoordinates.x;
-				
-			if (_startingCoordinates.y > _targetStartingCoordinates.y) {			
-				_y=_targetStartingCoordinates.y;
-				_yEnd = _connectingHallwayCoordinates.y+connector.height;
-			} else {
-				_y=_targetStartingCoordinates.y;
-				_yEnd=_targetStartingCoordinates.yEnd;
-			}
+			_y=_targetStartingCoordinates.y;
+			
+			_xEnd = _connectingHallwayCoordinates.x-1;
+			_yEnd = _targetStartingCoordinates.yEnd;
+			
 		}
 		break;
 		
@@ -271,7 +271,7 @@ function endingCoordinatesForConnector(connector) {
 			_x=_targetStartingCoordinates.x;
 			_xEnd = _targetStartingCoordinates.xEnd;
 				
-			_y=_connectingHallwayCoordinates.yEnd;
+			_y=_connectingHallwayCoordinates.yEnd+1;
 			_yEnd = _targetStartingCoordinates.yEnd;			
 		}
 		break;

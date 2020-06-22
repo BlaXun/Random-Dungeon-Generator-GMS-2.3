@@ -138,7 +138,7 @@ function ChamberPreset(chamberSprite) constructor {
 							}
 						}
 					
-						_newConnector.width = _width-1;
+						_newConnector.width = _width;
 					
 						if (_connectorDirection == Direction.Up) {
 							_upFacingConnectors[array_length(_upFacingConnectors)] = _newConnector;		
@@ -182,7 +182,7 @@ function ChamberPreset(chamberSprite) constructor {
 							}
 						}
 					
-						_newConnector.height = _height-1;
+						_newConnector.height = _height;
 					
 						if (_connectorDirection == Direction.Left) {
 							_leftFacingConnectors[array_length(_leftFacingConnectors)] = _newConnector;		

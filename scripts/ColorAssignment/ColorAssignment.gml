@@ -4,6 +4,7 @@
 enum ColorMeaning {
 	Connector,
 	Hallway,
+	HallwayEnd,
 	ChamberGround,
 	Padding,
 	Unknown

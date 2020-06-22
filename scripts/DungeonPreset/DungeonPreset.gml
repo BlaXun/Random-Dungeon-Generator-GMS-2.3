@@ -78,6 +78,11 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 							_colorToDraw = self.colorAssignments.colorUsedToDrawHallways;
 						break;
 						
+						case ColorMeaning.HallwayEnd: {
+							_colorToDraw = c_green;
+						}
+						break;
+						
 						default:
 							_colorToDraw = undefined;
 						break;
