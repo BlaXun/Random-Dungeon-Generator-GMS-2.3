@@ -19,6 +19,9 @@ function PlacedChamber(chamberPreset) constructor {
 	self.allowsConnectionOnAndFromTopSide = chamberPreset.allowsConnectionOnAndFromTopSide;
 	self.allowsConnectionOnAndFromBottomSide = chamberPreset.allowsConnectionOnAndFromBottomSide;
 	
+	self.connectors = createPlacedConnectorsFromConnectorPresets(self, chamberPreset.allConnectors);
+	self.placedConnectorForOutgoingConnection = undefined;
+	self.placedConnectorForIncomingConnection = undefined;
 	
 	///	@function deactivateDirection(directionToDeactivate);
 	///	@description	Based on previously placed chambers this chamber is not allowed to conenct to the given direction
@@ -102,4 +105,62 @@ function PlacedChamber(chamberPreset) constructor {
 		
 		return _debugString;
 	}
+
+	/*	@function selectConnectorOnSideForNextConnection(side);
+		@description	Selects a connector on the given side to be the connector that will establish the conenction to the next PlacedChamber
+		@param {Direction} side	The side to which the outgoing connection should be established */
+	static selectConnectorOnSideForNextConnection = function(side) {
+		var _availableConnectors = self.connectorsForSide(side);
+		var _chosenConnector = _availableConnectors[floor(random(array_length(_availableConnectors)))];
+		_chosenConnector.isStartingConnector = true;
+
+		self.placedConnectorForOutgoingConnection = _chosenConnector;
+	}
+	
+	/*	@function selectConnectorOnSideForPreviousConnection(side, connectorThatWantsToConnectToThisOne);
+		@description	Selects onne of the available conenctors for the given side that will accept a connection
+						with the given connector. The chosen connector is the receiver for the connection
+		@param {Direction} side	The side on which a connector will be chosen
+		@param {PlacedConnector} connectorThatWantsToConnectToThisOne A PlacedConnector that wants to connect to the chosen PlacedConnector */
+	static selectConnectorOnSideForPreviousConnection = function(side, connectorThatWantsToConnectToThisOne) {
+		var _availableConnectors = self.connectorsForSide(side);
+		var _chosenConnector = _availableConnectors[floor(random(array_length(_availableConnectors)))];
+		_chosenConnector.isReceivingConnector = true;
+		_chosenConnector.targetPlacedConnector = connectorThatWantsToConnectToThisOne;
+		self.placedConnectorForIncomingConnection = _chosenConnector;
+	}
+	
+	/*	@function connectorsForSide(side);
+		@description Returns all connectors that can establish a connection to the given side
+		@param {Direction} side The side to which the connector should be facing */
+	static connectorsForSide = function(side) {
+		var _connectors = [];
+		var _currentConnector = undefined;
+		for (var _i=0;_i<array_length(self.connectors);_i++) {
+			_currentConnector = self.connectors[_i];
+			
+			if (_currentConnector.facingDirection == side) {
+				_connectors[array_length(_connectors)] = _currentConnector;
+			}
+		}
+		
+		return _connectors;
+	}
+}
+
+/*	@function createPlacedConnectorsFromConnectorPresets(connectorPresets);
+	@description Creates a PlacedConnector-Instance for each ConnectorPreset in the given collection and returns it
+	@param {PlacedChamber} placedChamber	The placed chamber to be assigned as parent placed chamber for all created PlacedConnectors 
+	@param {array<ConnectorPreset>} connectorPresets	A array filled with ConnectorPreset-Instances
+	@return {array<PlacedConnector>}
+*/
+function createPlacedConnectorsFromConnectorPresets(placedChamber, connectorPresets) {
+	var _placedConnectors = [];
+	var _currentConnector = undefined;
+	for (var _i=0;_i<array_length(connectorPresets);_i++) {
+		_currentConnector = connectorPresets[_i];
+		_placedConnectors[array_length(_placedConnectors)] = new PlacedConnector(placedChamber, _currentConnector);
+	}
+	
+	return _placedConnectors;
 }

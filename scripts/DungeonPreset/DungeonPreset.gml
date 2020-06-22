@@ -11,9 +11,9 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset) {
 
-		self.populateWithChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
-		createHallwaysForDungeonPreset(self);
-
+		self.populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
+		self.createHallwaysOnPlacedChambers();
+		
 		var cropResultForDungeonTypeGrid, croppedTypeGrid, croppedPositions;
 		cropResultForDungeonTypeGrid = croppedGridFromGrid(self.valueTypeGrid.types);
 		croppedTypeGrid = cropResultForDungeonTypeGrid[0];
@@ -91,10 +91,10 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		}
 	}
 	
-	///	@function	populateDungeonPresetWithChamberPresets(dungeonPreset,chamberPresets,amountOfChambersToPlace)
+	///	@function	populateWithPlacedChambersUsingChamberPresets(chamberPresets,amountOfChambersToPlace,minimumRandomOffset,maximumRandomOffset)
 	///	@param {ds_list} chamberPresets			A list of chamber presets that are available to be used for populating
 	///	@param {real} amountOfChambersToPlace	The amount of chambers that the dungeon should consist of
-	static populateWithChamberPresets = function(chamberPresets,amountOfChambersToPlace,minimumRandomOffset, maximumRandomOffset) {
+	static populateWithPlacedChambersUsingChamberPresets = function(chamberPresets,amountOfChambersToPlace,minimumRandomOffset, maximumRandomOffset) {
 
 		randomize();
 
@@ -112,8 +112,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		var _directionToPreventOnAllFollowingPlacedChambers = Direction.None;
 		var _firstChamberDirection = Direction.None;
 
-		var _previouslyPlacedChamber = undefined;
-
+		var _previouslyPlacedChamber = undefined, _previouslyChosenPlacedConnectorForConnection = undefined;
+		
 		_chosenColumn = _startX;
 		_chosenRow = _startY;
 
@@ -243,15 +243,28 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 			_placedChamber.deactivateDirection(_directionToPreventOnAllFollowingPlacedChambers);
 			_placedChamber.deactivateDirection(oppositeDirectionForDirection(_directionToMoveToNext));
-			_directionToMoveToNext = _placedChamber.randomDirectionFromAvailableDirections();		
-			_placedChamber.desiredDirectionToConnectTo = _directionToMoveToNext;
-	
+			
+			//	Connect previous PlacedChamber with this one
+			if (_previouslyPlacedChamber != undefined) {				
+				_placedChamber.selectConnectorOnSideForPreviousConnection(oppositeDirectionForDirection(_directionToMoveToNext), _previouslyChosenPlacedConnectorForConnection);
+				_placedChamber.placedConnectorForIncomingConnection.targetPlacedConnector = _previouslyChosenPlacedConnectorForConnection;
+				_previouslyChosenPlacedConnectorForConnection.targetPlacedConnector = _placedChamber.placedConnectorForIncomingConnection;
+			}
+			
+			//	Prepare for next connection unless this is the final iteration
+			if (_placedChambers<(amountOfChambersToPlace-1)) {
+				_directionToMoveToNext = _placedChamber.randomDirectionFromAvailableDirections();
+				_placedChamber.desiredDirectionToConnectTo = _directionToMoveToNext;		
+			
+				_placedChamber.selectConnectorOnSideForNextConnection(_directionToMoveToNext);
+				_previouslyChosenPlacedConnectorForConnection = _placedChamber.placedConnectorForOutgoingConnection;			
+			}
+			
 			var _chamberPresetTotalWidth, _chamberPresetTotalHeight;
 			_chamberPresetTotalWidth = _chosenChamberPreset.totalWidth;
 			_chamberPresetTotalHeight = _chosenChamberPreset.totalHeight;
 			ds_grid_set_grid_region(self.valueTypeGrid.values,_chosenChamberPreset.valueTypeGrid.values,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 			ds_grid_set_grid_region(self.valueTypeGrid.types, _chosenChamberPreset.valueTypeGrid.types,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
-
 
 			_previouslyPlacedChamber = _placedChamber;
 			ds_list_add(self.placedChambers,_placedChamber);
@@ -267,6 +280,19 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		for (var _i=0;_i<ds_list_size(self.placedChambers);_i++) {
 			_currentPlacedChamber = self.placedChambers[| _i];
 			_currentPlacedChamber.correctPositions(croppedSpaces);		
+		}
+	}
+	
+	/*	@function createHallwaysOnPlacedChambers();
+		@description	Creates hallways on all PlacedChambers using those chambers PlacedConnectors
+	*/
+	static createHallwaysOnPlacedChambers = function() {
+		var _currentPlacedChamber = undefined;
+		
+		//	Start creating hallways for all PlacedChambers but the last one as that PlacedChamber doesnt have an outgoing connector
+		for (var _i=0;_i<ds_list_size(self.placedChambers)-1;_i++) {
+			_currentPlacedChamber = self.placedChambers[| _i];	
+			_currentPlacedChamber.placedConnectorForOutgoingConnection.createHallwayOnDungeonPreset(self);
 		}
 	}
 	

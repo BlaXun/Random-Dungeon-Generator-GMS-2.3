@@ -61,8 +61,6 @@ function ChamberPreset(chamberSprite) constructor {
 		self.allowsConnectionOnAndFromRightSide = array_length(self.rightFacingConnectors) > 0;
 		self.allowsConnectionOnAndFromTopSide = array_length(self.upFacingConnectors) > 0;
 		self.allowsConnectionOnAndFromBottomSide = array_length(self.downFacingConnectors) > 0;
-		
-		show_debug_message("Assigning directions -> " + string(self.allowsConnectionOnAndFromLeftSide) + "," + string(self.allowsConnectionOnAndFromRightSide) + "," + string(self.allowsConnectionOnAndFromTopSide) + "," + string(self.allowsConnectionOnAndFromBottomSide));
 	}
 	
 	/*	@function									createAndAssignConnectors(colorAssignments);
@@ -122,7 +120,7 @@ function ChamberPreset(chamberSprite) constructor {
 							continue;
 						}
 					 
-						_newConnector.height = 1;		
+						_newConnector.height = 1;
 						_newConnector.facingDirection = _connectorDirection;
 					
 						var _neighborIsBlankOrGround = false;
@@ -140,8 +138,7 @@ function ChamberPreset(chamberSprite) constructor {
 							}
 						}
 					
-						_newConnector.xEnd = _xPos+_width-1;
-						_newConnector.width = _width;
+						_newConnector.width = _width-1;
 					
 						if (_connectorDirection == Direction.Up) {
 							_upFacingConnectors[array_length(_upFacingConnectors)] = _newConnector;		
@@ -185,8 +182,7 @@ function ChamberPreset(chamberSprite) constructor {
 							}
 						}
 					
-						_newConnector.yEnd = _yPos+_height-1;
-						_newConnector.height = _height;
+						_newConnector.height = _height-1;
 					
 						if (_connectorDirection == Direction.Left) {
 							_leftFacingConnectors[array_length(_leftFacingConnectors)] = _newConnector;		
@@ -268,7 +264,7 @@ function ChamberPreset(chamberSprite) constructor {
 		_maximumConnectorDimensionRight = self.largestConnectorDimensionOnSide(Direction.Right);
 		_maximumConnectorDimensionBottom = self.largestConnectorDimensionOnSide(Direction.Down);
 	
-		self.padding = new Padding(_maximumConnectorDimensionLeft*2,_maximumConnectorDimensionTop*2,_maximumConnectorDimensionRight*2,_maximumConnectorDimensionBottom*2);
+		self.padding = new Padding(max(1,_maximumConnectorDimensionLeft*2),max(1,_maximumConnectorDimensionTop*2),max(1,_maximumConnectorDimensionRight*2),max(1,_maximumConnectorDimensionBottom*2));
 		
 		self.valueTypeGrid.applyPadding(self.padding,noone,ColorMeaning.Padding);
 		
@@ -285,10 +281,8 @@ function ChamberPreset(chamberSprite) constructor {
 		var _connector = undefined;
 		for (var _i=0;_i<array_length(self.allConnectors);_i++) {
 			_connector = self.allConnectors[_i];
-			_connector.xStart += padding.left;
-			_connector.xEnd += padding.left;
-			_connector.yStart += padding.top;
-			_connector.yEnd += padding.top;
+			_connector.x += padding.left;			
+			_connector.y += padding.top;
 		}
 	}
 	
