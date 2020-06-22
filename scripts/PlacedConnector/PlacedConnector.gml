@@ -186,8 +186,7 @@ function connectingHallwayCoordinatesForConnector(connector) {
 		case Direction.Left: {			
 			_y=min(_borderCoordinates.y,_targetBorderCoordinates.y);
 			_x = _borderCoordinates.x;
-			_xEnd = _x+(connector.height-1);
-			
+			_xEnd = _x+(connector.height-1);			
 			_yEnd = max(_borderCoordinates.yEnd,_targetBorderCoordinates.yEnd);
 		}
 		break;
@@ -201,18 +200,18 @@ function connectingHallwayCoordinatesForConnector(connector) {
 		break;
 		
 		case Direction.Right: {
-			_x=_borderCoordinates.x-connector.height-1;
+			_x=_borderCoordinates.x+1;
 			_y=min(_borderCoordinates.y,_targetBorderCoordinates.y);
-			_xEnd = _borderCoordinates.xEnd+1;
-			_yEnd = max(_borderCoordinates.yEnd,_targetBorderCoordinates.yEnd);
+			_xEnd = _x+(connector.height-1);
+			_yEnd=max(_borderCoordinates.yEnd,_targetBorderCoordinates.yEnd);
 		}
 		break;
 		
 		case Direction.Down: {
 			_x=min(_borderCoordinates.x,_targetBorderCoordinates.x);
-			_y=_borderCoordinates.yEnd+1-connector.width-1;
+			_y=_borderCoordinates.yEnd+1;
 			_xEnd = max(_borderCoordinates.xEnd,_targetBorderCoordinates.xEnd);
-			_yEnd = _borderCoordinates.y;
+			_yEnd = _y+(connector.width-1);
 		}
 		break;
 	}
@@ -257,13 +256,8 @@ function endingCoordinatesForConnector(connector) {
 			_x=_connectingHallwayCoordinates.x;
 			_xEnd = _targetStartingCoordinates.x;
 				
-			if (_startingCoordinates.y > _targetStartingCoordinates.y) {			
-				_y=_targetStartingCoordinates.y;
-				_yEnd = _connectingHallwayCoordinates.y+connector.height;
-			} else {
-				_y=_targetStartingCoordinates.y;
-				_yEnd=_targetStartingCoordinates.yEnd;
-			}
+			_y=_targetStartingCoordinates.y;			
+			_yEnd=_targetStartingCoordinates.yEnd;		
 		}
 		break;
 		
