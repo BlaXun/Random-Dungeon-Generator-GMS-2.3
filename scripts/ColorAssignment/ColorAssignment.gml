@@ -4,7 +4,7 @@
 enum ColorMeaning {
 	Connector,
 	Hallway,
-	HallwayEnd,
+	HallwayCorner,
 	ChamberGround,
 	Padding,
 	Unknown
@@ -17,6 +17,7 @@ function ColorAssignment() constructor {
 	self.colorUsedToDrawHallways = make_color_rgb(0,0,255);
 	self.colorUsedToDrawPadding = undefined;
 	self.colorUsedToDrawConnectors = undefined;
+	self.colorUsedToDrawHallwayCorners = undefined;
 	self.backgroundColor = c_black;	
 	
 	self._colorMeanings = createMap();
@@ -31,6 +32,11 @@ function ColorAssignment() constructor {
 		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.ChamberGround;
 	}
 		
+	static setHallwayCornerColor = function(color) {
+		self.colorUsedToDrawHallwayCorners = color;
+		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.HallwayCorner;
+	}
+	
 	static setHallwayDrawColor = function(color) {
 		self.colorUsedToDrawHallways = color;
 		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.Hallway;

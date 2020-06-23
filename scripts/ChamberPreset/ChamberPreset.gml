@@ -267,15 +267,6 @@ function ChamberPreset(chamberSprite) constructor {
 						Having such a padding applied to each side we easily reserve enough space to draw connecting hallways! */
 	static _applyPadding = function() {
 		
-		/*var _maximumConnectorDimensionLeft = 0, _maximumConnectorDimensionTop = 0, _maximumConnectorDimensionRight = 0, _maximumConnectorDimensionBottom = 0;
-		_maximumConnectorDimensionLeft = self._largestConnectorDimensionOnSide(Direction.Left);
-		_maximumConnectorDimensionTop = self._largestConnectorDimensionOnSide(Direction.Up);
-		_maximumConnectorDimensionRight = self._largestConnectorDimensionOnSide(Direction.Right);
-		_maximumConnectorDimensionBottom = self._largestConnectorDimensionOnSide(Direction.Down);
-	
-		self.padding = new Padding(max(1,_maximumConnectorDimensionLeft*2),max(1,_maximumConnectorDimensionTop*2),max(1,_maximumConnectorDimensionRight*2),max(1,_maximumConnectorDimensionBottom*2));
-		*/
-		
 		self.valueTypeGrid.applyPadding(self.padding,noone,ColorMeaning.Padding);
 		
 		self.totalWidth = self.valueTypeGrid.width;
@@ -384,7 +375,6 @@ function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments) {
 	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
 	_chamberPreset.valueTypeGrid = _valueTypeGrid;	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
-	//_chamberPreset.createAndAssignPaddingFromConnectors();
 	
 	return _chamberPreset;
 }

@@ -7,6 +7,9 @@ self.colorAssignment.addConnectorColor(make_color_rgb(238,28,36));
 self.colorAssignment.setPaddingDrawColor(make_color_rgb(30,30,30));
 self.colorAssignment.colorUsedToDrawConnectors = c_red;
 
+self.colorAssignment.setHallwayDrawColor(c_blue);
+self.colorAssignment.setHallwayCornerColor(c_aqua);
+
 var _chamberSprites = [];
 var _chamberSpriteAssetIndices = tag_get_assets("ChamberSprite");
 for (var _i=0;_i<array_length(_chamberSpriteAssetIndices);_i++) {
@@ -20,8 +23,8 @@ var _options = GeneratorOptions(self.colorAssignment,_chamberSprites);
 //	padding = maxConnectorDimension+ceil(maxConnectorDimension/2)
 
 _options.amountOfChambersToPlace = 25;
-_options.minimumRandomOffsetBetweenPlacedChambers = 0;
-_options.maximumRandomOffsetBetweenPlacedChambers = 0;
+_options.minimumRandomOffsetBetweenPlacedChambers = 5;
+_options.maximumRandomOffsetBetweenPlacedChambers = 20;
 
 self.rdg = new RandomDungonGenerator(_options);
 self.rdg.generateDungeon();
