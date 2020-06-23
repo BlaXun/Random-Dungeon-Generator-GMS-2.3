@@ -29,13 +29,16 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 		
 		var _typeGrid = dungeonPreset.valueTypeGrid.types;
 		
-		var _selfStartingCoordinates, _selfCornerCoordinates;
-		_selfStartingCoordinates = outsideCoordinatesForConnector(self);		
+		var _selfStartingCoordinates, _selfCornerCoordinates, _proximityCoordinates;
+		_selfStartingCoordinates = outsideCoordinatesForConnector(self);
+		
 		ds_grid_set_region(_typeGrid,_selfStartingCoordinates.x,_selfStartingCoordinates.y,_selfStartingCoordinates.xEnd,_selfStartingCoordinates.yEnd,ColorMeaning.Hallway);
 		
 		_selfCornerCoordinates = cornerCoordinatesForConnector(self);		
 		ds_grid_set_region(_typeGrid,_selfCornerCoordinates.x,_selfCornerCoordinates.y,_selfCornerCoordinates.xEnd,_selfCornerCoordinates.yEnd,ColorMeaning.HallwayCorner);
 		
+		_proximityCoordinates = proximityCoordinatesForConnector(self);
+		ds_grid_set_region(_typeGrid,_proximityCoordinates.x,_proximityCoordinates.y,_proximityCoordinates.xEnd,_proximityCoordinates.yEnd,ColorMeaning.HallwayCorner);
 		
 		var _targetStartingCoordinates, _targetCornerCoordinates;
 		_targetStartingCoordinates = outsideCoordinatesForConnector(self.targetPlacedConnector);
@@ -46,10 +49,10 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 		_targetCornerCoordinates = cornerCoordinatesForConnector(self.targetPlacedConnector);		
 		ds_grid_set_region(_typeGrid,_targetCornerCoordinates.x,_targetCornerCoordinates.y,_targetCornerCoordinates.xEnd,_targetCornerCoordinates.yEnd,ColorMeaning.HallwayCorner);
 		
-		/*
+		
 		var _connectingHallwayCoordinates = connectingHallwayCoordinatesForConnector(self);
 		ds_grid_set_region(_typeGrid,_connectingHallwayCoordinates.x,_connectingHallwayCoordinates.y,_connectingHallwayCoordinates.xEnd,_connectingHallwayCoordinates.yEnd,ColorMeaning.Hallway);
-		*/
+		
 		self.didCreateHallway = true;
 	}
 }
@@ -139,6 +142,60 @@ function outsideCoordinatesForConnector(connector) {
 	return new Coordinates(_x,_y,_xEnd,_yEnd);
 }
 	
+function proximityCoordinatesForConnector(connector) {
+
+	var _x, _y, _xEnd, _yEnd;
+	
+	if (connector.isStartingConnector == false) {
+		return new Coordinates(0,0,0,0);
+	}
+	
+	var cornerCoordinates = cornerCoordinatesForConnector(connector);
+	var targetPlacedChamber = connector.targetPlacedConnector.parentPlacedChamber;
+	var targetPlacedChamberCoordinates = new Coordinates(	targetPlacedChamber.xPositionInDungeon, 
+															targetPlacedChamber.yPositionInDungeon, 
+															targetPlacedChamber.xPositionInDungeon+targetPlacedChamber.chamberPreset.totalWidth, 
+															targetPlacedChamber.yPositionInDungeon+targetPlacedChamber.chamberPreset.totalHeight);
+	
+	switch(connector.facingDirection) {
+		
+		case Direction.Left: {
+			_x=targetPlacedChamberCoordinates.xEnd;
+			_xEnd=cornerCoordinates.x-1;
+			_y=cornerCoordinates.y;
+			_yEnd=cornerCoordinates.yEnd;
+		}
+		break;
+		
+		case Direction.Right: {
+			_x=cornerCoordinates.xEnd+1;			
+			_xEnd=targetPlacedChamberCoordinates.x-1;
+			_y=cornerCoordinates.y;
+			_yEnd=cornerCoordinates.yEnd;
+		}
+		break;
+		
+		case Direction.Up: {
+			_x=cornerCoordinates.x;
+			_xEnd=cornerCoordinates.xEnd;
+			_y=targetPlacedChamberCoordinates.yEnd;
+			_yEnd=cornerCoordinates.y-1;
+		}
+		break;
+		
+		case Direction.Down: {
+			_x=cornerCoordinates.x;
+			_xEnd=cornerCoordinates.xEnd;
+			_y = cornerCoordinates.y+1;
+			_yEnd=targetPlacedChamberCoordinates.y-1;
+		}
+		break;
+	}
+	
+	delete targetPlacedChamberCoordinates;
+	return new Coordinates(_x,_y,_xEnd,_yEnd);
+}
+
 function cornerCoordinatesForConnector(connector) {
 	
 	var _startingCoordinates = startingCoordinatesForConnector(connector);
@@ -185,14 +242,44 @@ function cornerCoordinatesForConnector(connector) {
 	
 function connectingHallwayCoordinatesForConnector(connector) {
 
-	var _selfCornerCoordinates = cornerCoordinatesForConnector(connector);
-	var _targetCornerCoordinates = cornerCoordinatesForConnector(connector.targetPlacedConnector);
+	var _targetCornerCoordinates =  cornerCoordinatesForConnector(connector.targetPlacedConnector);
+	var _proximityCoordinates = proximityCoordinatesForConnector(connector);
 	
-	var _x, _y, _xEnd, _yEnd;
-	_x = min(_selfCornerCoordinates.x, _targetCornerCoordinates.x);
-	_y = min(_selfCornerCoordinates.y, _targetCornerCoordinates.y);
-	_xEnd = max(_selfCornerCoordinates.xEnd, _targetCornerCoordinates.xEnd);
-	_yEnd = max(_selfCornerCoordinates.yEnd, _targetCornerCoordinates.yEnd);
+	var _x,_y,_xEnd,_yEnd;
+	switch(connector.facingDirection) {
+		
+		case Direction.Left: {
+			_x=_targetCornerCoordinates.xEnd+1;
+			_xEnd=_x + connector.height-1;
+			_y=min(_targetCornerCoordinates.y, _proximityCoordinates.y);
+			_yEnd=max(_targetCornerCoordinates.yEnd, _proximityCoordinates.yEnd);
+		}
+		break;
+		
+		case Direction.Right: {
+			_x=_proximityCoordinates.xEnd-(connector.height-1);
+			_xEnd=_proximityCoordinates.xEnd;
+			_y=min(_targetCornerCoordinates.y, _proximityCoordinates.y);
+			_yEnd=max(_targetCornerCoordinates.yEnd, _proximityCoordinates.yEnd);
+		}
+		break;
+		
+		case Direction.Up: {
+			_x=min(_targetCornerCoordinates.x,_proximityCoordinates.x);
+			_xEnd=max(_targetCornerCoordinates.xEnd,_proximityCoordinates.xEnd);
+			_y=_targetCornerCoordinates.yEnd+1;
+			_yEnd=_y + connector.width-1;
+		}
+		break;
+		
+		case Direction.Down: {
+			_x=min(_targetCornerCoordinates.x,_proximityCoordinates.x);
+			_xEnd=max(_targetCornerCoordinates.xEnd,_proximityCoordinates.xEnd);
+			_y=_proximityCoordinates.yEnd-(connector.width-1);
+			_yEnd=_proximityCoordinates.yEnd;
+		}
+		break;
+	}
 	
-	return new Coordinates(_x, _y, _xEnd, _yEnd);
+	return new Coordinates(_x,_y,_xEnd,_yEnd);
 }
