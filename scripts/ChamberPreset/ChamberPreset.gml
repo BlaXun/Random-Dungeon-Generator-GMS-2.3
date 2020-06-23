@@ -28,8 +28,7 @@ function ChamberPreset(chamberSprite) constructor {
 	self.allowsConnectionOnAndFromRightSide = false;
 	self.allowsConnectionOnAndFromLeftSide = false;
 	self.allowsConnectionOnAndFromTopSide = false;
-	self.allowsConnectionOnAndFromBottomSide = false;
-	
+	self.allowsConnectionOnAndFromBottomSide = false;	
 	
 	/*	@function						allSidesOnThatAllowConnections(listToPopulate);
 		@description					Populates the given list with all sides (Direction) on the current ChamberPreset that allow a connection
@@ -53,16 +52,6 @@ function ChamberPreset(chamberSprite) constructor {
 		}
 	}
 	
-	/*	@function		assignDirectionsToConnectTo();
-		@description	Sets the allowed connection sides depending on the currently assigned connectors */
-	static assignDirectionsToConnectTo = function() {
-
-		self.allowsConnectionOnAndFromLeftSide = array_length(self.leftFacingConnectors) > 0;
-		self.allowsConnectionOnAndFromRightSide = array_length(self.rightFacingConnectors) > 0;
-		self.allowsConnectionOnAndFromTopSide = array_length(self.upFacingConnectors) > 0;
-		self.allowsConnectionOnAndFromBottomSide = array_length(self.downFacingConnectors) > 0;
-	}
-	
 	/*	@function									createAndAssignConnectors(colorAssignments);
 		@description								Searches for connectors on the chamber preset and assigns them
 		@param colorAssignments {ColorAssignment}	Instance of ColorAssignment. These are the colors used to analyze the sprite */
@@ -78,6 +67,7 @@ function ChamberPreset(chamberSprite) constructor {
 		var _typeGridCopy = createGrid(self.valueTypeGrid.width, self.valueTypeGrid.height); 
 		ds_grid_copy(_typeGridCopy, self.valueTypeGrid.types);	
 	
+		var _maximumDimensionForAllConnectors = 0;
 		var _content, _connectorDirection, _neighborContentRight, _neighborContentBottom, _neighborContentTop, _neighborContentLeft;	
 		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
 				
@@ -139,7 +129,8 @@ function ChamberPreset(chamberSprite) constructor {
 						}
 					
 						_newConnector.width = _width;
-					
+						_maximumDimensionForAllConnectors = max(_maximumDimensionForAllConnectors, _width);
+						
 						if (_connectorDirection == Direction.Up) {
 							_upFacingConnectors[array_length(_upFacingConnectors)] = _newConnector;		
 						} else if (_connectorDirection == Direction.Down) {
@@ -183,6 +174,7 @@ function ChamberPreset(chamberSprite) constructor {
 						}
 					
 						_newConnector.height = _height;
+						_maximumDimensionForAllConnectors = max(_maximumDimensionForAllConnectors, _height);
 					
 						if (_connectorDirection == Direction.Left) {
 							_leftFacingConnectors[array_length(_leftFacingConnectors)] = _newConnector;		
@@ -204,8 +196,13 @@ function ChamberPreset(chamberSprite) constructor {
 		show_debug_message("Did find connectors \n up: " + string(array_length(self.upFacingConnectors)) +"\nleft: " + string(array_length(self.leftFacingConnectors))+"\ndown: " + string(array_length(self.downFacingConnectors)) + "\nright: " + string(array_length(self.rightFacingConnectors)));
 	
 		self.allConnectors = _allConnectors;
-		self.assignDirectionsToConnectTo();
-
+		self._assignDirectionsToConnectTo();
+		
+		//	The padding should be 1 + maximum main dimension across all connectors!
+		_maximumDimensionForAllConnectors +=1;
+		self.padding = new Padding(_maximumDimensionForAllConnectors,_maximumDimensionForAllConnectors,_maximumDimensionForAllConnectors,_maximumDimensionForAllConnectors);
+		self._applyPadding();
+		
 		destroyGrid(_typeGridCopy);
 	}
 
@@ -252,32 +249,46 @@ function ChamberPreset(chamberSprite) constructor {
 		return _allowsConnectionOnRequestedSide && _hasAnotherSideToConnectOnBesidesTheSideToIgnore;
 	}
 
-	/*	@function createAndAssignPaddingFromConnectors();
-		@description	Sets the padding for all sides depending on the connectors on this ChamberPreset	
+	/*	@function		_assignDirectionsToConnectTo();
+		@description	RESERVED FOR INTERNAL USE
+						Sets the allowed connection sides depending on the currently assigned connectors */
+	static _assignDirectionsToConnectTo = function() {
+
+		self.allowsConnectionOnAndFromLeftSide = array_length(self.leftFacingConnectors) > 0;
+		self.allowsConnectionOnAndFromRightSide = array_length(self.rightFacingConnectors) > 0;
+		self.allowsConnectionOnAndFromTopSide = array_length(self.upFacingConnectors) > 0;
+		self.allowsConnectionOnAndFromBottomSide = array_length(self.downFacingConnectors) > 0;
+	}
+	
+	/*	@function _createAndAssignPaddingFromConnectors();
+		@description	RESERVED FOR INTERNAL USE
+						Sets the padding for all sides depending on the connectors on this ChamberPreset	
 						The padding we are looking for is twice the size of the maximum connector on each side.
 						Having such a padding applied to each side we easily reserve enough space to draw connecting hallways! */
-	static createAndAssignPaddingFromConnectors = function() {
+	static _applyPadding = function() {
 		
-		var _maximumConnectorDimensionLeft = 0, _maximumConnectorDimensionTop = 0, _maximumConnectorDimensionRight = 0, _maximumConnectorDimensionBottom = 0;
-		_maximumConnectorDimensionLeft = self.largestConnectorDimensionOnSide(Direction.Left);
-		_maximumConnectorDimensionTop = self.largestConnectorDimensionOnSide(Direction.Up);
-		_maximumConnectorDimensionRight = self.largestConnectorDimensionOnSide(Direction.Right);
-		_maximumConnectorDimensionBottom = self.largestConnectorDimensionOnSide(Direction.Down);
+		/*var _maximumConnectorDimensionLeft = 0, _maximumConnectorDimensionTop = 0, _maximumConnectorDimensionRight = 0, _maximumConnectorDimensionBottom = 0;
+		_maximumConnectorDimensionLeft = self._largestConnectorDimensionOnSide(Direction.Left);
+		_maximumConnectorDimensionTop = self._largestConnectorDimensionOnSide(Direction.Up);
+		_maximumConnectorDimensionRight = self._largestConnectorDimensionOnSide(Direction.Right);
+		_maximumConnectorDimensionBottom = self._largestConnectorDimensionOnSide(Direction.Down);
 	
 		self.padding = new Padding(max(1,_maximumConnectorDimensionLeft*2),max(1,_maximumConnectorDimensionTop*2),max(1,_maximumConnectorDimensionRight*2),max(1,_maximumConnectorDimensionBottom*2));
+		*/
 		
 		self.valueTypeGrid.applyPadding(self.padding,noone,ColorMeaning.Padding);
 		
 		self.totalWidth = self.valueTypeGrid.width;
 		self.totalHeight = self.valueTypeGrid.height;
 		
-		self.correctConnectorPositionsUsingPadding(self.padding);
+		self._correctConnectorPositionsUsingPadding(self.padding);
 	}
 	
-	/*  @function correctConnectorPositionsUsingPadding(padding);
-		@description Changes each connectors start and end positions depending on the given padding
+	/*  @function _correctConnectorPositionsUsingPadding(padding);
+		@description	RESERVED FOR INTERNAL USE
+						Changes each connectors start and end positions depending on the given padding
 		@param {Padding} padding	A Padding-Struct that holds the values to be used (only left and top are relevant) to change the connectors coordinates */
-	static correctConnectorPositionsUsingPadding = function(padding) {
+	static _correctConnectorPositionsUsingPadding = function(padding) {
 		var _connector = undefined;
 		for (var _i=0;_i<array_length(self.allConnectors);_i++) {
 			_connector = self.allConnectors[_i];
@@ -286,11 +297,12 @@ function ChamberPreset(chamberSprite) constructor {
 		}
 	}
 	
-	/*	@function largestConnectorDimensionOnSide(side);
-		@description	Returns the largest (height or width) dimension of all connectors on the given side
+	/*	@function _largestConnectorDimensionOnSide(side);
+		@description	RESERVED FOR INTERNAL USE
+						Returns the largest (height or width) dimension of all connectors on the given side
 		@param {Direction} side	The side for which the maximum connector dimension should be returned
 		@return {Real}	The largest dimension of all connectors on the given side	*/
-	static largestConnectorDimensionOnSide = function(side) {
+	static _largestConnectorDimensionOnSide = function(side) {
 		
 		var _maximumDimension = 0;
 		var _connectors = [];
@@ -372,7 +384,7 @@ function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments) {
 	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
 	_chamberPreset.valueTypeGrid = _valueTypeGrid;	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
-	_chamberPreset.createAndAssignPaddingFromConnectors();
+	//_chamberPreset.createAndAssignPaddingFromConnectors();
 	
 	return _chamberPreset;
 }
