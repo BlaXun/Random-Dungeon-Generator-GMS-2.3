@@ -1,7 +1,9 @@
 /*	@function PlacedConnector(placedChamber, connectorPreset);
+
 	@description	Creates a new PlacedConnector with the given parent PlacedChamber and using the
 					values of the given ConnectorPreset as starting values (copied)
-*/
+					
+					A PlacedConnector is a Connector on a PlacedChamber that is ready to serve for creating a connection to another connector.	*/
 function PlacedConnector(placedChamber, connectorPreset) constructor {
 
 	self.x = connectorPreset.x;

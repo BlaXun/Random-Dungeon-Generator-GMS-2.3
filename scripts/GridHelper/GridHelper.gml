@@ -2,10 +2,12 @@ enum GridContent {
 	Empty = -1
 }
 
-///	@function createGrid(width, height)
-///	@description			Creates a new grid with the given dimension and stores it in a global list
-///	@param {real} width		The width of the grid that will be created
-///	@param {real} height	The height of the grid that will be created
+/*	@function createGrid(width, height);
+
+	@description			Creates a new grid with the given dimension and stores it in a global list
+	
+	@param {real} width		The width of the grid that will be created
+	@param {real} height	The height of the grid that will be created	*/
 function createGrid(width,height) {
 
 	if (!variable_global_exists("__grids")) {
@@ -20,9 +22,9 @@ function createGrid(width,height) {
 	return _grid;
 }
 
-///	@function	destroyGrid(grid);
-///	@description			Destroys the given grid
-///	@param grid {ds_grid}	The grid to destory
+/*	@function	destroyGrid(grid);
+	@description			Destroys the given grid	
+	@param {ds_grid} grid	The grid to destory	*/
 function destroyGrid(gridToDestroy) {
 
 	if (!variable_global_exists("__grids")) {
@@ -38,8 +40,8 @@ function destroyGrid(gridToDestroy) {
 	}
 }
 
-///	@function destroyAllGrids()
-///	@description Destroys all grids that were created using the "createGrid"-function
+/*	@function destroyAllGrids();
+	@description Destroys all grids that were created using the "createGrid"-function	*/
 function destroyAllGrids() {
 
 	if (variable_global_exists("__grids")) {
@@ -57,12 +59,12 @@ function destroyAllGrids() {
 	}
 }
 
-///	@function croppedGridFromGrid(grid);
-///	@description				Returns a cropped grid from the given grid. 
-///								Please make sure to delete the provided grid if it would be replaced by the cropped grid
-///
-///	@param {ds_grid} grid	The grid for which a cropped grid should be returned
-///	@return	An array with two values. 0=The cropped Grid, 1=Array with amount of pixel that were cut on each side
+/*	@function croppedGridFromGrid(grid);
+	@description				Returns a cropped grid from the given grid. 
+								Make sure to delete the provided grid if it would be replaced by the cropped grid
+
+	@param {ds_grid} grid	The grid for which a cropped grid should be returned
+	@return	An array with two values. 0=The cropped Grid, 1=Array with amount of pixel that were cut on each side	*/
 function croppedGridFromGrid(gridToCrop) {
 
 	var _xStart = 0, _yStart = 0, _xEnd = 0, _yEnd = 0;
@@ -122,13 +124,15 @@ function croppedGridFromGrid(gridToCrop) {
 	return [_resultGrid, _cutPixelsOnSides];
 }
 
-///	@function checkForCollisionWithChildGridOnParentGrid(childGrid,parentGrid)
-///	@description	Checks wether the childGrid would collide with any column/row on the parentGrid that has a value other than noone
-///	@param {ds_grid} childGrid	The grid that will be placed on the parentGrid
-///	@param {ds_grid} parentGrid	The grid that gets the childGrid placed on it
-///	@param {real} xOffset		An offset on the x-axis defining where the childGrid shall be placed on the parentGrid
-///	@param {real} yOffset		An offset on the y-axis defining where the childGrid shall be placed on the parentGrid
-///	@returns {boolean}			Wether a collision was detected
+/*	@function checkForCollisionWithChildGridOnParentGrid(childGrid,parentGrid)
+
+	@description	Checks wether the childGrid would collide with any column/row on the parentGrid that has a value other than noone
+
+	@param {ds_grid} childGrid	The grid that will be placed on the parentGrid
+	@param {ds_grid} parentGrid	The grid that gets the childGrid placed on it
+	@param {real} xOffset		An offset on the x-axis defining where the childGrid shall be placed on the parentGrid
+	@param {real} yOffset		An offset on the y-axis defining where the childGrid shall be placed on the parentGrid
+	@returns {boolean}			Wether a collision was detected	*/
 function checkForCollisionWithChildGridOnParentGrid(childGrid, parentGrid, x, y) {
 
 	var didFindCollision = false;
@@ -146,14 +150,14 @@ function checkForCollisionWithChildGridOnParentGrid(childGrid, parentGrid, x, y)
 	return didFindCollision;
 }
 
-///	@function		createPixelGridAndDatatypeGridFromSprite(sprite,colorAssignments,padding)
-///	@description	Creates a pixel grid from the given sprite while only populating the grid with colors that
-///					exist in the given list of colors. Padding can be applied.
-///
-///					Additionally a grid with datatype info is returned.
-///
-///	@param {real}	sprite					The index of the sprite that should get converted to pixel grid
-/// @param {ds_map} colorAssignments		A map holding information about the colors that may be encountered
+/*	@function		createPixelGridAndDatatypeGridFromSprite(sprite,colorAssignments,padding)
+	@description	Creates a pixel grid from the given sprite while only populating the grid with colors that
+					exist in the given list of colors. Padding can be applied.
+
+					Additionally a grid with datatype info is returned.
+
+	@param {real} spriteIndex					The index of the sprite that should get converted to pixel grid
+	@param {ColorAssignment} colorAssignments	A ColorAssignment-Struct that describes colors and their meaning	*/
 function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments) {
 
 	var _chamberSpriteWidth, _chamberSpriteHeight;
@@ -194,11 +198,12 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments)
 }
 
 /*	@function applyPaddingToGridWithValue(grid,padding,valueToSet);
+	
 	@description	Applies a padding to the mentioned grid using the values on the given padding struct and populating the new fields with the given value
+	
 	@param {ds_grid} grid		The grid on which padding should be applied
 	@param {Padding} padding	A Padding-Struct containing the amount of padding to be applied to each side
-	@param {any} valueToSet		The value to be applied to the newly created fields on the grid
-*/
+	@param {any} valueToSet		The value to be applied to the newly created fields on the grid	*/
 function applyPaddingToGridWithValue(grid,padding,valueToSet) {
 	var _currentWidth, _currentHeight;
 	_currentWidth = ds_grid_width(grid);
@@ -219,11 +224,12 @@ function applyPaddingToGridWithValue(grid,padding,valueToSet) {
 }
 
 /*	@function setValueForCoordinatesOnGrid(valueToSet, coordinates, grid);
+
 	@description	Sets the given values on all areas as defined by the given coordinates on the given grid
+	
 	@param {any} valueToSet					The value to be set
 	@param {Array<Coordinate>} coordinates	A array with Coordinate-Struct entries
-	@param {ds_grid} grid					The grid on which the value should be set
-*/
+	@param {ds_grid} grid					The grid on which the value should be set	*/
 function setValueForCoordinatesOnGrid(valueToSet, coordinates, grid) {
 	
 	var _currentCoordinates = undefined;
