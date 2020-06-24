@@ -217,3 +217,18 @@ function applyPaddingToGridWithValue(grid,padding,valueToSet) {
 	
 	destroyGrid(_tempGrid);
 }
+
+/*	@function setValueForCoordinatesOnGrid(valueToSet, coordinates, grid);
+	@description	Sets the given values on all areas as defined by the given coordinates on the given grid
+	@param {any} valueToSet					The value to be set
+	@param {Array<Coordinate>} coordinates	A array with Coordinate-Struct entries
+	@param {ds_grid} grid					The grid on which the value should be set
+*/
+function setValueForCoordinatesOnGrid(valueToSet, coordinates, grid) {
+	
+	var _currentCoordinates = undefined;
+	for (var _i=0;_i<array_length(coordinates);_i++) {
+		_currentCoordinates = coordinates[_i];
+		ds_grid_set_region(grid,_currentCoordinates.x,_currentCoordinates.y,_currentCoordinates.xEnd,_currentCoordinates.yEnd,valueToSet);
+	}
+}

@@ -1,6 +1,3 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-
 /*	@function PlacedConnector(placedChamber, connectorPreset);
 	@description	Creates a new PlacedConnector with the given parent PlacedChamber and using the
 					values of the given ConnectorPreset as starting values (copied)
@@ -23,40 +20,26 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 	/*	@function createHallwayOnDungeonPreset(dungeonPreset);
 		@description	Creates a hallway from this connector (the starting connector) to another connector (the receiving connector)
 						using the given DungeonPreset.
-		@param {DungeonPreset} dungeonPreset	The DungeonPreset to use for creating the hallway
-	*/
+		@param {DungeonPreset} dungeonPreset	The DungeonPreset to use for creating the hallway	*/
 	static createHallwayOnDungeonPreset = function(dungeonPreset) {
 		
-		var _typeGrid = dungeonPreset.valueTypeGrid.types;
+		var coordinates = [];
+		coordinates[array_length(coordinates)] = outsideCoordinatesForConnector(self);
+		coordinates[array_length(coordinates)] = proximityCoordinatesForConnector(self);
+		coordinates[array_length(coordinates)] = outsideCoordinatesForConnector(self.targetPlacedConnector);
+		coordinates[array_length(coordinates)] = cornerCoordinatesForConnector(self.targetPlacedConnector);
+		coordinates[array_length(coordinates)] = connectingHallwayCoordinatesForConnector(self);
 		
-		var _selfStartingCoordinates, _selfCornerCoordinates, _proximityCoordinates;
-		_selfStartingCoordinates = outsideCoordinatesForConnector(self);
-		
-		ds_grid_set_region(_typeGrid,_selfStartingCoordinates.x,_selfStartingCoordinates.y,_selfStartingCoordinates.xEnd,_selfStartingCoordinates.yEnd,ColorMeaning.Hallway);
-		
-		_selfCornerCoordinates = cornerCoordinatesForConnector(self);		
-		ds_grid_set_region(_typeGrid,_selfCornerCoordinates.x,_selfCornerCoordinates.y,_selfCornerCoordinates.xEnd,_selfCornerCoordinates.yEnd,ColorMeaning.HallwayCorner);
-		
-		_proximityCoordinates = proximityCoordinatesForConnector(self);
-		ds_grid_set_region(_typeGrid,_proximityCoordinates.x,_proximityCoordinates.y,_proximityCoordinates.xEnd,_proximityCoordinates.yEnd,ColorMeaning.HallwayCorner);
-		
-		var _targetStartingCoordinates, _targetCornerCoordinates;
-		_targetStartingCoordinates = outsideCoordinatesForConnector(self.targetPlacedConnector);
-		ds_grid_set_region(_typeGrid,_targetStartingCoordinates.x,_targetStartingCoordinates.y,_targetStartingCoordinates.xEnd,_targetStartingCoordinates.yEnd,ColorMeaning.Hallway);
-		
-		
-		//	First corner
-		_targetCornerCoordinates = cornerCoordinatesForConnector(self.targetPlacedConnector);		
-		ds_grid_set_region(_typeGrid,_targetCornerCoordinates.x,_targetCornerCoordinates.y,_targetCornerCoordinates.xEnd,_targetCornerCoordinates.yEnd,ColorMeaning.HallwayCorner);
-		
-		
-		var _connectingHallwayCoordinates = connectingHallwayCoordinatesForConnector(self);
-		ds_grid_set_region(_typeGrid,_connectingHallwayCoordinates.x,_connectingHallwayCoordinates.y,_connectingHallwayCoordinates.xEnd,_connectingHallwayCoordinates.yEnd,ColorMeaning.Hallway);
-		
+		setValueForCoordinatesOnGrid(ColorMeaning.Hallway, coordinates, dungeonPreset.valueTypeGrid.types);
 		self.didCreateHallway = true;
 	}
 }
 
+/*	@function startingCoordinatesForConnector(connector);
+	@description	Returns the coordinates of the given connector just outside of the connector itself.
+					These coordinates are usually used when starting to draw from a connector
+	@param {PlacedConnector} connector	The connector for which the starting coordinates should be returned
+	@return {Coordinates} A instance of Coordinates defining the coordinates for the PlacedConnectors starting position	*/
 function startingCoordinatesForConnector(connector) {
 
 	var _x,_y,_xEnd,_yEnd;
@@ -98,6 +81,10 @@ function startingCoordinatesForConnector(connector) {
 	return new Coordinates(_x,_y,_xEnd,_yEnd);
 }
 
+/*	@function outsideCoordinatesForConnector(connector);
+	@description	Returns the coordinates from a connectors starting point to its first corner
+	@param {PlacedConnector} connector	The connector for which the coordinates should be returned
+	@return {Coordinates} A instance of Coordinates	*/
 function outsideCoordinatesForConnector(connector) {
 
 	var _startingCoordinates = startingCoordinatesForConnector(connector);
@@ -142,6 +129,10 @@ function outsideCoordinatesForConnector(connector) {
 	return new Coordinates(_x,_y,_xEnd,_yEnd);
 }
 	
+/*	@function proximityCoordinatesForConnector(connector);
+	@description	Returns the coordinates from a connectors starting point to the chamber of its target placed connector
+	@param {PlacedConnector} connector	The connector for which the coordinates should be returned
+	@return {Coordinates} A instance of Coordinates	*/
 function proximityCoordinatesForConnector(connector) {
 
 	var _x, _y, _xEnd, _yEnd;
@@ -196,6 +187,10 @@ function proximityCoordinatesForConnector(connector) {
 	return new Coordinates(_x,_y,_xEnd,_yEnd);
 }
 
+/*	@function cornerCoordinatesForConnector(connector);
+	@description	Returns the coordinates for the corner of a conenctor to draw when trying to reach its destination
+	@param {PlacedConnector} connector	The connector for which the coordinates should be returned
+	@return {Coordinates} A instance of Coordinates	*/
 function cornerCoordinatesForConnector(connector) {
 	
 	var _startingCoordinates = startingCoordinatesForConnector(connector);
@@ -240,6 +235,11 @@ function cornerCoordinatesForConnector(connector) {
 	return new Coordinates(_x,_y,_xEnd,_yEnd);
 }
 	
+	
+/*	@function connectingHallwayCoordinatesForConnector(connector);
+	@description	Returns the coordinates for a conenctor that connects both corners of itself and its target
+	@param {PlacedConnector} connector	The connector for which the coordinates should be returned
+	@return {Coordinates} A instance of Coordinates	*/
 function connectingHallwayCoordinatesForConnector(connector) {
 
 	var _targetCornerCoordinates =  cornerCoordinatesForConnector(connector.targetPlacedConnector);
