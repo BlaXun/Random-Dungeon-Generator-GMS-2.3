@@ -2,7 +2,8 @@
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor {
 	
-	self.valueTypeGrid = new ValueTypeGrid(maximumWidth,maximumHeight,true);
+	//self.valueTypeGrid = new ValueTypeGrid(maximumWidth,maximumHeight,true);
+	self.metadata = createGrid(maximumWidth, maximumHeight);
 	
 	self.widthInPixel = maximumWidth;
 	self.heightInPixel = maximumHeight;
@@ -12,25 +13,21 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset) {
 
 		self.populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
-		//self.createHallwaysOnPlacedChambers();
 		
-		var cropResultForDungeonTypeGrid, croppedTypeGrid, croppedPositions;
-		cropResultForDungeonTypeGrid = croppedGridFromGrid(self.valueTypeGrid.types);
-		croppedTypeGrid = cropResultForDungeonTypeGrid[0];
+		var cropResultForDungeonTypeGrid, croppedPositions;
+		cropResultForDungeonTypeGrid = croppedGridFromGrid(self.metadata);
+		croppedMetadataGrid = cropResultForDungeonTypeGrid[0];
 		croppedPositions = cropResultForDungeonTypeGrid[1];
 
+		destroyGrid(self.metadata);
+		self.metadata = croppedMetadataGrid;
+		
 		var _newWidth, _newHeight;
-		_newWidth = ds_grid_width(croppedTypeGrid);
-		_newHeight = ds_grid_height(croppedTypeGrid);
+		_newWidth = ds_grid_width(self.metadata);
+		_newHeight = ds_grid_height(self.metadata);
 
 		self.widthInPixel = _newWidth;		
 		self.heightInPixel = _newHeight;
-		
-		var _resizedValueGrid = createGrid(_newWidth,_newHeight);
-		ds_grid_set_grid_region(_resizedValueGrid,self.valueTypeGrid.values,croppedPositions[Position.Left],croppedPositions[Position.Top],croppedPositions[Position.Left]+_newWidth+1,croppedPositions[Position.Top]+_newHeight+1,0,0);
-		
-		self.valueTypeGrid.replaceValueAndTypeGrid(_resizedValueGrid, croppedTypeGrid);
-		
 		self.updatePositionsOfAllPlacedChambersFromCroppedSpaces(croppedPositions);
 		show_debug_message("Size: " + string(ds_list_size(self.placedChambers)));	
 	}
@@ -44,30 +41,22 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		var _content = undefined;
 		var _colorToDraw = noone;
 		
-		var _drawnConnectors = 0;
-		for (var _yPos=0;_yPos<self.valueTypeGrid.height;_yPos++) {
-	
-			for (var _xPos=0;_xPos<self.valueTypeGrid.width;_xPos++) {
-		
-				_content = self.valueTypeGrid.types[# _xPos, _yPos];		
+		for (var _yPos=0;_yPos<ds_grid_height(self.metadata);_yPos++) {
+			
+			for (var _xPos=0;_xPos<ds_grid_width(self.metadata);_xPos++) {
+			
+				_content = self.metadata[# _xPos, _yPos];		
 				_colorToDraw = undefined;
 		
 				if (_content != ColorMeaning.Unknown) {
 					switch (_content) {
 				
-						case ColorMeaning.ChamberGround: 					
-							_colorToDraw = self.valueTypeGrid.values[# _xPos, _yPos];
+						case ColorMeaning.ChamberGround: 														
+							_colorToDraw = self.colorAssignments.colorUsedToDrawChamberGround;
 						break;			
 				
-						case ColorMeaning.Connector: 
-						_drawnConnectors++;
-						if (self.colorAssignments.colorUsedToDrawConnectors == undefined) {							
-							show_debug_message(self.colorAssignments);
-							_colorToDraw = self.valueTypeGrid.values[# _xPos, _yPos];
-						} else {
+						case ColorMeaning.Connector: 							
 							_colorToDraw = self.colorAssignments.colorUsedToDrawConnectors;
-						}
-							
 						break;
 				
 						case ColorMeaning.Padding: 
@@ -76,15 +65,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				
 						case ColorMeaning.Hallway: 
 							_colorToDraw = self.colorAssignments.colorUsedToDrawHallways;
-						break;
-						
-						case ColorMeaning.HallwayCorner: {
-							if (self.colorAssignments.colorUsedToDrawHallwayCorners == undefined) {							
-								_colorToDraw = self.valueTypeGrid.values[# _xPos, _yPos];
-							} else {
-								_colorToDraw = self.colorAssignments.colorUsedToDrawHallwayCorners;
-							}							
-						}
 						break;
 						
 						default:
@@ -114,8 +94,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		_placedChambers = 0;
 
 		var _startX, _startY;
-		_startX = floor(self.valueTypeGrid.width/2);
-		_startY = floor(self.valueTypeGrid.height/2);
+		_startX = floor(ds_grid_width(self.metadata)/2);
+		_startY = floor(ds_grid_height(self.metadata)/2);
 
 		//	We need to prevent at least one ChamberFlow on all PlacedChambers that are created after the first one. This is to prevent collisons
 		var _directionToPreventOnAllFollowingPlacedChambers = Direction.None;
@@ -160,7 +140,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		
 				switch (_directionToMoveToNext) {
 		
-					//	TODO: Der Random-Faktor darf NICHT mit der direction to prevent kollidieren
 					case Direction.Right:			
 						_chosenColumn += 1;
 						_chosenColumn += _previousChamberPresetTotalWidth + _randomizedOffset;
@@ -212,8 +191,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 	
 			//	Move the chamber a bit if a collision is detected. Main axis to move on is defined by direction of the first chamber 
-			while (checkForCollisionWithChildGridOnParentGrid(_chosenChamberPreset.valueTypeGrid.types, self.valueTypeGrid.types,_chosenColumn,_chosenRow) == true) {
-		
+			while (checkForCollisionWithChildGridOnParentGrid(_chosenChamberPreset.valueTypeGrid.types, self.metadata,_chosenColumn,_chosenRow) == true) {
 				switch (_firstChamberDirection) {
 			
 					case Direction.Right:			
@@ -256,8 +234,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 			var _chamberPresetTotalWidth, _chamberPresetTotalHeight;
 			_chamberPresetTotalWidth = _chosenChamberPreset.totalWidth;
 			_chamberPresetTotalHeight = _chosenChamberPreset.totalHeight;
-			ds_grid_set_grid_region(self.valueTypeGrid.values,_chosenChamberPreset.valueTypeGrid.values,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
-			ds_grid_set_grid_region(self.valueTypeGrid.types, _chosenChamberPreset.valueTypeGrid.types,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
+			ds_grid_set_grid_region(self.metadata, _chosenChamberPreset.valueTypeGrid.types,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 			
 			//	Connect previous PlacedChamber with this one
 			if (_previouslyPlacedChamber != undefined) {				
@@ -291,19 +268,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		for (var _i=0;_i<ds_list_size(self.placedChambers);_i++) {
 			_currentPlacedChamber = self.placedChambers[| _i];
 			_currentPlacedChamber.correctPositions(croppedSpaces);		
-		}
-	}
-	
-	/*	@function createHallwaysOnPlacedChambers();
-		@description	Creates hallways on all PlacedChambers using those chambers PlacedConnectors
-	*/
-	static createHallwaysOnPlacedChambers = function() {
-		var _currentPlacedChamber = undefined;
-		
-		//	Start creating hallways for all PlacedChambers but the last one as that PlacedChamber doesnt have an outgoing connector
-		for (var _i=0;_i<ds_list_size(self.placedChambers)-1;_i++) {
-			_currentPlacedChamber = self.placedChambers[| _i];	
-			_currentPlacedChamber.placedConnectorForOutgoingConnection.createHallwayOnDungeonPreset(self);
 		}
 	}
 	

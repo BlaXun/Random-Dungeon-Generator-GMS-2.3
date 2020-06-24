@@ -1,5 +1,5 @@
-///	@function createList()
-///	@description Creates a new list with the given dimension and stores it in a global list
+/*	@function createList()
+	@description Creates a new list with the given dimension and stores it in a global list	*/
 function createList() {
 
 	if (!variable_global_exists("__lists")) {
@@ -12,9 +12,9 @@ function createList() {
 	return _list;
 }
 
-///	@function	destroyList(list);
-///	@description			Destroys the given list
-///	@param {ds_list} list	The list to destory
+/*	@function	destroyList(list);
+	@description			Destroys the given list
+	@param {ds_list} list	The list to destory	*/
 function destroyList(listToDestroy) {
 
 	if (!variable_global_exists("__lists")) {
@@ -30,8 +30,8 @@ function destroyList(listToDestroy) {
 	}
 }
 
-///	@function destroyAllLists()
-///	@description Destroys all lists that were created using the "createList"-function
+/*	@function destroyAllLists()
+	@description Destroys all lists that were created using the "createList"-function	*/
 function destroyAllLists() {
 
 	if (variable_global_exists("__lists")) {
@@ -48,5 +48,3 @@ function destroyAllLists() {
 		ds_list_clear(global.__lists);
 	}
 }
-
-

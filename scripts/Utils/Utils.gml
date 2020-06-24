@@ -1,7 +1,7 @@
-/// @function oppositeDirectionForDirection(direction);
-///	@description	Returns the opposite Direction for the given Direction
-/// @param {Direction} direction	The Direction for which the opposite should be returned 
-///	@return	The opposite Direction for the given Direction
+/*	@function oppositeDirectionForDirection(direction);
+	@description	Returns the opposite Direction for the given Direction
+	@param {Direction} direction	The Direction for which the opposite should be returned 
+	@return	The opposite Direction for the given Direction	*/
 function oppositeDirectionForDirection(direction) {
 
 	var _oppositeDirection = Direction.None;

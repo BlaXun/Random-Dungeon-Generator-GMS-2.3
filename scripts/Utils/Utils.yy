@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Utils.yy",
   },
   "resourceVersion": "1.0",
-  "name": "oppositeDirectionForDirection",
+  "name": "Utils",
   "tags": [],
   "resourceType": "GMScript",
 }

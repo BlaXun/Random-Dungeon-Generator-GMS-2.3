@@ -1,5 +1,5 @@
-///	@function newMap()
-///	@description Creates a new map and stores it in a global list
+/*	@function newMap()
+	@description Creates a new map and stores it in a global list	*/
 function createMap() {
 
 	if (!variable_global_exists("__maps")) {
@@ -12,9 +12,9 @@ function createMap() {
 	return _map;
 }
 
-///	@function destroyMap(map);
-///	@description			Destroys the given map
-///	@param {ds_map} map		The map to destory
+/*	@function destroyMap(map);
+	@description			Destroys the given map
+	@param {ds_map} map		The map to destory	*/
 function destroyMap(mapToDestroy) {
 
 	if (!variable_global_exists("__maps")) {
@@ -30,8 +30,8 @@ function destroyMap(mapToDestroy) {
 	}
 }
 
-///	@function destroyAllMaps()
-///	@description Destroys all maps that were created using the "createMap"-function
+/*	@function destroyAllMaps()
+	@description Destroys all maps that were created using the "createMap"-function	*/
 function destroyAllMaps() {
 
 	if (variable_global_exists("__maps")) {

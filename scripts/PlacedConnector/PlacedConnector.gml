@@ -32,7 +32,7 @@ function PlacedConnector(placedChamber, connectorPreset) constructor {
 		coordinates[array_length(coordinates)] = cornerCoordinatesForConnector(self.targetPlacedConnector);
 		coordinates[array_length(coordinates)] = connectingHallwayCoordinatesForConnector(self);
 		
-		setValueForCoordinatesOnGrid(ColorMeaning.Hallway, coordinates, dungeonPreset.valueTypeGrid.types);
+		setValueForCoordinatesOnGrid(ColorMeaning.Hallway, coordinates, dungeonPreset.metadata);
 		self.didCreateHallway = true;
 	}
 }

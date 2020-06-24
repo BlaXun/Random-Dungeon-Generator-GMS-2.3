@@ -4,11 +4,12 @@ self.colorAssignment = new ColorAssignment();
 self.colorAssignment.backgroundColor = c_black;
 self.colorAssignment.addChamberGroundColor(make_color_rgb(255,255,255));
 self.colorAssignment.addConnectorColor(make_color_rgb(238,28,36));
-self.colorAssignment.setPaddingDrawColor(make_color_rgb(30,30,30));
-self.colorAssignment.colorUsedToDrawConnectors = c_red;
 
-self.colorAssignment.setHallwayDrawColor(c_blue);
-self.colorAssignment.setHallwayCornerColor(c_aqua);
+self.colorAssignment.colorUsedToDrawConnectors = c_red;
+self.colorAssignment.colorUsedToDrawChamberGround = c_white;
+self.colorAssignment.colorUsedToDrawHallways = c_blue;
+self.colorAssignment.colorUsedToDrawPadding = make_color_rgb(30,30,30);
+
 
 var _chamberSprites = [];
 var _chamberSpriteAssetIndices = tag_get_assets("ChamberSprite");
