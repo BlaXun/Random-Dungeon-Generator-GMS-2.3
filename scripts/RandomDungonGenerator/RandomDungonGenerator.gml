@@ -46,8 +46,8 @@ function RandomDungonGenerator(options) constructor {
 		var _currentChamberPreset = undefined;
 		for (var _i=0;_i<ds_list_size(self.chamberPresets);_i++) {
 			_currentChamberPreset = self.chamberPresets[| _i];
-			_maxChamberPresetWidth = max(_maxChamberPresetWidth, _currentChamberPreset.totalWidth);
-			_maxChamberPresetHeight = max(_maxChamberPresetHeight, _currentChamberPreset.totalHeight);
+			_maxChamberPresetWidth = max(_maxChamberPresetWidth, _currentChamberPreset.width);
+			_maxChamberPresetHeight = max(_maxChamberPresetHeight, _currentChamberPreset.height);
 		}
 		
 		
@@ -94,9 +94,9 @@ function RandomDungonGenerator(options) constructor {
 	static drawDungeon = function() {
 		
 		if (self.dungeonSurface == undefined) {
-			self.dungeonSurface = surface_create(self.dungeonPreset.widthInPixel, self.dungeonPreset.heightInPixel);	//	Surface on which the complete dungeon will be drawn*/
+			self.dungeonSurface = surface_create(self.dungeonPreset.width, self.dungeonPreset.height);	//	Surface on which the complete dungeon will be drawn*/
 		} else {
-			surface_resize(self.dungeonSurface,self.dungeonPreset.widthInPixel,self.dungeonPreset.heightInPixel);
+			surface_resize(self.dungeonSurface,self.dungeonPreset.width,self.dungeonPreset.height);
 		}
 		
 		surface_set_target(self.dungeonSurface);

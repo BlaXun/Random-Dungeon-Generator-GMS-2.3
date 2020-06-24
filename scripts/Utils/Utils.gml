@@ -27,3 +27,14 @@ function oppositeDirectionForDirection(direction) {
 	
 	return _oppositeDirection;
 }
+
+/*
+	@function Coordinates(x,y,xEnd,yEnd);
+	@description	Returns a Coordinates-Struct that defines an area
+*/
+function Coordinates(x,y,xEnd,yEnd) constructor {
+	self.x = x;
+	self.y = y;
+	self.xEnd = xEnd;
+	self.yEnd = yEnd;
+}

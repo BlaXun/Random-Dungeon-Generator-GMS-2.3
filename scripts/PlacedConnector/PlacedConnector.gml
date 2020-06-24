@@ -147,8 +147,8 @@ function proximityCoordinatesForConnector(connector) {
 	var targetPlacedChamber = connector.targetPlacedConnector.parentPlacedChamber;
 	var targetPlacedChamberCoordinates = new Coordinates(	targetPlacedChamber.xPositionInDungeon, 
 															targetPlacedChamber.yPositionInDungeon, 
-															targetPlacedChamber.xPositionInDungeon+targetPlacedChamber.chamberPreset.totalWidth, 
-															targetPlacedChamber.yPositionInDungeon+targetPlacedChamber.chamberPreset.totalHeight);
+															targetPlacedChamber.xPositionInDungeon+targetPlacedChamber.chamberPreset.width, 
+															targetPlacedChamber.yPositionInDungeon+targetPlacedChamber.chamberPreset.height);
 	
 	switch(connector.facingDirection) {
 		
@@ -208,7 +208,7 @@ function cornerCoordinatesForConnector(connector) {
 		break;
 		
 		case Direction.Right: {
-			_x=connector.parentPlacedChamber.xPositionInDungeon+connector.parentPlacedChamber.chamberPreset.totalWidth;
+			_x=connector.parentPlacedChamber.xPositionInDungeon+connector.parentPlacedChamber.chamberPreset.width;
 			_x-=connector.height;			
 			_xEnd=_x + connector.height-1;
 			_y=_startingCoordinates.y;
@@ -227,7 +227,7 @@ function cornerCoordinatesForConnector(connector) {
 		case Direction.Down: {
 			_x=_startingCoordinates.x;
 			_xEnd=_startingCoordinates.xEnd;
-			_y = connector.parentPlacedChamber.yPositionInDungeon+connector.parentPlacedChamber.chamberPreset.totalHeight;
+			_y = connector.parentPlacedChamber.yPositionInDungeon+connector.parentPlacedChamber.chamberPreset.height;
 			_y -= connector.width;
 			_yEnd=_y + connector.width-1;
 		}

@@ -1,41 +1,45 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+/*	
+	The DungeonPreset is the struct that creates a dungeon
+*/
 function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor {
 	
-	//self.valueTypeGrid = new ValueTypeGrid(maximumWidth,maximumHeight,true);
+	//	The grid that contains metadata information for whatever is placed in the dungeon
 	self.metadata = createGrid(maximumWidth, maximumHeight);
 	
-	self.widthInPixel = maximumWidth;
-	self.heightInPixel = maximumHeight;
+	self.width = maximumWidth;
+	self.height = maximumHeight;
 	self.colorAssignments = colorAssignments;
 	self.placedChambers = createList();
 	
+	/*	@function createNewDungeon(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
+		
+		@description Creates a new dungeon from the given chamber prests while trying to place the given amount of chambers	
+		
+		@param {ds_list<ChamberPreset>} chamberPresets	A list of available ChamberPresets to be used when creating the dungeon
+		@param {real} amountOfChambersToPlace	The amount of chambers to place that make up the dungeon
+		@param {real} minimumRandomOffset	A minimum offset to be applied between chambers
+		@param {real} maximumRandomOffset	A maximum offset to be applied between chambers	*/
 	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset) {
 
-		self.populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
+		self._populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
 		
-		var cropResultForDungeonTypeGrid, croppedPositions;
-		cropResultForDungeonTypeGrid = croppedGridFromGrid(self.metadata);
-		croppedMetadataGrid = cropResultForDungeonTypeGrid[0];
-		croppedPositions = cropResultForDungeonTypeGrid[1];
-
+		var cropResultForDungeonTypeGrid = croppedGridFromGrid(self.metadata);		
 		destroyGrid(self.metadata);
-		self.metadata = croppedMetadataGrid;
 		
-		var _newWidth, _newHeight;
-		_newWidth = ds_grid_width(self.metadata);
-		_newHeight = ds_grid_height(self.metadata);
-
-		self.widthInPixel = _newWidth;		
-		self.heightInPixel = _newHeight;
-		self.updatePositionsOfAllPlacedChambersFromCroppedSpaces(croppedPositions);
-		show_debug_message("Size: " + string(ds_list_size(self.placedChambers)));	
+		self.metadata = cropResultForDungeonTypeGrid[0];
+		
+		self.width = ds_grid_width(self.metadata);		
+		self.height = ds_grid_height(self.metadata);
+		
+		self._updatePositionsOfAllPlacedChambersFromCroppedSpaces(cropResultForDungeonTypeGrid[1]);
 	}
 	
-	///	@function drawDungeon(x,y);
-	///	@description	Draws the dungeon to screen from the given preset using the given coordinates
-	///	@param {real} x	The x-coordinate where to draw the dungeon
-	///	@param {real} y	The y-coordinate where to draw the dungeon
+	/*	@function drawDungeon(x,y);
+	
+		@description	Draws the dungeon to screen from the given preset using the given coordinates
+	
+		@param {real} x	The x-coordinate where to draw the dungeon
+		@param {real} y	The y-coordinate where to draw the dungeon	*/
 	static drawDungeon = function(x,y) {
 
 		var _content = undefined;
@@ -80,10 +84,16 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		}
 	}
 	
-	///	@function	populateWithPlacedChambersUsingChamberPresets(chamberPresets,amountOfChambersToPlace,minimumRandomOffset,maximumRandomOffset)
-	///	@param {ds_list} chamberPresets			A list of chamber presets that are available to be used for populating
-	///	@param {real} amountOfChambersToPlace	The amount of chambers that the dungeon should consist of
-	static populateWithPlacedChambersUsingChamberPresets = function(chamberPresets,amountOfChambersToPlace,minimumRandomOffset, maximumRandomOffset) {
+	/*	@function _populateWithPlacedChambersUsingChamberPresets(chamberPresets,amountOfChambersToPlace,minimumRandomOffset,maximumRandomOffset);
+		
+		@description	FOR INTERNAL USE
+						This the logic that populates the dungeon with chambers and hallways
+						
+		@param {ds_list} chamberPresets			A list of chamber presets that are available to be used for populating
+		@param {real} amountOfChambersToPlace	The amount of chambers that the dungeon should consist of
+		@param {real} minimumRandomOffset		A minimum offset to be applied between chambers
+		@param {real} maximumRandomOffset		A maximum offset to be applied between chambers	*/
+	static _populateWithPlacedChambersUsingChamberPresets = function(chamberPresets,amountOfChambersToPlace,minimumRandomOffset, maximumRandomOffset) {
 
 		randomize();
 		
@@ -131,12 +141,12 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 				var _previousPlacedChamberChamberPreset, _previousChamberPresetTotalWidth, _previousChamberPresetTotalHeight;
 				_previousPlacedChamberChamberPreset = _previouslyPlacedChamber.chamberPreset;
-				_previousChamberPresetTotalWidth = _previousPlacedChamberChamberPreset.totalWidth;
-				_previousChamberPresetTotalHeight = _previousPlacedChamberChamberPreset.totalHeight;
+				_previousChamberPresetTotalWidth = _previousPlacedChamberChamberPreset.width;
+				_previousChamberPresetTotalHeight = _previousPlacedChamberChamberPreset.height;
 	
 				var _thisChamberWidth, _thisChamberHeight;
-				_thisChamberWidth = _chosenChamberPreset.totalWidth;
-				_thisChamberHeight = _chosenChamberPreset.totalHeight;
+				_thisChamberWidth = _chosenChamberPreset.width;
+				_thisChamberHeight = _chosenChamberPreset.height;
 		
 				switch (_directionToMoveToNext) {
 		
@@ -189,7 +199,6 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				}
 			}
 	
-	
 			//	Move the chamber a bit if a collision is detected. Main axis to move on is defined by direction of the first chamber 
 			while (checkForCollisionWithChildGridOnParentGrid(_chosenChamberPreset.valueTypeGrid.types, self.metadata,_chosenColumn,_chosenRow) == true) {
 				switch (_firstChamberDirection) {
@@ -232,8 +241,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 			_placedChamber.deactivateDirection(oppositeDirectionForDirection(_directionToMoveToNext));
 			
 			var _chamberPresetTotalWidth, _chamberPresetTotalHeight;
-			_chamberPresetTotalWidth = _chosenChamberPreset.totalWidth;
-			_chamberPresetTotalHeight = _chosenChamberPreset.totalHeight;
+			_chamberPresetTotalWidth = _chosenChamberPreset.width;
+			_chamberPresetTotalHeight = _chosenChamberPreset.height;
 			ds_grid_set_grid_region(self.metadata, _chosenChamberPreset.valueTypeGrid.types,0,0,_chamberPresetTotalWidth,_chamberPresetTotalHeight,_chosenColumn,_chosenRow);
 			
 			//	Connect previous PlacedChamber with this one
@@ -262,7 +271,13 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		debug("Done placing chambers (" + string(_placedChambers)+"/"+string(amountOfChambersToPlace)+")");
 	}
 	
-	static updatePositionsOfAllPlacedChambersFromCroppedSpaces = function(croppedSpaces) {
+	/*	@function _updatePositionsOfAllPlacedChambersFromCroppedSpaces(croppedSpaves);
+		
+		@description	FOR INTERNAL USE
+						Updates the positions of all placedChambeers on this dungeon based on the given cropped spaces
+		
+		@param {Array<Position>} croppedSpaces	A array with amount of cropped spaces on each side	*/
+	static _updatePositionsOfAllPlacedChambersFromCroppedSpaces = function(croppedSpaces) {
 		
 		var _currentPlacedChamber = undefined;
 		for (var _i=0;_i<ds_list_size(self.placedChambers);_i++) {
@@ -273,15 +288,17 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 	
 	static toString = function() {
 		var _debugString = "============================= DUNGEON PRESET ==============================\n";
-		_debugString += "widthInPixel: " +string(self.widthInPixel) + "\n";
-		_debugString += "heightInPixel: " +string(self.heightInPixel) + "\n";
+		_debugString += "width: " +string(self.width) + "\n";
+		_debugString += "height: " +string(self.height) + "\n";
 		_debugString += "PlacedChambers (count): " +string(ds_list_size(self.placedChambers)) + "\n";
 		return _debugString;
 	}
 }
 
 /*	@function allAvailableDirectionsOutOfChambers(chambers);
+	
 	@description	Returns all possible directions by summarizing the directions of the given chambers
+	
 	@param {ds_list} chambers	A list of ChamberPresets
 	@return A array with Direction-Enum entries	*/
 function allAvailableDirectionsOutOfChambers(chambers) {

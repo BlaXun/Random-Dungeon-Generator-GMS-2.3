@@ -1,14 +1,14 @@
 /// @description Insert description here
 // You can write your code in this editor
 self.colorAssignment = new ColorAssignment();
-self.colorAssignment.backgroundColor = c_black;
 self.colorAssignment.addChamberGroundColor(make_color_rgb(255,255,255));
 self.colorAssignment.addConnectorColor(make_color_rgb(238,28,36));
 
-self.colorAssignment.colorUsedToDrawConnectors = c_red;
-self.colorAssignment.colorUsedToDrawChamberGround = c_white;
-self.colorAssignment.colorUsedToDrawHallways = c_blue;
-self.colorAssignment.colorUsedToDrawPadding = make_color_rgb(30,30,30);
+self.colorAssignment.backgroundColor = make_color_rgb(149,125,173);
+self.colorAssignment.colorUsedToDrawConnectors = make_color_rgb(224,187,228);
+self.colorAssignment.colorUsedToDrawChamberGround = make_color_rgb(255,223,211);
+self.colorAssignment.colorUsedToDrawHallways = make_color_rgb(254,200,216);
+self.colorAssignment.colorUsedToDrawPadding = make_color_rgb(210,145,188);
 
 
 var _chamberSprites = [];

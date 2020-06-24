@@ -1,12 +1,8 @@
 function defineGenericEnums() {
-	/*
+
+/*
 		Define some generic enums
 	*/
-
-	enum Dimension {
-		Width = 0,
-		Height = 1
-	}
 
 	enum Position {
 		Top,

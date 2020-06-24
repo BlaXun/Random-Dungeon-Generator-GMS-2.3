@@ -22,8 +22,8 @@ function ChamberPreset(chamberSprite) constructor {
 	self.sprite = chamberSprite;
 	self.padding = new Padding(0,0,0,0);
 	
-	self.totalWidth = sprite_get_width(self.sprite);
-	self.totalHeight = sprite_get_height(self.sprite);
+	self.width = sprite_get_width(self.sprite);
+	self.height = sprite_get_height(self.sprite);
 	
 	self.allowsConnectionOnAndFromRightSide = false;
 	self.allowsConnectionOnAndFromLeftSide = false;
@@ -209,8 +209,8 @@ function ChamberPreset(chamberSprite) constructor {
 	static toString = function() {
 		var _debugString = "============================= CHAMBER PRESET ==============================\n";
 		_debugString += "sprite: " +sprite_get_name(self.sprite) + "\n";
-		_debugString += "totalWidth: " +string(self.totalWidth) + "\n";
-		_debugString += "totalHeight: " +string(self.totalHeight) + "\n";
+		_debugString += "width: " +string(self.width) + "\n";
+		_debugString += "height: " +string(self.height) + "\n";
 		_debugString += "padding: " +string(self.padding) + "\n";
 		_debugString += "leftFacingConnectors: " +string(self.leftFacingConnectors) + "\n";
 		_debugString += "upFacingConnectors: " +string(self.upFacingConnectors) + "\n";
@@ -269,8 +269,8 @@ function ChamberPreset(chamberSprite) constructor {
 		
 		self.valueTypeGrid.applyPadding(self.padding,noone,ColorMeaning.Padding);
 		
-		self.totalWidth = self.valueTypeGrid.width;
-		self.totalHeight = self.valueTypeGrid.height;
+		self.width = self.valueTypeGrid.width;
+		self.height= self.valueTypeGrid.height;
 		
 		self._correctConnectorPositionsUsingPadding(self.padding);
 	}
@@ -371,7 +371,7 @@ function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments) {
 	var _chamberPreset = new ChamberPreset(chamberSprite);
 
 	var _grids = createPixelGridAndDatatypeGridFromSprite(chamberSprite, colorAssignments);
-	var _valueTypeGrid = new ValueTypeGrid(_chamberPreset.totalWidth, _chamberPreset.totalHeight,false);
+	var _valueTypeGrid = new ValueTypeGrid(_chamberPreset.width, _chamberPreset.height,false);
 	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
 	_chamberPreset.valueTypeGrid = _valueTypeGrid;	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
