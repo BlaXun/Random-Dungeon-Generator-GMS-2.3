@@ -10,6 +10,7 @@ self.colorAssignment.colorUsedToDrawChamberGround = make_color_rgb(255,223,211);
 self.colorAssignment.colorUsedToDrawHallways = make_color_rgb(254,200,216);
 self.colorAssignment.colorUsedToDrawPadding = make_color_rgb(210,145,188);
 
+self.colorAssignment.addUserDefinedColorWithValue(make_color_rgb(160,65,13), "Treasure Chest");
 
 var _chamberSprites = [];
 var _chamberSpriteAssetIndices = tag_get_assets("ChamberSprite");

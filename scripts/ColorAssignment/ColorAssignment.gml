@@ -10,15 +10,21 @@ function ColorAssignment() constructor {
 
 	self.colorsDetectedAsConnector = createList();
 	self.colorsDetectedAsChamberGround = createList();
+	self.colorsDetectedAsUserDefined = createList();
+	self._userDefinedColorsMeanings = createMap();
 	self.colorUsedToDrawHallways = make_color_rgb(0,0,255);
 	self.colorUsedToDrawPadding = undefined;
 	self.colorUsedToDrawConnectors = undefined;
 	self.colorUsedToDrawChamberGround = undefined;
 	self.backgroundColor = c_black;	
 	
-	
 	static addConnectorColor = function(color) {
 		self.colorsDetectedAsConnector[| ds_list_size(self.colorsDetectedAsConnector)] = color; 
+	}
+	
+	static addUserDefinedColorWithValue = function(color, value) {
+		self.colorsDetectedAsUserDefined[| ds_list_size(self.colorsDetectedAsUserDefined)] = color; 
+		_userDefinedColorsMeanings[? color] = value;
 	}
 	
 	static addChamberGroundColor = function(color) {
@@ -32,6 +38,8 @@ function ColorAssignment() constructor {
 			_meaning = ColorMeaning.Connector;
 		} else if (ds_list_find_index(self.colorsDetectedAsChamberGround, color) > -1) {
 			_meaning = ColorMeaning.ChamberGround;
+		} else if (ds_list_find_index(self.colorsDetectedAsUserDefined, color) > -1) {
+			_meaning = self._userDefinedColorsMeanings[? color];
 		}
 		
 		if (color == undefined) {
@@ -44,6 +52,8 @@ function ColorAssignment() constructor {
 	static uninit = function() {
 		destroyList(self.colorsDetectedAsConnector);
 		destroyList(self.colorsDetectedAsChamberGround);
+		destroyList(self.colorsDetectedAsUserDefined);
+		destroyMap(self._userDefinedColorsMeanings);
 		destroyMap(self._colorMeanings);
 	}	
 }

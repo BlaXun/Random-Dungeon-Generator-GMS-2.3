@@ -180,7 +180,7 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments)
 			_pixelColor = surface_getpixel(_surf,_xPos,_yPos);
 		
 			var _colorMeaning = colorAssignments.meaningForColor(_pixelColor);
-			if (_colorMeaning != ColorMeaning.Unknown) {						
+			if (_colorMeaning != ColorMeaning.Unknown) {	
 				_pixelGrid[# _xPos, _yPos] = _pixelColor;
 				_pixelGridContents[# _xPos, _yPos] = _colorMeaning;			
 			}

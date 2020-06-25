@@ -287,47 +287,6 @@ function ChamberPreset(chamberSprite) constructor {
 			_connector.y += padding.top;
 		}
 	}
-	
-	/*	@function _largestConnectorDimensionOnSide(side);
-		@description	RESERVED FOR INTERNAL USE
-						Returns the largest (height or width) dimension of all connectors on the given side
-		@param {Direction} side	The side for which the maximum connector dimension should be returned
-		@return {Real}	The largest dimension of all connectors on the given side	*/
-	static _largestConnectorDimensionOnSide = function(side) {
-		
-		var _maximumDimension = 0;
-		var _connectors = [];
-		switch (side) {
-			
-			case (Direction.Left): {
-				_connectors = self.leftFacingConnectors;
-			}
-			break;
-			
-			case (Direction.Up): {
-				_connectors = self.upFacingConnectors;
-			}
-			break;
-			
-			case (Direction.Right): {
-				_connectors = self.rightFacingConnectors;
-			}
-			break;
-			
-			case (Direction.Down): {
-				_connectors = self.downFacingConnectors;
-			}		
-			break;
-		}
-		
-		var _currentConnector = undefined;
-		for (var _i=0;_i<array_length(_connectors);_i++) {
-			_currentConnector = _connectors[_i];
-			_maximumDimension = max(_maximumDimension,_currentConnector.maximumDimensionDependingOnFacingDirection());			
-		}
-		
-		return _maximumDimension;
-	}
 }
 
 /*	@function chamberThatAllowsConnectionOnSide(availableChamberPresets,sideToConnectOn,directionToExclude);

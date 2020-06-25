@@ -53,6 +53,7 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				_colorToDraw = undefined;
 		
 				if (_content != ColorMeaning.Unknown) {
+					
 					switch (_content) {
 				
 						case ColorMeaning.ChamberGround: 														

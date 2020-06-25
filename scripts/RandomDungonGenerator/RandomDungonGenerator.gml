@@ -7,7 +7,6 @@ function GeneratorOptions(colorAssignment, spritesToUseForChambers) constructor 
 	self.maximumRandomOffsetBetweenPlacedChambers = 0;
 }
 
-
 /*
 	This is the entry point for creating new random dungeons.
 	The RandomDungeonGenerator will take care of everything using the given values

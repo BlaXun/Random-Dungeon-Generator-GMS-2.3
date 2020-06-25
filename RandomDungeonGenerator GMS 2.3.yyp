@@ -12,6 +12,7 @@
     {"id":{"name":"sprBottomAndRightConnectorChamber","path":"sprites/sprBottomAndRightConnectorChamber/sprBottomAndRightConnectorChamber.yy",},"order":1,},
     {"id":{"name":"sprLeftAndBottomConnectorChamber","path":"sprites/sprLeftAndBottomConnectorChamber/sprLeftAndBottomConnectorChamber.yy",},"order":4,},
     {"id":{"name":"sprLeftAndTopConnectorChamber","path":"sprites/sprLeftAndTopConnectorChamber/sprLeftAndTopConnectorChamber.yy",},"order":5,},
+    {"id":{"name":"sprChamberWithUserDefinedTreasureChest","path":"sprites/sprChamberWithUserDefinedTreasureChest/sprChamberWithUserDefinedTreasureChest.yy",},"order":16,},
     {"id":{"name":"sprAnotherChamber","path":"sprites/sprAnotherChamber/sprAnotherChamber.yy",},"order":0,},
     {"id":{"name":"GridHelper","path":"scripts/GridHelper/GridHelper.yy",},"order":5,},
     {"id":{"name":"MapHelper","path":"scripts/MapHelper/MapHelper.yy",},"order":7,},
