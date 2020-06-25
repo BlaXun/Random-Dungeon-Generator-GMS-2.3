@@ -16,7 +16,7 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 <h1>Samples</h1>
 These are some random dungeons generated using the provided sample chamber sprites. The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
 
-<img src="./Sample1.png"/><img src="./Sample2.png"/><img src="./Sample3.png"/><img src="./Sample4.png"/><img src="./Sample5.png"/>
+<img src="./Sample1.png"/> <img src="./Sample2.png" width="285" height="219"/> <img src="./Sample3.png" width="251" height="139"/> <img src="./Sample4.png"/> <img src="./Sample5.png" width="240" height="189"/>
 
 <h2>Output format</h2>
 
