@@ -26,13 +26,39 @@ for (var _i=0;_i<array_length(_chamberSpriteAssetIndices);_i++) {
 	
 //	(Optional) Defining a callback-function so we know when the dungeon is ready
 var _callback = function(dungeonGenerator) {
-	show_message("Done creating a dungeon- Press space to create another");
-	show_message(string(dungeonGenerator));
+	show_message_async("Done creating a dungeon- Press space to create another. Your dungeon will be drawn using tiles and also drawn at the upper-left corner as pixel-representation");
+	show_message_async(string(dungeonGenerator));
 	
 	//	In here you would now use the dungeonGenerator.dungeonPreset.metadata ds_grid, cycle through it and create your dungeon.
-	//	If you somehow need a list of all placed chambers you can use dungeonGenerator.dungeonPreset.placedChambers (ds_list).
+	//	If you somehow need a list of all placed chambers you can use dungeonGenerator.dungeonPreset.placedChambers (ds_list).	
+
+	//	This will place tiles 
+	var lay_id = layer_get_id("Tiles_1");
+	var map_id = layer_tilemap_get_id(lay_id);
+	tilemap_clear(map_id,0);
 	
-	//	As a fallback, so you can see the output, we are going to draw the dungeon to a surface and display it	
+	for (var _yPos=0;_yPos<ds_grid_height(self.dungeonGenerator.dungeonPreset.metadata);_yPos++) {
+		
+		for (var _xPos=0;_xPos<ds_grid_width(self.dungeonGenerator.dungeonPreset.metadata);_xPos++) {
+		
+			switch (self.dungeonGenerator.dungeonPreset.metadata[# _xPos, _yPos]) {
+				
+				case ColorMeaning.ChamberGround:
+					tilemap_set(map_id,1,_xPos,_yPos);
+				break;
+				
+				case ColorMeaning.Hallway:
+					tilemap_set(map_id,48,_xPos,_yPos);
+				break;
+				
+				case ColorMeaning.Connector:
+					tilemap_set(map_id,49,_xPos,_yPos);
+				break;
+			}
+		}
+	}
+	
+	//	Also draw a pixel-representation of the generated map
 	self.dungeonGenerator.drawDungeon();
 };
 
@@ -43,7 +69,7 @@ _options.setCallbackFunction(_callback);
 	Be cautious with this. The amount of chambers will define the initial height / width of the ds_grid
 	to be created. Depending on the size of your chamber-sprites this can be a quite huge grid in the end
 	and could potentially crash your game!	*/
-_options.amountOfChambersToPlace = 40;
+_options.amountOfChambersToPlace = 20;
 
 //	(Optional)	Define a minimum and maxmimum offset to be applied when placing chambers. This will result
 //				in somewhat random placement. Values assigned here are on a pixel-level.
