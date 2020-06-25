@@ -1,6 +1,3 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-
 enum ColorMeaning {
 	Connector,
 	Hallway,
@@ -19,30 +16,29 @@ function ColorAssignment() constructor {
 	self.colorUsedToDrawChamberGround = undefined;
 	self.backgroundColor = c_black;	
 	
-	self._colorMeanings = createMap();
 	
 	static addConnectorColor = function(color) {
 		self.colorsDetectedAsConnector[| ds_list_size(self.colorsDetectedAsConnector)] = color; 
-		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.Connector;
 	}
 	
 	static addChamberGroundColor = function(color) {
 		self.colorsDetectedAsChamberGround[| ds_list_size(self.colorsDetectedAsConnector)] = color;
-		self._colorMeanings[? self.uniformIdentifierForColor(color)] = ColorMeaning.ChamberGround;
 	}
 	
 	static meaningForColor = function(color) {
+		
+		var _meaning = undefined;
+		if (ds_list_find_index(self.colorsDetectedAsConnector, color) > -1) {
+			_meaning = ColorMeaning.Connector;
+		} else if (ds_list_find_index(self.colorsDetectedAsChamberGround, color) > -1) {
+			_meaning = ColorMeaning.ChamberGround;
+		}
 		
 		if (color == undefined) {
 			throw ("Passed undefined on color parameter in meaningForColor");
 		}
 		
-		var _meaning = self._colorMeanings[? self.uniformIdentifierForColor(color)];
 		return _meaning == undefined ? ColorMeaning.Unknown : _meaning;
-	}
-	
-	static uniformIdentifierForColor = function(color) {
-		return string(color_get_red(color))+","+string(color_get_green(color))+","+string(color_get_blue(color));
 	}
 	
 	static uninit = function() {
