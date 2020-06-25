@@ -1,2 +1,5 @@
-# Random-Dungeon-Generator-GMS-2.3
-This is my Random Dungeon Generator that is compatible with Game Maker Studio 2.3
+# Random Dungeon Generator (Game Maker Studio 2.3)
+
+*Introduction*
+This Random Dungeon Generator combines user-defined chambers to create a dungeon.
+The user-defined chambers are simple sprites that use color coding (user can customize the color detection).
