@@ -11,15 +11,17 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 **Output format**<br/>
 Once the dungeon was created the system will provide a ds_grid which contains one of the enumeration-values of the ColorMeaning enumeration.<br/>
 The values you will encounter are 
+
 * Connector => A connector was found on this position
 * Hallway => A hallway was created on this position, connecting chambers
 * ChamberGround => This is chamber ground
 * Padding => Padding applied around a chamber. You usually can ignore this
 * Unknown => Empty Space
+
 <br/>
 In addition to these pre-defined metadata-types you can also defined you own "meanings" using the ColorAssignment-Struct that is used on the RandomDungeonGenerator.<br/>
 Take a look at the dungeonCreator-Object on how to define custom colors.<br/>
-
+<br/>
 **Creating chamber sprites** <br/>
 Without chamber sprites there can be no dungeon. 
 Each chamber sprite needs some ground and connectors. At least one connector on two different sides need to be placed on a chamber.
