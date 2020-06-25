@@ -22,6 +22,15 @@ function ColorAssignment() constructor {
 		self.colorsDetectedAsConnector[| ds_list_size(self.colorsDetectedAsConnector)] = color; 
 	}
 	
+	/*
+		@function addUserDefinedColorWithValue(color, value);
+		
+		@description			Adds a color that is detected as user-defined with a user-defined value to be placed in the final metadata-grid
+								Using this you can add detecting for custom things such as teleporters, treasure chests, enemy placement, npcs, etc.
+								
+		@param {color} color	The color that is detected as user-defined
+		@param {any} value		The value to be placed in the final output grid
+	*/
 	static addUserDefinedColorWithValue = function(color, value) {
 		self.colorsDetectedAsUserDefined[| ds_list_size(self.colorsDetectedAsUserDefined)] = color; 
 		_userDefinedColorsMeanings[? color] = value;
