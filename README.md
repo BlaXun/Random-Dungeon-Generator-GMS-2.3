@@ -1,17 +1,17 @@
 # Random Dungeon Generator (Game Maker Studio 2.3)
 
-**Introduction**<br/>
+<h1>Introduction</h1>
 
 This Random Dungeon Generator combines user-defined chambers to create a dungeon.<br/>
 The user-defined chambers are simple sprites that use color coding (user can customize the color detection).<br/>
 <br/>
 
-**Requirements**
+<h1>Requirements</h1>
 * At least Game Maker Studio 2.3
 * Some sprites
 <br/>
 
-**Output format**<br/>
+<h1>Output format**</h1>
 
 Once the dungeon was created the system will provide a **ds_grid** which contains one of the enumeration-values of the ColorMeaning enumeration.<br/>
 The values you will encounter are 
@@ -28,12 +28,12 @@ Take a look at the dungeonCreator-Object on how to define custom colors.<br/>
 
 In addition to the ds_grid you can also retrieve a **ds_list** of placed chambers with information on how each chamber is connected. Use the **placedChambers** property on the DungeonPreset-Struct for this.<br/>
 
-**Creating chamber sprites** <br/>
+<h1>Creating chamber sprites</h1>
 
 Without chamber sprites there can be no dungeon. 
 Each chamber sprite needs some ground and connectors. At least one connector on two different sides need to be placed on a chamber.
 
-**How Connectors work** <br/>
+<h2>How Connectors work</h2>
 
 Connectors come in two variations: **Vertical** and **horizontal**. Depending on how the pixel of a connector are placed on the chamber sprite the connector will either be detected as a horizontal or vertical connector. Vertical connectors have a height of 1 and a width of > 1. Horizontal connectors have a width of 1 and a height of > 1. 
 In addition to the connectors orientation it also has a **facing direction**. This facing direction is dependend of the pixels surrounding the connector. For a horizontal connector the facing direction is **left** when the pixel to the right of the connector are chamber ground. The facing direction is **right** when the pixel to the left of the connector are chamber ground. For a vertical connector the facing direction is **up** when the pixel below the connector are chamber ground. The facing direction is **down** when the pixel above the connector are chamber ground.<br/>
