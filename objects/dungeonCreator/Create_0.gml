@@ -33,12 +33,20 @@ var _callback = function(dungeonGenerator) {
 	//	If you somehow need a list of all placed chambers you can use dungeonGenerator.dungeonPreset.placedChambers (ds_list).
 	
 	//	As a fallback, so you can see the output, we are going to draw the dungeon to a surface and display it	
-	self.dungeonGenerator.drawDungeon();
+	//self.dungeonGenerator.drawDungeon();
 };
 
 var _options = new GeneratorOptions(self.colorAssignment,_chamberSprites);
 _options.setCallbackFunction(_callback);
+
+/*	Define how many chambers should be placed.
+	Be cautious with this. The amount of chambers will define the initial height / width of the ds_grid
+	to be created. Depending on the size of your chamber-sprites this can be a quite huge grid in the end
+	and could potentially crash your game!	*/
 _options.amountOfChambersToPlace = 25;
+
+//	(Optional)	Define a minimum and maxmimum offset to be applied when placing chambers. This will result
+//				in somewhat random placement. Values assigned here are on a pixel-level.
 _options.minimumRandomOffsetBetweenPlacedChambers = 5;
 _options.maximumRandomOffsetBetweenPlacedChambers = 20;
 
