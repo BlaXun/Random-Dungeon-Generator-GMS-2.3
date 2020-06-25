@@ -7,8 +7,10 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 <br/>
 
 <h1>Requirements</h1>
+
 * At least Game Maker Studio 2.3
 * Some sprites
+
 <br/>
 
 <h2>Output format</h2>
