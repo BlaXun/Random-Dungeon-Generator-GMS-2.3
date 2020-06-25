@@ -26,7 +26,7 @@ The values you will encounter are
 In addition to these pre-defined metadata-types you can also defined you own "meanings" using the ColorAssignment-Struct that is used on the RandomDungeonGenerator.<br/>
 Take a look at the dungeonCreator-Object on how to define custom colors.<br/>
 <br/>
-In addition to the ds_grid you can also retrieve a list of placed chambers with information on how each chamber is connected. Use the **placedChambers** property on the DungeonPreset-Struct for this.<br/>
+In addition to the ds_grid you can also retrieve a list of placed chambers with information on how each chamber is connected. Use the **placedChambers** property on the DungeonPreset-Struct for this. <br/>
 
 **Creating chamber sprites** <br/>
 
