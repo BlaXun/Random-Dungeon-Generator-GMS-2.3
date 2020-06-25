@@ -5,6 +5,12 @@ function GeneratorOptions(colorAssignment, spritesToUseForChambers) constructor 
 	self.amountOfChambersToPlace = 0;
 	self.minimumRandomOffsetBetweenPlacedChambers = 0;
 	self.maximumRandomOffsetBetweenPlacedChambers = 0;
+	
+	self.onEndCallback = undefined;
+	
+	static setCallbackFunction = function(callback) {
+		self.onEndCallback = method(self, callback);
+	}
 }
 
 /*
@@ -88,6 +94,10 @@ function RandomDungonGenerator(options) constructor {
 		self.dungeonPreset = new DungeonPreset(self.options.colorAssignments,self._requiredMaximumGridWidth,self._requiredMaximumGridHeight);
 		self.dungeonPreset.createNewDungeon(self.chamberPresets, self.options.amountOfChambersToPlace,self.options.minimumRandomOffsetBetweenPlacedChambers,self.options.maximumRandomOffsetBetweenPlacedChambers);
 		self.dungeonWasCreated = true;
+		
+		if (is_undefined(self.options.onEndCallback) == false &&  is_method(self.options.onEndCallback)) {
+			self.options.onEndCallback(self);
+		}
 	}
 	
 	static drawDungeon = function() {
