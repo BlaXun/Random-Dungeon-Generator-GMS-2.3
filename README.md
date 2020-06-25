@@ -8,6 +8,7 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 * At least Game Maker Studio 2.3
 * Some sprites
 <br/>
+
 **Output format**<br/>
 Once the dungeon was created the system will provide a ds_grid which contains one of the enumeration-values of the ColorMeaning enumeration.<br/>
 The values you will encounter are 
