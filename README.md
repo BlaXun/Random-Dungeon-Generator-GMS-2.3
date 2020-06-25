@@ -11,7 +11,7 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 * Some sprites
 <br/>
 
-<h1>Output format**</h1>
+<h2>Output format</h2>
 
 Once the dungeon was created the system will provide a **ds_grid** which contains one of the enumeration-values of the ColorMeaning enumeration.<br/>
 The values you will encounter are 
@@ -28,7 +28,7 @@ Take a look at the dungeonCreator-Object on how to define custom colors.<br/>
 
 In addition to the ds_grid you can also retrieve a **ds_list** of placed chambers with information on how each chamber is connected. Use the **placedChambers** property on the DungeonPreset-Struct for this.<br/>
 
-<h1>Creating chamber sprites</h1>
+<h2>Creating chamber sprites</h2>
 
 Without chamber sprites there can be no dungeon. 
 Each chamber sprite needs some ground and connectors. At least one connector on two different sides need to be placed on a chamber.
