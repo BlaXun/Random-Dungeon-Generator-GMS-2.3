@@ -7,7 +7,7 @@
     {"id":{"name":"sprSmallHorizontal","path":"sprites/sprSmallHorizontal/sprSmallHorizontal.yy",},"order":14,},
     {"id":{"name":"sprRandomChamber","path":"sprites/sprRandomChamber/sprRandomChamber.yy",},"order":17,},
     {"id":{"name":"sprCurvedBottomRight","path":"sprites/sprCurvedBottomRight/sprCurvedBottomRight.yy",},"order":9,},
-    {"id":{"name":"TileSet1","path":"tilesets/TileSet1/TileSet1.yy",},"order":5,},
+    {"id":{"name":"TileSet1","path":"tilesets/TileSet1/TileSet1.yy",},"order":0,},
     {"id":{"name":"sprTopAndBottomConnectorChamber","path":"sprites/sprTopAndBottomConnectorChamber/sprTopAndBottomConnectorChamber.yy",},"order":7,},
     {"id":{"name":"sprTopAndRightConnectorChamber","path":"sprites/sprTopAndRightConnectorChamber/sprTopAndRightConnectorChamber.yy",},"order":8,},
     {"id":{"name":"sprBottomAndRightConnectorChamber","path":"sprites/sprBottomAndRightConnectorChamber/sprBottomAndRightConnectorChamber.yy",},"order":1,},
@@ -66,6 +66,7 @@
     {"folderPath":"folders/Rooms.yy","order":3,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Chambers.yy","order":10,"resourceVersion":"1.0","name":"Chambers","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Tilesets.yy","order":11,"resourceVersion":"1.0","name":"Tilesets","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Tilesets.yy","order":6,"resourceVersion":"1.0","name":"Tilesets","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":461609314234257646,"resourceVersion":"1.0","name":"audiogroup_default","resourceType":"GMAudioGroup",},

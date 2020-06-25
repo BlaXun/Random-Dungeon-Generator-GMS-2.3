@@ -398,8 +398,8 @@
     ],
   },
   "parent": {
-    "name": "RandomDungeonGenerator GMS 2.3",
-    "path": "RandomDungeonGenerator GMS 2.3.yyp",
+    "name": "Tilesets",
+    "path": "folders/Tilesets.yy",
   },
   "resourceVersion": "1.0",
   "name": "TileSet1",
