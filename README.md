@@ -15,6 +15,7 @@ Each chamber sprite needs some ground and connectors. At least one connector on 
 **How Connectors work** <br/>
 
 
-The sample project comes with a list of sample sprites to use.
-
 **Limitations** <br/>
+* Can not limit how many times each chamber is used
+* Builts one long dungeon from start to end but does NOT create branches
+* Depending on the chamber layout crossing hallways could appear
