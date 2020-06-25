@@ -4,13 +4,13 @@
 
 This Random Dungeon Generator combines user-defined chambers to create a dungeon.<br/>
 The user-defined chambers are simple sprites that use color coding (user can customize the color detection).<br/>
+**The system does not require any objects to use and is easy to integrate into your own project as it can rely only on the provided scripts**
 <br/>
 
 <h1>Requirements</h1>
 
 * At least Game Maker Studio 2.3
 * Some sprites
-
 <br/>
 
 <h1>Samples</h1>
@@ -39,6 +39,8 @@ In addition to the ds_grid you can also retrieve a **ds_list** of placed chamber
 
 Without chamber sprites there can be no dungeon. 
 Each chamber sprite needs some ground and connectors. At least one connector on two different sides need to be placed on a chamber.
+
+<img src="./ChamberSprite.png" width="320" height="192"/>
 
 <h2>About Connectors</h2>
 
