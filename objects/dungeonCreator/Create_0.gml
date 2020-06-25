@@ -33,7 +33,7 @@ var _callback = function(dungeonGenerator) {
 	//	If you somehow need a list of all placed chambers you can use dungeonGenerator.dungeonPreset.placedChambers (ds_list).
 	
 	//	As a fallback, so you can see the output, we are going to draw the dungeon to a surface and display it	
-	//self.dungeonGenerator.drawDungeon();
+	self.dungeonGenerator.drawDungeon();
 };
 
 var _options = new GeneratorOptions(self.colorAssignment,_chamberSprites);

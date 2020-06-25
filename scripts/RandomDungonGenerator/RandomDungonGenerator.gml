@@ -25,7 +25,7 @@ function RandomDungonGenerator(options) constructor {
 	self.options = options;
 	self._didCreateChambers = false;
 	
-	global.__debugging = true;	//	Enables / Disables debugging output on console
+	global.__debugging = false;	//	Enables / Disables debugging output on console
 	
 	self.dungeonWasCreated = false;	//	Wether the dungeon generating is done
 	self.chamberPresets = createList();

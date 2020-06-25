@@ -193,8 +193,6 @@ function ChamberPreset(chamberSprite) constructor {
 		self.downFacingConnectors = _downFacingConnectors;
 		self.rightFacingConnectors = _rightFacingConnectors;
 	
-		show_debug_message("Did find connectors \n up: " + string(array_length(self.upFacingConnectors)) +"\nleft: " + string(array_length(self.leftFacingConnectors))+"\ndown: " + string(array_length(self.downFacingConnectors)) + "\nright: " + string(array_length(self.rightFacingConnectors)));
-	
 		self.allConnectors = _allConnectors;
 		self._assignDirectionsToConnectTo();
 		
