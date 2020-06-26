@@ -45,12 +45,11 @@ var _callback = function(dungeonGenerator) {
 	var _newRoom = room_add();
 	room_set_width(_newRoom, _gridWidth*16);
 	room_set_height(_newRoom, _gridHeight*16);
-
-	//room_set_view_enabled(_newRoom,0);
-	//room_set_viewport(_newRoom,0,true,0,0,320,240);
+	
+	room_set_background_color(_newRoom,c_black,true);
 	
 	var _playerInstance = undefined;
-	var _didPlacePlayer = false;
+	var _didPlacePlayer = false;	
 	for (var _yPos=0;_yPos<_gridHeight;_yPos++) {
 		
 		for (var _xPos=0;_xPos<_gridWidth;_xPos++) {
