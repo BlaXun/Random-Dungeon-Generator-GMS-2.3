@@ -99,9 +99,9 @@ function ChamberPreset(chamberSprite) constructor {
 					
 						//	Vertical Connector										
 						var _connectorDirection = Direction.None;
-						if ((_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.Padding) && _neighborContentTop == ColorMeaning.ChamberGround) {
+						if ((_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.Padding) && _neighborContentTop == ColorMeaning.ChamberGround && is_string(_neighborContentBottom) == false) {
 							_connectorDirection = Direction.Down;
-						} else if ((_neighborContentTop == ColorMeaning.Unknown || _neighborContentTop == ColorMeaning.Padding) && _neighborContentBottom == ColorMeaning.ChamberGround) {
+						} else if ((_neighborContentTop == ColorMeaning.Unknown || _neighborContentTop == ColorMeaning.Padding) && _neighborContentBottom == ColorMeaning.ChamberGround && is_string(_neighborContentTop) == false) {
 							_connectorDirection = Direction.Up;
 						}
 					
@@ -142,9 +142,9 @@ function ChamberPreset(chamberSprite) constructor {
 					
 						//	Horizontal Connector
 						var _connectorDirection = Direction.None;
-						if ((_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.Padding) && _neighborContentLeft == ColorMeaning.ChamberGround) {
+						if ((_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.Padding) && _neighborContentLeft == ColorMeaning.ChamberGround && is_string(_neighborContentRight) == false) {
 							_connectorDirection = Direction.Right;
-						} else if ((_neighborContentLeft == ColorMeaning.Unknown || _neighborContentLeft == ColorMeaning.Padding) && _neighborContentRight == ColorMeaning.ChamberGround) {
+						} else if ((_neighborContentLeft == ColorMeaning.Unknown || _neighborContentLeft == ColorMeaning.Padding) && _neighborContentRight == ColorMeaning.ChamberGround && is_string(_neighborContentLeft) == false) {
 							_connectorDirection = Direction.Left;
 						}
 					
