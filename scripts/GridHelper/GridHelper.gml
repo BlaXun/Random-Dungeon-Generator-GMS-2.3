@@ -159,10 +159,12 @@ function checkForCollisionWithChildGridOnParentGrid(childGrid, parentGrid, x, y)
 	@param {real} spriteIndex					The index of the sprite that should get converted to pixel grid
 	@param {ColorAssignment} colorAssignments	A ColorAssignment-Struct that describes colors and their meaning	*/
 function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments) {
-
+	
 	var _chamberSpriteWidth, _chamberSpriteHeight;
 	_chamberSpriteWidth = sprite_get_width(spriteIndex);
 	_chamberSpriteHeight = sprite_get_height(spriteIndex);
+	
+	show_debug_message("Trying to analyze sprite... (" + sprite_get_name(spriteIndex) + ")");
 
 	var _pixelGrid = createGrid(_chamberSpriteWidth,_chamberSpriteHeight);	
 	var _pixelGridContents = createGrid(_chamberSpriteWidth,_chamberSpriteHeight);
@@ -194,6 +196,7 @@ function createPixelGridAndDatatypeGridFromSprite(spriteIndex, colorAssignments)
 	_gridsToReturn[0] = _pixelGrid;
 	_gridsToReturn[1] = _pixelGridContents;
 
+	show_debug_message("Done (" + sprite_get_name(spriteIndex) + ")");
 	return _gridsToReturn;
 }
 

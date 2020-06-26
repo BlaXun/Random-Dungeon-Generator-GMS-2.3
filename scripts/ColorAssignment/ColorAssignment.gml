@@ -32,8 +32,10 @@ function ColorAssignment() constructor {
 		@param {any} value		The value to be placed in the final output grid
 	*/
 	static addUserDefinedColorWithValue = function(color, value) {
+		show_debug_message("Adding user defined color...");
 		self.colorsDetectedAsUserDefined[| ds_list_size(self.colorsDetectedAsUserDefined)] = color; 
 		_userDefinedColorsMeanings[? color] = value;
+		show_debug_message("Done adding user defined color");
 	}
 	
 	static addChamberGroundColor = function(color) {
