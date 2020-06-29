@@ -5,7 +5,7 @@ function GeneratorOptions(colorAssignment, spritesToUseForChambers) constructor 
 	self.amountOfChambersToPlace = 0;
 	self.minimumRandomOffsetBetweenPlacedChambers = 0;
 	self.maximumRandomOffsetBetweenPlacedChambers = 0;
-	
+	self.surroundWithWalls = false;	//	Using this option woll add ColorMeaning.AutoWall around ChamberGround, Hallways and open Connectors
 	self.onEndCallback = undefined;
 	
 	static setCallbackFunction = function(callback) {
@@ -92,7 +92,7 @@ function RandomDungonGenerator(options) constructor {
 		}
 		
 		self.dungeonPreset = new DungeonPreset(self.options.colorAssignments,self._requiredMaximumGridWidth,self._requiredMaximumGridHeight);
-		self.dungeonPreset.createNewDungeon(self.chamberPresets, self.options.amountOfChambersToPlace,self.options.minimumRandomOffsetBetweenPlacedChambers,self.options.maximumRandomOffsetBetweenPlacedChambers);
+		self.dungeonPreset.createNewDungeon(self.chamberPresets, self.options.amountOfChambersToPlace,self.options.minimumRandomOffsetBetweenPlacedChambers,self.options.maximumRandomOffsetBetweenPlacedChambers, self.options.surroundWithWalls);
 		self.dungeonWasCreated = true;
 		
 		if (is_undefined(self.options.onEndCallback) == false &&  is_method(self.options.onEndCallback)) {

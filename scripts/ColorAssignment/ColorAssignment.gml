@@ -3,6 +3,7 @@ enum ColorMeaning {
 	Hallway,
 	ChamberGround,
 	Padding,
+	AutoWall,
 	Unknown
 }
 
@@ -16,6 +17,8 @@ function ColorAssignment() constructor {
 	self.colorUsedToDrawPadding = undefined;
 	self.colorUsedToDrawConnectors = undefined;
 	self.colorUsedToDrawChamberGround = undefined;
+	self.colorUsedToDrawAutoWalls = make_color(70,70,70);
+	
 	self.backgroundColor = c_black;	
 	
 	static addConnectorColor = function(color) {

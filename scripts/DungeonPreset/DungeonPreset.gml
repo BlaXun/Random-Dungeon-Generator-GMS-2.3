@@ -18,10 +18,12 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		@param {ds_list<ChamberPreset>} chamberPresets	A list of available ChamberPresets to be used when creating the dungeon
 		@param {real} amountOfChambersToPlace	The amount of chambers to place that make up the dungeon
 		@param {real} minimumRandomOffset	A minimum offset to be applied between chambers
-		@param {real} maximumRandomOffset	A maximum offset to be applied between chambers	*/
-	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset) {
+		@param {real} maximumRandomOffset	A maximum offset to be applied between chambers	
+		@param {boolean} applyAutoWalls		Decides wether walls should surround corners of chamber ground, open connectors and hallways	*/
+	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset, applyAutoWalls) {
 
 		self._populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
+		
 		
 		var cropResultForDungeonTypeGrid = croppedGridFromGrid(self.metadata);		
 		destroyGrid(self.metadata);
@@ -32,6 +34,47 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		self.height = ds_grid_height(self.metadata);
 		
 		self._updatePositionsOfAllPlacedChambersFromCroppedSpaces(cropResultForDungeonTypeGrid[1]);
+		
+		if (applyAutoWalls == true) {
+			self._applyAutoWalls();
+		}
+	}
+	
+	static _applyAutoWalls = function() {
+		
+		var _currentContent, _rightContent, _bottomContent, _leftContent, _topContent;
+		
+		for (var _yPos=0;_yPos<self.height;_yPos++) {				
+			
+			for (var _xPos=0;_xPos<self.width;_xPos++) {
+				
+				_currentContent = self.metadata[# _xPos, _yPos];
+				
+				_rightContent = _xPos < self.width-1 ? self.metadata[# _xPos+1, _yPos] : undefined;
+				_bottomContent = _yPos < self.height-1 ? self.metadata[# _xPos, _yPos+1] : undefined;
+				_leftContent = _xPos > 0 ? self.metadata[# _xPos-1, _yPos] : undefined;
+				_topContent = _yPos > 0 ? self.metadata[# _xPos, _yPos-1] : undefined;
+									
+				if (_currentContent == ColorMeaning.ChamberGround || _currentContent == ColorMeaning.Connector || _currentContent = ColorMeaning.Hallway) {
+				
+					if	(_rightContent == ColorMeaning.Padding || _rightContent == ColorMeaning.Unknown || _rightContent == GridContent.Empty) {
+						self.metadata[# _xPos+1, _yPos] = ColorMeaning.AutoWall;
+					}
+					
+					if (_leftContent == ColorMeaning.Padding || _leftContent == ColorMeaning.Unknown || _leftContent == GridContent.Empty) {
+						self.metadata[# _xPos-1, _yPos] = ColorMeaning.AutoWall;
+					}
+					
+					if	(_topContent == ColorMeaning.Padding || _topContent == ColorMeaning.Unknown || _topContent == GridContent.Empty) {
+						self.metadata[# _xPos, _yPos-1] = ColorMeaning.AutoWall;
+					}
+					
+					if (_bottomContent == ColorMeaning.Padding || _bottomContent == ColorMeaning.Unknown || _bottomContent == GridContent.Empty) {
+						self.metadata[# _xPos, _yPos+1] = ColorMeaning.AutoWall;
+					}					
+				}
+			}
+		}
 	}
 	
 	/*	@function drawDungeon(x,y);
@@ -70,6 +113,10 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				
 						case ColorMeaning.Hallway: 
 							_colorToDraw = self.colorAssignments.colorUsedToDrawHallways;
+						break;
+						
+						case ColorMeaning.AutoWall:
+							_colorToDraw = self.colorAssignments.colorUsedToDrawAutoWalls;
 						break;
 						
 						default:
