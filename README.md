@@ -11,7 +11,6 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 
 * At least Game Maker Studio 2.3
 * Some sprites
-<br/>
 
 <h1>Features</h1>
 
@@ -19,7 +18,6 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 * Highly customizable due to the user being able to define chambers by sprites (uses color-coding for recognition)
 * Allows for automatically applying Wall-Metadata around ChamberGround, Hallways and open Conenctors. This can be toggled on/off
 * Returns a generic ds_grid with information about the dungeon layout. This can be used in ANY Game Maker Studio Project and even outside of such projects
-<br/>
 
 <h1>Samples</h1>
 These are some random dungeons generated using the provided sample chamber sprites. The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
