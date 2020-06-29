@@ -27,6 +27,7 @@ The values you will encounter are
 * Hallway => A hallway was created on this position, connecting chambers
 * ChamberGround => This is chamber ground
 * Padding => Padding applied around a chamber. You usually can ignore this
+* AutoWall => Walls that were applied around ChamberGround, Hallway and open Connector. Applying auto-walls can be switched on/off in the options
 * Unknown => Empty Space
 
 <br/>
