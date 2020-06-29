@@ -19,11 +19,11 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		@param {real} amountOfChambersToPlace	The amount of chambers to place that make up the dungeon
 		@param {real} minimumRandomOffset	A minimum offset to be applied between chambers
 		@param {real} maximumRandomOffset	A maximum offset to be applied between chambers	
-		@param {boolean} applyAutoWalls		Decides wether walls should surround corners of chamber ground, open connectors and hallways	*/
-	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset, applyAutoWalls) {
+		@param {boolean} applyAutoWalls		Decides wether walls should surround corners of chamber ground, open connectors and hallways	
+		@param {boolean} closeAutoWallCorners		Decides wether corners on auto-walls should be close */
+	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset, applyAutoWalls, closeAutoWallCorners) {
 
 		self._populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
-		
 		
 		var cropResultForDungeonTypeGrid = croppedGridFromGrid(self.metadata);		
 		destroyGrid(self.metadata);
@@ -36,11 +36,16 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		self._updatePositionsOfAllPlacedChambersFromCroppedSpaces(cropResultForDungeonTypeGrid[1]);
 		
 		if (applyAutoWalls == true) {
-			self._applyAutoWalls();
+			self._applyAutoWalls(closeAutoWallCorners);
 		}
 	}
 	
-	static _applyAutoWalls = function() {
+	/*	@function _applyAutoWalls(closeCorners);
+		@description	RESERVED FOR INTERNAL USE!
+						Places walls (ColorMeaning.AutoWall) around ChamberGround, Hallways and open Connectors
+						
+		@param {boolean} closeCorners	Wether corners on auto walls should be closed		*/
+	static _applyAutoWalls = function(closeCorners) {
 		
 		var _currentContent, _rightContent, _bottomContent, _leftContent, _topContent;
 		
@@ -72,6 +77,43 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 					if (_bottomContent == ColorMeaning.Padding || _bottomContent == ColorMeaning.Unknown || _bottomContent == GridContent.Empty) {
 						self.metadata[# _xPos, _yPos+1] = ColorMeaning.AutoWall;
 					}					
+				}
+			}
+		}
+		
+		if (closeCorners == true) {
+			
+			var _positionsToMark = [];
+			for (var _xPos=0;_xPos<self.width;_xPos++) {
+				
+				for (var _yPos=0;_yPos<self.height;_yPos++) {
+					
+					_currentContent = self.metadata[# _xPos, _yPos];
+					
+					if (_currentContent == ColorMeaning.Padding || _currentContent == GridContent.Empty || _currentContent == ColorMeaning.Unknown) {
+						
+						_rightContent = _xPos < self.width-1 ? self.metadata[# _xPos+1, _yPos] : undefined;
+						_bottomContent = _yPos < self.height-1 ? self.metadata[# _xPos, _yPos+1] : undefined;
+						_leftContent = _xPos > 0 ? self.metadata[# _xPos-1, _yPos] : undefined;
+						_topContent = _yPos > 0 ? self.metadata[# _xPos, _yPos-1] : undefined;
+						
+						if	(_rightContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall) || 
+							(_rightContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall) ||
+							(_leftContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall) ||
+							(_leftContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall) {
+							
+							_positionsToMark[array_length(_positionsToMark)] = new Position(_xPos,_yPos);							
+						}
+					}
+				}	
+			}
+			
+			if (array_length(_positionsToMark) > 0) {
+				var _pos = undefined;
+				for (var _i=0;_i<array_length(_positionsToMark);_i++) {
+					_pos = _positionsToMark[_i];
+					self.metadata[# _pos.x, _pos.y] = ColorMeaning.AutoWall;
+					delete _pos;
 				}
 			}
 		}
