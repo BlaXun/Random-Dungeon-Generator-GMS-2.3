@@ -13,6 +13,14 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 * Some sprites
 <br/>
 
+<h1>Features</h1>
+
+* Creates dungeons from user-defined sprites
+* Highly customizable due to the user being able to define chambers by sprites (uses color-coding for recognition)
+* Allows for automatically applying Wall-Metadata around ChamberGround, Hallways and open Conenctors. This can be toggled on/off
+* Returns a generic ds_grid with information about the dungeon layout. This can be used in ANY Game Maker Studio Project and even outside of such projects
+<br/>
+
 <h1>Samples</h1>
 These are some random dungeons generated using the provided sample chamber sprites. The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
 
@@ -60,3 +68,4 @@ Chambers are connected to each other by hallways. A hallway will be created from
 * Builts one long dungeon from start to end but does NOT create branches
 * Depending on the chamber layout crossing hallways could appear
 * Depending on chamber sprite size and amount of chambers to be placed the required ds_grid can become quite large before being cropped. This could potentially crash your game. I would advice testing results with various different amounts of chambers.
+* Initial loadup could be slow depending on the size and amount of chambers
