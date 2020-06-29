@@ -20,7 +20,8 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 * Returns a generic ds_grid with information about the dungeon layout. This can be used in ANY Game Maker Studio Project and even outside of such projects
 
 <h1>Samples</h1>
-These are some random dungeons generated using the provided sample chamber sprites. The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
+These are some random dungeons generated using the provided sample chamber sprites.<br/>
+The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
 
 <img src="./Sample1.png"/> <img src="./Sample3.png" width="251" height="139"/> 
 
