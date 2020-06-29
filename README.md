@@ -23,13 +23,13 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 These are some random dungeons generated using the provided sample chamber sprites.<br/>
 The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
 
-<img src="./Sample1.png"/> <img src="./Sample3.png" width="251" height="139"/> 
+<img src="./Sample1.png"/> <img src="./Sample3.png"/> 
 
 Dungeon with high amount of chamber offset<br/>
-<img src="./Sample2.png" width="285" height="219"/>
+<img src="./Sample2.png"/>
 
 Dungeon with AutoWalls applied<br/>
-<img src="./Sample6.PNG" width="355" height="220"/>
+<img src="./Sample6.PNG"/>
 
 <h2>Output format</h2>
 
