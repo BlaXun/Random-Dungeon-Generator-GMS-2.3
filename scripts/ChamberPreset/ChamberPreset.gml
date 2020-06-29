@@ -119,7 +119,7 @@ function ChamberPreset(chamberSprite) constructor {
 						
 							_neighborContentRight = (_xPos+_width > self.valueTypeGrid.width-1) ? ColorMeaning.Unknown : _typeGridCopy[# _xPos+_width,_yPos];
 						
-							if (_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.ChamberGround) {
+							if (_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.ChamberGround || is_string(_neighborContentRight)) {
 								_neighborIsBlankOrGround = true;
 							} else if (_neighborContentRight == ColorMeaning.Connector) {
 								//	Mask neighbor with ChamberGround to prevent duplicate detection
@@ -164,7 +164,7 @@ function ChamberPreset(chamberSprite) constructor {
 						
 							_neighborContentBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? ColorMeaning.Unknown : _typeGridCopy[# _xPos,_yPos+_height];
 						
-							if (_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.ChamberGround) {
+							if (_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.ChamberGround || is_string(_neighborContentBottom)) {
 								_neighborIsBlankOrGround = true;
 							} else if (_neighborContentBottom == ColorMeaning.Connector) {										
 								//	Mask neighbor with ChamberGround to prevent duplicate detection
