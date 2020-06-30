@@ -27,26 +27,27 @@ for (var _i=0;_i<array_length(_chamberSpriteAssetIndices);_i++) {
 	
 //	(Optional) Defining a callback-function so we know when the dungeon is ready
 var _callback = function(dungeonGenerator) {
-	show_message_async("Done creating a dungeon- Press space to create another. Your dungeon will be drawn using tiles and also drawn at the upper-left corner as pixel-representation");
+	
+	show_message_async("Done creating a dungeon.\nYour dungeon will be drawn using tiles and also drawn at the upper-left corner as pixel-representation.\n\nPress space to create another or 'D' to move to a demo room withg the generated dungeon.");
 	show_message_async(string(dungeonGenerator));
 	
 	//	In here you would now use the dungeonGenerator.dungeonPreset.metadata ds_grid, cycle through it and create your dungeon.
 	//	If you somehow need a list of all placed chambers you can use dungeonGenerator.dungeonPreset.placedChambers (ds_list).	
-
-	//	This will place tiles 
-	var lay_id = layer_get_id("Tiles_1");
-	var map_id = layer_tilemap_get_id(lay_id);
-	tilemap_clear(map_id,0);
-	
 	var _gridWidth, _gridHeight;
 	_gridHeight = ds_grid_height(self.dungeonGenerator.dungeonPreset.metadata)
 	_gridWidth = ds_grid_width(self.dungeonGenerator.dungeonPreset.metadata)
 	
-	var _newRoom = room_add();
-	room_set_width(_newRoom, _gridWidth*16);
-	room_set_height(_newRoom, _gridHeight*16);
+	global.demoRoom = room_add();
+	layer_set_target_room(global.demoRoom);
+	var layerId = layer_create(100, "Tiles_1");
+	var tilemapId = layer_tilemap_create(layerId,TileSet1,0,0,_gridWidth,_gridHeight);
 	
-	room_set_background_color(_newRoom,c_black,true);
+	tilemap_clear(tilemapId,0);
+	
+	room_set_width(global.demoRoom, _gridWidth*16);
+	room_set_height(global.demoRoom, _gridHeight*16);
+	
+	room_set_background_color(global.demoRoom,c_black,true);
 	
 	var _playerInstance = undefined;
 	var _didPlacePlayer = false;	
@@ -55,36 +56,37 @@ var _callback = function(dungeonGenerator) {
 		for (var _xPos=0;_xPos<_gridWidth;_xPos++) {
 		
 			var _content = self.dungeonGenerator.dungeonPreset.metadata[# _xPos, _yPos];			
-			if (_content == "Wall") {
-				room_instance_add(_newRoom,_xPos*16,_yPos*16,objBlock);				
-			}
 			
 			switch (_content) {
+				
+				case ColorMeaning.AutoWall:
+					room_instance_add(global.demoRoom,_xPos*16,_yPos*16,objBlock);				
+				break;
 				
 				case ColorMeaning.ChamberGround:
 				
 					if (_didPlacePlayer == false) {
-						_playerInstance = room_instance_add(_newRoom,_xPos*16,_yPos*16,objPlayer);
+						_playerInstance = room_instance_add(global.demoRoom,_xPos*16,_yPos*16,objPlayer);
 						_didPlacePlayer = true;
 					}
-					tilemap_set(map_id,1,_xPos,_yPos);
+					tilemap_set(tilemapId,1,_xPos,_yPos);
 				break;
 				
 				case ColorMeaning.Hallway:
-					tilemap_set(map_id,48,_xPos,_yPos);
+					tilemap_set(tilemapId,48,_xPos,_yPos);
 				break;
 				
 				case ColorMeaning.Connector:
-					tilemap_set(map_id,49,_xPos,_yPos);
+					tilemap_set(tilemapId,49,_xPos,_yPos);
 				break;
 			}
 		}
 	}
 	
+	layer_reset_target_room();
+	
 	//	Also draw a pixel-representation of the generated map
 	self.dungeonGenerator.drawDungeon();
-	
-	room_goto(_newRoom);
 };
 
 var _options = new GeneratorOptions(self.colorAssignment,_chamberSprites);

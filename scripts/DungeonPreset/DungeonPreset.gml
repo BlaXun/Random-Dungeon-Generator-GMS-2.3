@@ -83,6 +83,8 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		
 		if (closeCorners == true) {
 			
+			var _topLeftContent, _topRightContent, _bottomRightContent, _bottomLeftContent;
+			
 			var _positionsToMark = [];
 			for (var _xPos=0;_xPos<self.width;_xPos++) {
 				
@@ -96,11 +98,15 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 						_bottomContent = _yPos < self.height-1 ? self.metadata[# _xPos, _yPos+1] : undefined;
 						_leftContent = _xPos > 0 ? self.metadata[# _xPos-1, _yPos] : undefined;
 						_topContent = _yPos > 0 ? self.metadata[# _xPos, _yPos-1] : undefined;
+						_topLeftContent = _xPos > 0 && _yPos > 0 ? self.metadata[# _xPos-1, _yPos-1] : undefined;
+						_topRightContent = _xPos < self.width-1 && _yPos > 0 ? self.metadata[# _xPos+1, _yPos-1] : undefined;
+						_bottomRightContent = _xPos < self.width-1 && _yPos < self.height-1 ? self.metadata[# _xPos+1, _yPos+1] : undefined;
+						_bottomLeftContent = _xPos > 0 && _yPos < self.height-1 ? self.metadata[# _xPos-1, _yPos+1] : undefined;
 						
-						if	(_rightContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall) || 
-							(_rightContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall) ||
-							(_leftContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall) ||
-							(_leftContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall) {
+						if	(_rightContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall && (_bottomRightContent == ColorMeaning.ChamberGround || _bottomRightContent == ColorMeaning.Hallway))  || 
+							(_rightContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall && (_topRightContent == ColorMeaning.ChamberGround || _topRightContent == ColorMeaning.Hallway))  || 
+							(_leftContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall && (_bottomLeftContent == ColorMeaning.ChamberGround || _bottomLeftContent == ColorMeaning.Hallway))  || 
+							(_leftContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall && (_topLeftContent == ColorMeaning.ChamberGround || _topLeftContent == ColorMeaning.Hallway)) {
 							
 							_positionsToMark[array_length(_positionsToMark)] = new Position(_xPos,_yPos);							
 						}

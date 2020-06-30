@@ -21,6 +21,7 @@
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"parent":{"name":"dungeonCreator","path":"objects/dungeonCreator/dungeonCreator.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":0,"eventType":8,"collisionObjectId":null,"parent":{"name":"dungeonCreator","path":"objects/dungeonCreator/dungeonCreator.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":32,"eventType":9,"collisionObjectId":null,"parent":{"name":"dungeonCreator","path":"objects/dungeonCreator/dungeonCreator.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"isDnD":false,"eventNum":68,"eventType":9,"collisionObjectId":null,"parent":{"name":"dungeonCreator","path":"objects/dungeonCreator/dungeonCreator.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],

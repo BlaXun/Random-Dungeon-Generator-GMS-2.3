@@ -1,7 +1,12 @@
 /// @description Insert description here
 // You can write your code in this editor
-var _cam = camera_create_view(0,0,320,240,0,objPlayer,5,5,-1,-1);
-view_set_camera(0, _cam);
-view_set_visible(0, true);
+view_width = 1920/6;
+view_height = 1080/6;
 
-room_set_viewport(room,0,true,0,0,320,240);
+view_scale = 3;
+
+window_set_size(view_width*view_scale,view_height*view_scale);
+
+alarm[0] = 1;
+
+surface_resize(application_surface,view_width*view_scale,view_height*view_scale);
