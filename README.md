@@ -11,12 +11,25 @@ The user-defined chambers are simple sprites that use color coding (user can cus
 
 * At least Game Maker Studio 2.3
 * Some sprites
-<br/>
+
+<h1>Features</h1>
+
+* Creates dungeons from user-defined sprites
+* Highly customizable due to the user being able to define chambers by sprites (uses color-coding for recognition)
+* Allows for automatically applying Wall-Metadata around ChamberGround, Hallways and open Conenctors. This can be toggled on/off
+* Returns a generic ds_grid with information about the dungeon layout. This can be used in ANY Game Maker Studio Project and even outside of such projects
 
 <h1>Samples</h1>
-These are some random dungeons generated using the provided sample chamber sprites. The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
+These are some random dungeons generated using the provided sample chamber sprites.<br/>
+The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <br/>
 
-<img src="./Sample1.png"/> <img src="./Sample2.png" width="285" height="219"/> <img src="./Sample3.png" width="251" height="139"/> <img src="./Sample4.png"/> <img src="./Sample5.png" width="240" height="189"/>
+<img src="./Sample1.png"/> <img src="./Sample3.png"/> 
+
+Dungeon with high amount of chamber offset<br/>
+<img src="./Sample2.png"/>
+
+Dungeon with AutoWalls applied<br/>
+<img src="./Sample6.PNG"/>
 
 <h2>Output format</h2>
 
@@ -27,6 +40,7 @@ The values you will encounter are
 * Hallway => A hallway was created on this position, connecting chambers
 * ChamberGround => This is chamber ground
 * Padding => Padding applied around a chamber. You usually can ignore this
+* AutoWall => Walls that were applied around ChamberGround, Hallway and open Connector. Applying auto-walls can be switched on/off in the options
 * Unknown => Empty Space
 
 <br/>
@@ -59,3 +73,4 @@ Chambers are connected to each other by hallways. A hallway will be created from
 * Builts one long dungeon from start to end but does NOT create branches
 * Depending on the chamber layout crossing hallways could appear
 * Depending on chamber sprite size and amount of chambers to be placed the required ds_grid can become quite large before being cropped. This could potentially crash your game. I would advice testing results with various different amounts of chambers.
+* Initial loadup could be slow depending on the size and amount of chambers

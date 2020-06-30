@@ -18,8 +18,10 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		@param {ds_list<ChamberPreset>} chamberPresets	A list of available ChamberPresets to be used when creating the dungeon
 		@param {real} amountOfChambersToPlace	The amount of chambers to place that make up the dungeon
 		@param {real} minimumRandomOffset	A minimum offset to be applied between chambers
-		@param {real} maximumRandomOffset	A maximum offset to be applied between chambers	*/
-	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset) {
+		@param {real} maximumRandomOffset	A maximum offset to be applied between chambers	
+		@param {boolean} applyAutoWalls		Decides wether walls should surround corners of chamber ground, open connectors and hallways	
+		@param {boolean} closeAutoWallCorners		Decides wether corners on auto-walls should be close */
+	static createNewDungeon = function(chamberPresets,amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset, applyAutoWalls, closeAutoWallCorners) {
 
 		self._populateWithPlacedChambersUsingChamberPresets(chamberPresets, amountOfChambersToPlace, minimumRandomOffset, maximumRandomOffset);
 		
@@ -32,6 +34,89 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 		self.height = ds_grid_height(self.metadata);
 		
 		self._updatePositionsOfAllPlacedChambersFromCroppedSpaces(cropResultForDungeonTypeGrid[1]);
+		
+		if (applyAutoWalls == true) {
+			self._applyAutoWalls(closeAutoWallCorners);
+		}
+	}
+	
+	/*	@function _applyAutoWalls(closeCorners);
+		@description	RESERVED FOR INTERNAL USE!
+						Places walls (ColorMeaning.AutoWall) around ChamberGround, Hallways and open Connectors
+						
+		@param {boolean} closeCorners	Wether corners on auto walls should be closed		*/
+	static _applyAutoWalls = function(closeCorners) {
+		
+		var _currentContent, _rightContent, _bottomContent, _leftContent, _topContent;
+		
+		for (var _yPos=0;_yPos<self.height;_yPos++) {				
+			
+			for (var _xPos=0;_xPos<self.width;_xPos++) {
+				
+				_currentContent = self.metadata[# _xPos, _yPos];
+				
+				_rightContent = _xPos < self.width-1 ? self.metadata[# _xPos+1, _yPos] : undefined;
+				_bottomContent = _yPos < self.height-1 ? self.metadata[# _xPos, _yPos+1] : undefined;
+				_leftContent = _xPos > 0 ? self.metadata[# _xPos-1, _yPos] : undefined;
+				_topContent = _yPos > 0 ? self.metadata[# _xPos, _yPos-1] : undefined;
+									
+				if (_currentContent == ColorMeaning.ChamberGround || _currentContent == ColorMeaning.Connector || _currentContent = ColorMeaning.Hallway) {
+				
+					if	(_rightContent == ColorMeaning.Padding || _rightContent == ColorMeaning.Unknown || _rightContent == GridContent.Empty) {
+						self.metadata[# _xPos+1, _yPos] = ColorMeaning.AutoWall;
+					}
+					
+					if (_leftContent == ColorMeaning.Padding || _leftContent == ColorMeaning.Unknown || _leftContent == GridContent.Empty) {
+						self.metadata[# _xPos-1, _yPos] = ColorMeaning.AutoWall;
+					}
+					
+					if	(_topContent == ColorMeaning.Padding || _topContent == ColorMeaning.Unknown || _topContent == GridContent.Empty) {
+						self.metadata[# _xPos, _yPos-1] = ColorMeaning.AutoWall;
+					}
+					
+					if (_bottomContent == ColorMeaning.Padding || _bottomContent == ColorMeaning.Unknown || _bottomContent == GridContent.Empty) {
+						self.metadata[# _xPos, _yPos+1] = ColorMeaning.AutoWall;
+					}					
+				}
+			}
+		}
+		
+		if (closeCorners == true) {
+			
+			var _positionsToMark = [];
+			for (var _xPos=0;_xPos<self.width;_xPos++) {
+				
+				for (var _yPos=0;_yPos<self.height;_yPos++) {
+					
+					_currentContent = self.metadata[# _xPos, _yPos];
+					
+					if (_currentContent == ColorMeaning.Padding || _currentContent == GridContent.Empty || _currentContent == ColorMeaning.Unknown) {
+						
+						_rightContent = _xPos < self.width-1 ? self.metadata[# _xPos+1, _yPos] : undefined;
+						_bottomContent = _yPos < self.height-1 ? self.metadata[# _xPos, _yPos+1] : undefined;
+						_leftContent = _xPos > 0 ? self.metadata[# _xPos-1, _yPos] : undefined;
+						_topContent = _yPos > 0 ? self.metadata[# _xPos, _yPos-1] : undefined;
+						
+						if	(_rightContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall) || 
+							(_rightContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall) ||
+							(_leftContent == ColorMeaning.AutoWall && _bottomContent == ColorMeaning.AutoWall) ||
+							(_leftContent == ColorMeaning.AutoWall && _topContent == ColorMeaning.AutoWall) {
+							
+							_positionsToMark[array_length(_positionsToMark)] = new Position(_xPos,_yPos);							
+						}
+					}
+				}	
+			}
+			
+			if (array_length(_positionsToMark) > 0) {
+				var _pos = undefined;
+				for (var _i=0;_i<array_length(_positionsToMark);_i++) {
+					_pos = _positionsToMark[_i];
+					self.metadata[# _pos.x, _pos.y] = ColorMeaning.AutoWall;
+					delete _pos;
+				}
+			}
+		}
 	}
 	
 	/*	@function drawDungeon(x,y);
@@ -70,6 +155,10 @@ function DungeonPreset(colorAssignments,maximumWidth,maximumHeight) constructor 
 				
 						case ColorMeaning.Hallway: 
 							_colorToDraw = self.colorAssignments.colorUsedToDrawHallways;
+						break;
+						
+						case ColorMeaning.AutoWall:
+							_colorToDraw = self.colorAssignments.colorUsedToDrawAutoWalls;
 						break;
 						
 						default:

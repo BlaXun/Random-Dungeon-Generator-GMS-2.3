@@ -119,7 +119,7 @@ function ChamberPreset(chamberSprite) constructor {
 						
 							_neighborContentRight = (_xPos+_width > self.valueTypeGrid.width-1) ? ColorMeaning.Unknown : _typeGridCopy[# _xPos+_width,_yPos];
 						
-							if (_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.ChamberGround || is_string(_neighborContentRight)) {
+							if (_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
 							} else if (_neighborContentRight == ColorMeaning.Connector) {
 								//	Mask neighbor with ChamberGround to prevent duplicate detection
@@ -142,7 +142,7 @@ function ChamberPreset(chamberSprite) constructor {
 					
 						//	Horizontal Connector
 						var _connectorDirection = Direction.None;
-						if ((_neighborContentRight == ColorMeaning.Unknown ||  _neighborContentRight == ColorMeaning.Padding) && _neighborContentLeft == ColorMeaning.ChamberGround && is_string(_neighborContentRight) == false) {
+						if ((_neighborContentRight == ColorMeaning.Unknown || _neighborContentRight == ColorMeaning.Padding) && _neighborContentLeft == ColorMeaning.ChamberGround && is_string(_neighborContentRight) == false) {
 							_connectorDirection = Direction.Right;
 						} else if ((_neighborContentLeft == ColorMeaning.Unknown || _neighborContentLeft == ColorMeaning.Padding) && _neighborContentRight == ColorMeaning.ChamberGround && is_string(_neighborContentLeft) == false) {
 							_connectorDirection = Direction.Left;
@@ -164,7 +164,7 @@ function ChamberPreset(chamberSprite) constructor {
 						
 							_neighborContentBottom = (_yPos+_height > self.valueTypeGrid.height-1) ? ColorMeaning.Unknown : _typeGridCopy[# _xPos,_yPos+_height];
 						
-							if (_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.ChamberGround || is_string(_neighborContentBottom)) {
+							if (_neighborContentBottom == ColorMeaning.Unknown || _neighborContentBottom == ColorMeaning.ChamberGround) {
 								_neighborIsBlankOrGround = true;
 							} else if (_neighborContentBottom == ColorMeaning.Connector) {										
 								//	Mask neighbor with ChamberGround to prevent duplicate detection
@@ -325,17 +325,13 @@ function chamberThatAllowsConnectionOnSide(availableChamberPresets, sideToConnec
 	@param {color} colorAssignments A ColorAssignment-Instance that holds information regarding color and meaning */
 function createChamberPresetFromChamberSprite(chamberSprite,colorAssignments) {
 
-	show_debug_message("Creating new chamber preset for " + sprite_get_name(chamberSprite));
 	var _chamberPreset = new ChamberPreset(chamberSprite);
 
 	var _grids = createPixelGridAndDatatypeGridFromSprite(chamberSprite, colorAssignments);
 	var _valueTypeGrid = new ValueTypeGrid(_chamberPreset.width, _chamberPreset.height,false);
 	_valueTypeGrid.replaceValueAndTypeGrid(_grids[0],_grids[1]);
-	_chamberPreset.valueTypeGrid = _valueTypeGrid;
-	
-	show_debug_message("Creating and assigning connectors for " + sprite_get_name(chamberSprite));
+	_chamberPreset.valueTypeGrid = _valueTypeGrid;	
 	_chamberPreset.createAndAssignConnectors(colorAssignments);	
 	
-	show_debug_message("Returning chamber preset for " + sprite_get_name(chamberSprite));
 	return _chamberPreset;
 }

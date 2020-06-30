@@ -100,6 +100,8 @@ _options.amountOfChambersToPlace = 20;
 //				in somewhat random placement. Values assigned here are on a pixel-level.
 _options.minimumRandomOffsetBetweenPlacedChambers = 0;
 _options.maximumRandomOffsetBetweenPlacedChambers = 0;
+_options.surroundWithWalls = true;
+_options.closeWallCorners = true;
 
 self.rdg = new RandomDungonGenerator(_options);
 

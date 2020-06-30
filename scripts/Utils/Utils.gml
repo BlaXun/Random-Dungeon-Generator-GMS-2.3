@@ -38,3 +38,8 @@ function Coordinates(x,y,xEnd,yEnd) constructor {
 	self.xEnd = xEnd;
 	self.yEnd = yEnd;
 }
+
+function Position(x,y) constructor {
+	self.x = x;
+	self.y = y;
+}
