@@ -9,6 +9,7 @@ self.colorAssignment.addConnectorColor(make_color_rgb(238,28,36));
 
 //	(Optional) Defining custom colors with custom meaning
 self.colorAssignment.addUserDefinedColorWithValue(make_color_rgb(160,65,13), "Treasure Chest");
+self.colorAssignment.addUserDefinedColorWithValue(make_color_rgb(241,110,170), "Wall");
 
 //	(Optional) Defining colors to be used for drawing the output
 self.colorAssignment.backgroundColor = make_color_rgb(149,125,173);
@@ -37,13 +38,35 @@ var _callback = function(dungeonGenerator) {
 	var map_id = layer_tilemap_get_id(lay_id);
 	tilemap_clear(map_id,0);
 	
-	for (var _yPos=0;_yPos<ds_grid_height(self.dungeonGenerator.dungeonPreset.metadata);_yPos++) {
+	var _gridWidth, _gridHeight;
+	_gridHeight = ds_grid_height(self.dungeonGenerator.dungeonPreset.metadata)
+	_gridWidth = ds_grid_width(self.dungeonGenerator.dungeonPreset.metadata)
+	
+	var _newRoom = room_add();
+	room_set_width(_newRoom, _gridWidth*16);
+	room_set_height(_newRoom, _gridHeight*16);
+	
+	room_set_background_color(_newRoom,c_black,true);
+	
+	var _playerInstance = undefined;
+	var _didPlacePlayer = false;	
+	for (var _yPos=0;_yPos<_gridHeight;_yPos++) {
 		
-		for (var _xPos=0;_xPos<ds_grid_width(self.dungeonGenerator.dungeonPreset.metadata);_xPos++) {
+		for (var _xPos=0;_xPos<_gridWidth;_xPos++) {
 		
-			switch (self.dungeonGenerator.dungeonPreset.metadata[# _xPos, _yPos]) {
+			var _content = self.dungeonGenerator.dungeonPreset.metadata[# _xPos, _yPos];			
+			if (_content == "Wall") {
+				room_instance_add(_newRoom,_xPos*16,_yPos*16,objBlock);				
+			}
+			
+			switch (_content) {
 				
 				case ColorMeaning.ChamberGround:
+				
+					if (_didPlacePlayer == false) {
+						_playerInstance = room_instance_add(_newRoom,_xPos*16,_yPos*16,objPlayer);
+						_didPlacePlayer = true;
+					}
 					tilemap_set(map_id,1,_xPos,_yPos);
 				break;
 				
@@ -60,6 +83,8 @@ var _callback = function(dungeonGenerator) {
 	
 	//	Also draw a pixel-representation of the generated map
 	self.dungeonGenerator.drawDungeon();
+	
+	room_goto(_newRoom);
 };
 
 var _options = new GeneratorOptions(self.colorAssignment,_chamberSprites);

@@ -1,6 +1,7 @@
 {
   "resources": [
     {"id":{"name":"PlacedConnector","path":"scripts/PlacedConnector/PlacedConnector.yy",},"order":10,},
+    {"id":{"name":"sprBlock","path":"sprites/sprBlock/sprBlock.yy",},"order":0,},
     {"id":{"name":"sprSimpleChamber","path":"sprites/sprSimpleChamber/sprSimpleChamber.yy",},"order":6,},
     {"id":{"name":"sprFancyChamber","path":"sprites/sprFancyChamber/sprFancyChamber.yy",},"order":2,},
     {"id":{"name":"sprFancyChamber2","path":"sprites/sprFancyChamber2/sprFancyChamber2.yy",},"order":3,},
@@ -14,6 +15,7 @@
     {"id":{"name":"tsSample","path":"sprites/tsSample/tsSample.yy",},"order":0,},
     {"id":{"name":"sprLeftAndBottomConnectorChamber","path":"sprites/sprLeftAndBottomConnectorChamber/sprLeftAndBottomConnectorChamber.yy",},"order":4,},
     {"id":{"name":"sprLeftAndTopConnectorChamber","path":"sprites/sprLeftAndTopConnectorChamber/sprLeftAndTopConnectorChamber.yy",},"order":5,},
+    {"id":{"name":"objPlayer","path":"objects/objPlayer/objPlayer.yy",},"order":1,},
     {"id":{"name":"sprChamberWithUserDefinedTreasureChest","path":"sprites/sprChamberWithUserDefinedTreasureChest/sprChamberWithUserDefinedTreasureChest.yy",},"order":16,},
     {"id":{"name":"sprAnotherChamber","path":"sprites/sprAnotherChamber/sprAnotherChamber.yy",},"order":0,},
     {"id":{"name":"GridHelper","path":"scripts/GridHelper/GridHelper.yy",},"order":5,},
@@ -26,6 +28,7 @@
     {"id":{"name":"DungeonPreset","path":"scripts/DungeonPreset/DungeonPreset.yy",},"order":6,},
     {"id":{"name":"sprRandomChamber2","path":"sprites/sprRandomChamber2/sprRandomChamber2.yy",},"order":18,},
     {"id":{"name":"RandomDungonGenerator","path":"scripts/RandomDungonGenerator/RandomDungonGenerator.yy",},"order":8,},
+    {"id":{"name":"objBlock","path":"objects/objBlock/objBlock.yy",},"order":0,},
     {"id":{"name":"sprCurvedLeftTop","path":"sprites/sprCurvedLeftTop/sprCurvedLeftTop.yy",},"order":11,},
     {"id":{"name":"sprChamber","path":"sprites/sprChamber/sprChamber.yy",},"order":15,},
     {"id":{"name":"ColorAssignment","path":"scripts/ColorAssignment/ColorAssignment.yy",},"order":9,},
@@ -35,6 +38,7 @@
     {"id":{"name":"README","path":"notes/README/README.yy",},"order":4,},
     {"id":{"name":"ChamberPreset","path":"scripts/ChamberPreset/ChamberPreset.yy",},"order":4,},
     {"id":{"name":"ConnectorPreset","path":"scripts/ConnectorPreset/ConnectorPreset.yy",},"order":5,},
+    {"id":{"name":"sprPlayer","path":"sprites/sprPlayer/sprPlayer.yy",},"order":1,},
     {"id":{"name":"DebugHelper","path":"scripts/DebugHelper/DebugHelper.yy",},"order":2,},
     {"id":{"name":"dungeonCreator","path":"objects/dungeonCreator/dungeonCreator.yy",},"order":0,},
     {"id":{"name":"room0","path":"rooms/room0/room0.yy",},"order":0,},
@@ -67,6 +71,8 @@
     {"folderPath":"folders/Sprites/Chambers.yy","order":10,"resourceVersion":"1.0","name":"Chambers","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Tilesets.yy","order":11,"resourceVersion":"1.0","name":"Tilesets","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Tilesets.yy","order":6,"resourceVersion":"1.0","name":"Tilesets","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Objects/Sample Dungeon.yy","order":1,"resourceVersion":"1.0","name":"Sample Dungeon","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Sprites/Sample Dungeon.yy","order":12,"resourceVersion":"1.0","name":"Sample Dungeon","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":461609314234257646,"resourceVersion":"1.0","name":"audiogroup_default","resourceType":"GMAudioGroup",},
