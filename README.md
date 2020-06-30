@@ -28,7 +28,7 @@ The results shown here are drawn pixel-by-pixel using the underlying ds_grid. <b
 Dungeon with high amount of chamber offset<br/>
 <img src="./Sample2.png"/>
 
-Dungeon with AutoWalls applied<br/>
+Dungeon with AutoWalls applied (closed corners deactivated)<br/>
 <img src="./Sample6.PNG"/>
 
 Sample Dungeon with Player interaction<br/>
