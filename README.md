@@ -31,6 +31,9 @@ Dungeon with high amount of chamber offset<br/>
 Dungeon with AutoWalls applied<br/>
 <img src="./Sample6.PNG"/>
 
+Sample Dungeon with Player interaction<br/>
+<img src="./Sample4.PNG" width="320" height="190"/>
+
 <h2>Output format</h2>
 
 Once the dungeon was created the system will provide a **ds_grid** which contains one of the enumeration-values of the ColorMeaning enumeration.<br/>
